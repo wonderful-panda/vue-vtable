@@ -1,0 +1,16 @@
+{
+    "extends": "airbnb",
+    "installedESLint": true,
+    "parserOptions": {
+        "ecmaVersion": 6
+    },
+    "rules": {
+        "indent": ["error", 4],
+        "quotes": ["error", "double"],
+        "comma-dangle": ["off"],
+        "no-new": ["off"]
+    },
+    "plugins": [
+        "html"
+    ]
+}
