@@ -1,14 +1,15 @@
 <template>
     <div class="vlist-container" :style="[$options.style.container, style]">
         <div v-if="headerComponent" class="vlist-header-row" :style="$options.style.header(minWidth, scrollLeft)">
-            <component :is="headerComponent" :row-height="rowHeight" :ctx="ctx">
+            <component :is="headerComponent" :height="rowHeight" :ctx="ctx">
             </component>
         </div>
         <div v-el:scrollable class="vlist-scrollable" :style="$options.style.scrollable" @scroll="recalcRenderRange">
             <resize-sensor @resized="recalcRenderRange"></resize-sensor>
             <div class="vlist-body" :style="$options.style.body(minWidth, rowHeight, items.length)">
                 <div class="vlist-spacer" :style="$options.style.spacer(rowHeight, firstRenderedIndex)"></div>
-                <div class="vlist-row" v-for="item in renderedItems" :style="$options.style.row(rowHeight)">
+                <div class="vlist-row" v-for="item in renderedItems" track-by="$index"
+                    :style="$options.style.row(rowHeight)">
                     <component :is="rowComponent" :item="item" :index="$index + firstRenderedIndex" :height="rowHeight" :ctx="ctx">
                     </component>
                 </div>
@@ -26,7 +27,6 @@
             style: { default: () => ({}) },
             headerComponent: {},
             rowComponent: { require: true },
-            bufferRows: { type: Number, default: 20 },
             rowHeight: { type: Number, require: true, validator: v => v > 0 },
             items: { type: Array, require: true },
             minWidth: {},

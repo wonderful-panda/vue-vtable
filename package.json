@@ -9,6 +9,7 @@
     "build": "cross-env NODE_ENV=production browserify --no-bundle-external src/main.js > dist/build.js"
   },
   "dependencies": {
+    "lodash": "^4.13.1",
     "vue": "^1.0.0",
     "vue-resizesensor": "https://github.com/wonderful-panda/vue-resizesensor/tarball/publish"
   },

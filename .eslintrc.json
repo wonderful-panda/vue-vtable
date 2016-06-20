@@ -8,7 +8,10 @@
         "indent": ["error", 4],
         "quotes": ["error", "double"],
         "comma-dangle": ["off"],
-        "no-new": ["off"]
+        "no-new": ["off"],
+        "no-console": ["warn"],
+        "global-require": ["off"],
+        "no-unused-vars": ["error", { "vars": "all", "args": "none" }]
     },
     "plugins": [
         "html"
