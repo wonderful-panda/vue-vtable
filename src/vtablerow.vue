@@ -1,5 +1,5 @@
 <template>
-    <div class="vtable-row" :style="$options.style.row(height)">
+    <div :class="ctx.getRowClass(item, index)" :style="$options.style.row(height)">
         <template v-for="c in ctx.columns">
             <div class="vtable-cell" :style="$options.style.cell(ctx.widths[$index], height)">
                 <component v-if="c.component" :is="c.component"

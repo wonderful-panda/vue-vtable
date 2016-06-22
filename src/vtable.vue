@@ -23,6 +23,7 @@
             columns: { type: Array, require: true },
             items: { type: Array, require: true },
             splitterWidth: { type: Number, default: 2, validator: v => v > 0 },
+            getRowClass: { type: Function, default: () => "vtable-row" },
             ctx: {}
         },
         style: {
@@ -34,6 +35,7 @@
                 listCtx: {
                     ctx: this.ctx,
                     columns: this.columns,
+                    getRowClass: this.getRowClass,
                     widths: this.columns.map(c => c.defaultWidth),
                     draggingSplitter: -1,
                     splitterCallback: this.splitterCallback
