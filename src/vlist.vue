@@ -7,10 +7,10 @@
         <div v-el:scrollable class="vlist-scrollable" :style="$options.style.scrollable" @scroll="recalcRenderRange">
             <resize-sensor @resized="recalcRenderRange"></resize-sensor>
             <div class="vlist-body" :style="$options.style.body(minWidth, rowHeight, items.length)">
-                <div class="vlist-spacer" :style="$options.style.spacer(rowHeight, firstRenderedIndex)"></div>
+                <div class="vlist-spacer" :style="$options.style.spacer(rowHeight, firstIndex)"></div>
                 <div class="vlist-row" v-for="item in renderedItems" track-by="$index"
                     :style="$options.style.row(rowHeight)">
-                    <component :is="rowComponent" :item="item" :index="$index + firstRenderedIndex" :height="rowHeight" :ctx="ctx">
+                    <component :is="rowComponent" :item="item" :index="$index + firstIndex" :height="rowHeight" :ctx="ctx">
                     </component>
                 </div>
             </div>
@@ -57,9 +57,9 @@
                     minWidth
                 };
             },
-            spacer(rowHeight, firstRenderedIndex) {
+            spacer(rowHeight, firstIndex) {
                 return {
-                    height: px(rowHeight * firstRenderedIndex),
+                    height: px(rowHeight * firstIndex),
                     flex: "0 0 auto"
                 };
             },
@@ -75,13 +75,13 @@
             return {
                 scrollLeft: 0,
                 scrollTop: 0,
-                firstRenderedIndex: 0,
-                lastRenderedIndex: 0
+                firstIndex: 0,
+                lastIndex: 0
             };
         },
         computed: {
             renderedItems() {
-                return this.items.slice(this.firstRenderedIndex, this.lastRenderedIndex + 1);
+                return this.items.slice(this.firstIndex, this.lastIndex + 1);
             }
         },
         methods: {
@@ -89,8 +89,8 @@
                 const el = this.$els.scrollable;
                 this.scrollLeft = el.scrollLeft;
                 this.scrollTop = el.scrollTop;
-                this.firstRenderedIndex = Math.floor(this.scrollTop / this.rowHeight);
-                this.lastRenderedIndex = Math.ceil((this.scrollTop + el.clientHeight) / this.rowHeight);
+                this.firstIndex = Math.floor(this.scrollTop / this.rowHeight);
+                this.lastIndex = Math.ceil((this.scrollTop + el.clientHeight) / this.rowHeight);
             }
         },
         attached() {
