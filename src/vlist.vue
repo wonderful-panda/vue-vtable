@@ -9,7 +9,8 @@
             <div class="vlist-body" :style="$options.style.body(minWidth, rowHeight, items.length)">
                 <div class="vlist-spacer" :style="$options.style.spacer(rowHeight, firstIndex)"></div>
                 <div class="vlist-row" v-for="item in renderedItems" track-by="$index"
-                    :style="$options.style.row(rowHeight)">
+                    :style="$options.style.row(rowHeight)"
+                    @click="$emit('row-click', {item: item, index: $index + firstIndex, event: $event})">
                     <component :is="rowComponent" :item="item" :index="$index + firstIndex" :height="rowHeight" :ctx="ctx">
                     </component>
                 </div>

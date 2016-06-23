@@ -22,7 +22,7 @@
 </style>
 <template>
     <h1>{{ message }}</h1>
-    <vtable id="main-list" :items="items" :row-height="20" :columns="columns" >
+    <vtable id="main-list" :items="items" :row-height="20" :columns="columns">
     </vtable>
 </template>
 
