@@ -4,6 +4,7 @@
 
 <script type="text/javascript">
     import Vue from "vue";
+    import { px } from "./utils";
     export default Vue.extend({
         props: {
             index: { type: Number, require: true },
@@ -14,7 +15,7 @@
         },
         computed: {
             style() {
-                const w = `${this.width}px`;
+                const w = px(this.width);
                 return {
                     minWidth: w,
                     maxWidth: w,

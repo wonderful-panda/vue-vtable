@@ -12,6 +12,7 @@
 
 <script type="text/javascript">
     import Vue from "vue";
+    import { px } from "./utils";
     export default Vue.extend({
         name: "vtableheader",
         components: { splitter: require("./vtablesplitter.vue") },
@@ -25,17 +26,17 @@
                     display: "flex",
                     flex: "1 1 auto",
                     width: "100%",
-                    height: `${height}px`,
-                    lineHeight: `${height}px`,
+                    height: px(height),
+                    lineHeight: px(height),
                     textWrap: "none"
                 };
             },
             cell(index, height, ctx) {
-                const w = `${ctx.widths[index]}px`;
+                const w = px(ctx.widths[index]);
                 return {
                     minWidth: w,
                     flexBasis: w,
-                    lineHeight: `${height}px`,
+                    lineHeight: px(height),
                     overflow: "hidden"
                 };
             }

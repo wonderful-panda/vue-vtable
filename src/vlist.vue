@@ -19,6 +19,7 @@
 </template>
 
 <script type="text/javascript">
+    import { px } from "./utils";
     export default {
         components: {
             resizeSensor: require("vue-resizesensor")
@@ -42,7 +43,7 @@
                     boxSizing: "border-box",
                     minWidth,
                     position: "relative",
-                    left: `${scrollLeft * -1}px`,
+                    left: px(scrollLeft * -1),
                     overflow: "hidden"
                 };
             },
@@ -52,13 +53,13 @@
                     flexFlow: "column nowrap",
                     flex: "1 1 auto",
                     boxSizing: "border-box",
-                    minHeight: `${rowHeight * itemCount}px`,
+                    minHeight: px(rowHeight * itemCount),
                     minWidth
                 };
             },
             spacer(rowHeight, firstRenderedIndex) {
                 return {
-                    height: `${rowHeight * firstRenderedIndex}px`,
+                    height: px(rowHeight * firstRenderedIndex),
                     flex: "0 0 auto"
                 };
             },
@@ -66,7 +67,7 @@
                 return {
                     display: "flex",
                     width: "100%",
-                    height: `${rowHeight}px`
+                    height: px(rowHeight)
                 };
             }
         },

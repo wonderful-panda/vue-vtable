@@ -17,6 +17,7 @@
 
 <script type="text/javascript">
     import Vue from "vue";
+    import { px } from "./utils";
     export default Vue.extend({
         name: "vtablerow",
         components: { splitter: require("./vtablesplitter.vue") },
@@ -32,15 +33,15 @@
                     display: "flex",
                     flex: "1 1 auto",
                     width: "100%",
-                    height: `${height}px`,
-                    lineHeight: `${height}px`
+                    height: px(height),
+                    lineHeight: px(height)
                 };
             },
             cell(width, height) {
                 return {
-                    minWidth: `${width}px`,
-                    flexBasis: `${width}px`,
-                    lineHeight: `${height}px`,
+                    minWidth: px(width),
+                    flexBasis: px(width),
+                    lineHeight: px(height),
                     overflow: "hidden"
                 };
             }

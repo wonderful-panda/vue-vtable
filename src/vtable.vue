@@ -11,6 +11,7 @@
 <script type="text/javascript">
     import Vue from "vue";
     import _ from "lodash";
+    import { px } from "./utils";
     export default Vue.extend({
         components: {
             vlist: require("./vlist.vue"),
@@ -37,7 +38,7 @@
                     draggingSplitter: -1,
                     splitterCallback: this.splitterCallback
                 },
-                minWidth: `${minWidth}px`
+                minWidth: px(minWidth)
             };
         },
         methods: {
@@ -46,7 +47,7 @@
                 if (index >= 0) {
                     this.listCtx.widths.$set(index, width);
                     const minWidth = _.sumBy(this.listCtx.widths, w => w + this.splitterWidth);
-                    this.minWidth = `${minWidth}px`;
+                    this.minWidth = px(minWidth);
                 }
             }
         }
