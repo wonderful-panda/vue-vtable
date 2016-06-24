@@ -28,6 +28,8 @@
                     width: "100%",
                     height: px(height),
                     lineHeight: px(height),
+                    boxSizing: "border-box",
+                    margin: 0,
                     textWrap: "none"
                 };
             },
@@ -37,6 +39,8 @@
                     minWidth: w,
                     flexBasis: w,
                     lineHeight: px(height),
+                    boxSizing: "border-box",
+                    margin: 0,
                     overflow: "hidden"
                 };
             }

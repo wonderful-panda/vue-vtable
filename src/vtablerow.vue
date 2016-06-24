@@ -34,7 +34,9 @@
                     flex: "1 1 auto",
                     width: "100%",
                     height: px(height),
-                    lineHeight: px(height)
+                    lineHeight: px(height),
+                    boxSizing: "border-box",
+                    margin: 0
                 };
             },
             cell(width, height) {
@@ -42,6 +44,8 @@
                     minWidth: px(width),
                     flexBasis: px(width),
                     lineHeight: px(height),
+                    boxSizing: "border-box",
+                    margin: 0,
                     overflow: "hidden"
                 };
             }
