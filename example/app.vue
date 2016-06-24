@@ -15,14 +15,30 @@
     #main-list {
         flex: 1 1 0px;
     }
-    .vtable-dragging-splitter {
+    .vlist-row-selected {
         background-color: #ddd;
+    }
+    .vlist-row:hover {
+        background-color: #eee;
+    }
+    .vtable-dragging-splitter {
+        background-color: #aaf;
+    }
+    .vtable-cell, .vtable-header-cell {
+        padding: 0 0.1em;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
 </style>
 <template>
     <h1>{{ message }}</h1>
-    <vtable id="main-list" :items="items" :row-height="20" :columns="columns">
+    <vtable id="main-list"
+        :items="items"
+        :row-height="20"
+        :columns="columns"
+        :get-row-class="getRowClass"
+        @row-click="onRowClick">
     </vtable>
 </template>
 
@@ -39,7 +55,15 @@
                 { title: "name", defaultWidth: 100, value: item => item.name },
                 { title: "description", defaultWidth: 200, value: item => `description of ${item.id}` }
             ];
-            return { items, columns, message: "vue-vlist" };
+            return { items, columns, message: "vue-vlist", selectedIndex: -1 };
+        },
+        methods: {
+            onRowClick(args) {
+                this.selectedIndex = args.index;
+            },
+            getRowClass(item, index) {
+                return index === this.selectedIndex ? "vlist-row-selected" : "vlist-row";
+            }
         }
     });
 </script>
