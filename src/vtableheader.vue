@@ -1,7 +1,7 @@
 <template>
     <div class="vtable-header" :style="$options.style.row(height)">
         <template v-for="c in ctx.columns">
-            <div class="vtable-header-cell" :style="$options.style.cell($index, height, ctx)">
+            <div :class="['vtable-header-cell', c.className]" :style="$options.style.cell($index, height, ctx)">
                 {{ c.title }}
             </div>
             <splitter :index="$index" :width="ctx.splitterWidth" :dragging="$index == ctx.draggingSplitter"

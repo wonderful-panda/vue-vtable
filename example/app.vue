@@ -29,6 +29,9 @@
         white-space: nowrap;
         text-overflow: ellipsis;
     }
+    .cell-desc {
+        flex: 1 1 auto;
+    }
 
 </style>
 <template>
@@ -51,9 +54,24 @@
         data() {
             const items = _.range(0, 10000).map(i => ({ id: i, name: `name of ${i}` }));
             const columns = [
-                { title: "id", defaultWidth: 100, value: item => item.id },
-                { title: "name", defaultWidth: 100, value: item => item.name },
-                { title: "description", defaultWidth: 200, value: item => `description of ${item.id}` }
+                {
+                    title: "id",
+                    className: "cell-id",
+                    defaultWidth: 100,
+                    value: item => item.id
+                },
+                {
+                    title: "name",
+                    className: "cell-name",
+                    defaultWidth: 100,
+                    value: item => item.name
+                },
+                {
+                    title: "description",
+                    className: "cell-desc",
+                    defaultWidth: 200,
+                    value: item => `description of ${item.id}`
+                }
             ];
             return { items, columns, message: "vue-vlist", selectedIndex: -1 };
         },

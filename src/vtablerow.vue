@@ -1,7 +1,7 @@
 <template>
     <div :class="ctx.getRowClass(item, index)" :style="$options.style.row(height)">
         <template v-for="c in ctx.columns">
-            <div class="vtable-cell" :style="$options.style.cell(ctx.widths[$index], height)">
+            <div :class="['vtable-cell', c.className]" :style="$options.style.cell(ctx.widths[$index], height)">
                 <component v-if="c.component" :is="c.component"
                     :item="item" :index="$index" :ctx="ctx.ctx">
                 </component>
