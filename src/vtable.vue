@@ -38,6 +38,7 @@
                     columns: this.columns,
                     getRowClass: this.getRowClass,
                     widths: this.columns.map(c => c.defaultWidth),
+                    splitterWidth: this.splitterWidth,
                     draggingSplitter: -1,
                     splitterCallback: this.splitterCallback
                 },

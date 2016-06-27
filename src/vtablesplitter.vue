@@ -9,7 +9,7 @@
         props: {
             index: { type: Number, require: true },
             dragging: { type: Boolean, require: true },
-            width: { type: Number, default: 2 },
+            width: { type: Number, default: 3 },
             callback: { type: Function, require: true },
             columnMinWidth: { type: Number, default: 1 }
         },
@@ -19,6 +19,7 @@
                 return {
                     minWidth: w,
                     maxWidth: w,
+                    boxSizing: "border-box",
                     height: "100%",
                     cursor: "col-resize"
                 };
