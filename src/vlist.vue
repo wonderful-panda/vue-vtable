@@ -1,6 +1,6 @@
 <template>
     <div class="vlist-container" :style="[$options.style.container, style]">
-        <div v-if="headerComponent" class="vlist-header-row" :style="$options.style.header(minWidth, scrollLeft)">
+        <div v-if="headerComponent" class="vlist-header-row" :style="$options.style.header(minWidth, scrollLeft, scrollbarWidth)">
             <component :is="headerComponent" :height="rowHeight" :ctx="ctx">
             </component>
         </div>
@@ -36,8 +36,12 @@
         },
         style: {
             container: { display: "flex", flexFlow: "column nowrap", overflow: "hidden" },
-            scrollable: { overflow: "auto", position: "relative", flex: "1 1 0px" },
-            header(minWidth, scrollLeft) {
+            scrollable: {
+                overflow: "auto",
+                position: "relative",
+                flex: "1 1 0px"
+            },
+            header(minWidth, scrollLeft, scrollbarWidth) {
                 return {
                     display: "flex",
                     flex: "0 0 auto",
@@ -45,7 +49,8 @@
                     minWidth,
                     position: "relative",
                     left: px(scrollLeft * -1),
-                    overflow: "hidden"
+                    overflow: "hidden",
+                    paddingRight: px(scrollbarWidth)
                 };
             },
             body(minWidth, rowHeight, itemCount) {
@@ -77,7 +82,8 @@
                 scrollLeft: 0,
                 scrollTop: 0,
                 firstIndex: 0,
-                lastIndex: 0
+                lastIndex: 0,
+                scrollbarWidth: 0
             };
         },
         computed: {
@@ -92,7 +98,11 @@
                 this.scrollTop = el.scrollTop;
                 this.firstIndex = Math.floor(this.scrollTop / this.rowHeight);
                 this.lastIndex = Math.ceil((this.scrollTop + el.clientHeight) / this.rowHeight);
+                this.scrollbarWidth = el.getBoundingClientRect().width - el.clientWidth;
             }
+        },
+        watch: {
+            rowHeight: "recalcRenderRange"
         },
         attached() {
             this.recalcRenderRange();
