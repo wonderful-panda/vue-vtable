@@ -30,7 +30,10 @@
         background-color: #ddf;
     }
     .vtable-splitter {
-        border-right: 1px #888 solid;
+        border-right: 1px #aaa solid;
+    }
+    .vtable-hover-splitter {
+        background-color: #aaf;
     }
     .vtable-dragging-splitter {
         background-color: #aaf;

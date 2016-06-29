@@ -44,7 +44,9 @@
                     widths: this.columns.map(c => c.defaultWidth),
                     splitterWidth: this.splitterWidth,
                     draggingSplitter: -1,
-                    splitterCallback: this.splitterCallback
+                    hoverSplitter: -1,
+                    splitterCallback: this.splitterCallback,
+                    splitterHoverCallback: this.splitterHoverCallback
                 },
                 minWidth: px(minWidth)
             };
@@ -57,6 +59,9 @@
                     const minWidth = _.sumBy(this.listCtx.widths, w => w + this.splitterWidth);
                     this.minWidth = px(minWidth);
                 }
+            },
+            splitterHoverCallback(index) {
+                this.listCtx.hoverSplitter = index;
             }
         }
     });

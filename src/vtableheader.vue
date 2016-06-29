@@ -4,8 +4,13 @@
             <div :class="['vtable-header-cell', c.className]" :style="$options.style.cell($index, height, ctx)">
                 {{ c.title }}
             </div>
-            <splitter :index="$index" :width="ctx.splitterWidth" :dragging="$index == ctx.draggingSplitter"
-                :callback="ctx.splitterCallback"></splitter>
+            <splitter :index="$index"
+                :width="ctx.splitterWidth"
+                :dragging="$index == ctx.draggingSplitter"
+                :hover="$index == ctx.hoverSplitter"
+                :callback="ctx.splitterCallback"
+                :hover-callback="ctx.splitterHoverCallback">
+            </splitter>
         </template>
     </div>
 </template>

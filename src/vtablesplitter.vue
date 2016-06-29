@@ -1,5 +1,10 @@
 <template>
-    <div :class="{'vtable-splitter': true, 'vtable-dragging-splitter': dragging }" :style="style" @mousedown="onMouseDown"></div>
+    <div :class="className"
+        :style="style"
+        @mouseenter="hoverCallback(index)"
+        @mouseleave="hoverCallback(-1)"
+        @mousedown="onMouseDown">
+    </div>
 </template>
 
 <script type="text/javascript">
@@ -9,11 +14,22 @@
         props: {
             index: { type: Number, require: true },
             dragging: { type: Boolean, require: true },
+            hover: { type: Boolean, require: true },
             width: { type: Number, default: 3 },
             callback: { type: Function, require: true },
+            hoverCallback: { type: Function, require: true },
             columnMinWidth: { type: Number, default: 1 }
         },
         computed: {
+            className() {
+                if (this.dragging) {
+                    return "vtable-splitter vtable-dragging-splitter";
+                }
+                if (this.hover) {
+                    return "vtable-splitter vtable-hover-splitter";
+                }
+                return "vtable-splitter";
+            },
             style() {
                 const w = px(this.width);
                 return {

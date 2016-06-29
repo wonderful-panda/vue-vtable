@@ -9,8 +9,13 @@
                     {{ c.value(item, $index, ctx.ctx) }}
                 </template>
             </div>
-            <splitter :index="$index" :width="ctx.splitterWidth" :dragging="$index == ctx.draggingSplitter"
-                :callback="ctx.splitterCallback"></splitter>
+            <splitter :index="$index"
+                :width="ctx.splitterWidth"
+                :dragging="$index == ctx.draggingSplitter"
+                :hover="$index == ctx.hoverSplitter"
+                :callback="ctx.splitterCallback"
+                :hover-callback="ctx.splitterHoverCallback">
+            </splitter>
         </template>
     </div>
 </template>
