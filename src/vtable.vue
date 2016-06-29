@@ -3,7 +3,10 @@
         <vlist :style="{ flex: '1 1 auto' }" :row-height="rowHeight"
             :header-component="$options.components.vtableheader"
             :row-component="$options.components.vtablerow"
-            :items="items" :min-width="minWidth" :ctx="listCtx"
+            :items="items"
+            :row-style-cycle="rowStyleCycle"
+            :min-width="minWidth"
+            :ctx="listCtx"
             @row-click="$emit('row-click', $arguments[0])">
         </vlist>
     </div>
@@ -23,6 +26,7 @@
             rowHeight: { type: Number, require: true, validator: v => v > 0 },
             columns: { type: Array, require: true },
             items: { type: Array, require: true },
+            rowStyleCycle: { type: Number, default: 1, validator: v => v > 0 },
             splitterWidth: { type: Number, default: 3, validator: v => v > 0 },
             getRowClass: { type: Function, default: () => "vtable-row" },
             ctx: {}

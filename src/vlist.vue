@@ -31,6 +31,7 @@
             rowComponent: { require: true },
             rowHeight: { type: Number, require: true, validator: v => v > 0 },
             items: { type: Array, require: true },
+            rowStyleCycle: { type: Number, default: 1, validator: v => v > 0 },
             minWidth: {},
             ctx: {}
         },
@@ -96,7 +97,11 @@
                 const el = this.$els.scrollable;
                 this.scrollLeft = el.scrollLeft;
                 this.scrollTop = el.scrollTop;
-                this.firstIndex = Math.floor(this.scrollTop / this.rowHeight);
+                let firstIndex = Math.floor(this.scrollTop / this.rowHeight);
+                if (this.rowStyleCycle > 1) {
+                    firstIndex -= (firstIndex % this.rowStyleCycle);
+                }
+                this.firstIndex = firstIndex;
                 this.lastIndex = Math.ceil((this.scrollTop + el.clientHeight) / this.rowHeight);
                 this.scrollbarWidth = el.getBoundingClientRect().width - el.clientWidth;
             }

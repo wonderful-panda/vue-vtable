@@ -23,6 +23,9 @@
     .vtable-row-selected {
         font-weight: bold;
     }
+    .vlist-row:nth-child(odd) {
+        background-color: #eef;
+    }
     .vlist-row:hover {
         background-color: #ddf;
     }
@@ -57,6 +60,7 @@
         :row-height="rowHeight"
         :columns="columns"
         :get-row-class="getRowClass"
+        :row-style-cycle="2"
         @row-click="onRowClick">
     </vtable>
 </template>
