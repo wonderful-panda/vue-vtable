@@ -1,8 +1,7 @@
 <template>
     <div class="vlist-container" :style="[$options.style.container, style]">
-        <div v-if="headerComponent" class="vlist-header-row" :style="$options.style.header(minWidth, scrollLeft, scrollbarWidth)">
-            <component :is="headerComponent" :height="rowHeight" :ctx="ctx">
-            </component>
+        <div class="vlist-header-row" v-if="hasHeader" :style="$options.style.header(minWidth, scrollLeft, scrollbarWidth)">
+            <slot name="header"></slot>
         </div>
         <div v-el:scrollable class="vlist-scrollable" :style="$options.style.scrollable" @scroll="recalcRenderRange">
             <resize-sensor @resized="recalcRenderRange"></resize-sensor>
@@ -27,7 +26,6 @@
         },
         props: {
             style: { default: () => ({}) },
-            headerComponent: {},
             rowComponent: { require: true },
             rowHeight: { type: Number, require: true, validator: v => v > 0 },
             items: { type: Array, require: true },
@@ -84,7 +82,8 @@
                 scrollTop: 0,
                 firstIndex: 0,
                 lastIndex: 0,
-                scrollbarWidth: 0
+                scrollbarWidth: 0,
+                hasHeader: true
             };
         },
         computed: {
@@ -111,6 +110,7 @@
         },
         attached() {
             this.recalcRenderRange();
+            this.hasHeader = (this.$el.querySelector("[slot=header]") != null);
         }
     };
 </script>

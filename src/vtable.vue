@@ -8,6 +8,23 @@
             :min-width="minWidth"
             :ctx="listCtx"
             @row-click="$emit('row-click', $arguments[0])">
+
+            <!-- Grid header -->
+            <div slot="header" class="vtable-header" :style="$options.style.header(rowHeight)">
+                <template v-for="c in columns">
+                    <div :class="['vtable-header-cell', c.className]"
+                         :style="$options.style.headercell(rowHeight, listCtx.widths[$index])">
+                        {{ c.title }}
+                    </div>
+                    <splitter :index="$index"
+                        :width="splitterWidth"
+                        :dragging="$index == listCtx.draggingSplitter"
+                        :hover="$index == listCtx.hoverSplitter"
+                        :callback="splitterCallback"
+                        :hover-callback="splitterHoverCallback">
+                    </splitter>
+                </template>
+            </div>
         </vlist>
     </div>
 </template>
@@ -19,8 +36,8 @@
     export default Vue.extend({
         components: {
             vlist: require("./vlist.vue"),
-            vtableheader: require("./vtableheader.vue"),
-            vtablerow: require("./vtablerow.vue")
+            vtablerow: require("./vtablerow.vue"),
+            splitter: require("./vtablesplitter.vue")
         },
         props: {
             rowHeight: { type: Number, require: true, validator: v => v > 0 },
@@ -32,7 +49,33 @@
             ctx: {}
         },
         style: {
-            container: { display: "flex", margin: 0, padding: 0 },
+            container: {
+                display: "flex",
+                margin: 0,
+                padding: 0
+            },
+            header(height) {
+                return {
+                    display: "flex",
+                    flex: "1 1 auto",
+                    width: "100%",
+                    height: px(height),
+                    lineHeight: px(height),
+                    boxSizing: "border-box",
+                    margin: 0,
+                    textWrap: "none"
+                };
+            },
+            headercell(height, width) {
+                return {
+                    minWidth: px(width),
+                    flexBasis: px(width),
+                    lineHeight: px(height),
+                    boxSizing: "border-box",
+                    margin: 0,
+                    overflow: "hidden"
+                };
+            }
         },
         data() {
             const minWidth = _.sumBy(this.columns, c => c.defaultWidth + this.splitterWidth);
