@@ -32,7 +32,7 @@
     .vtable-splitter {
         border-right: 1px #aaa solid;
     }
-    .vtable-hover-splitter {
+    .vtable-splitter:hover {
         background-color: #aaf;
     }
     .vtable-dragging-splitter {
@@ -79,19 +79,19 @@
                 {
                     title: "id",
                     className: "cell-id",
-                    defaultWidth: 100,
+                    defaultWidth: 200,
                     value: item => item.id
                 },
                 {
                     title: "name",
                     className: "cell-name",
-                    defaultWidth: 100,
+                    defaultWidth: 200,
                     value: item => item.name
                 },
                 {
                     title: "description",
                     className: "cell-desc",
-                    defaultWidth: 200,
+                    defaultWidth: 300,
                     value: item => `description of ${item.id}`
                 }
             ];
