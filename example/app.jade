@@ -1,0 +1,9 @@
+h1 {{ message }}
+div(style="margin-bottom: 1em;")
+    span Row height:
+    input(type="number", :value="rowHeight", @keyup.enter="rowHeight = parseInt($event.target.value)")
+    span Row count:
+    input(type="number", :value="rowCount", @keyup.enter="rowCount = parseInt($event.target.value)")
+    
+vtable(id="main-list", :items="items", :row-height="rowHeight", :columns="columns",
+       :get-row-class="getRowClass", :row-style-cycle="2", @row-click="onRowClick")

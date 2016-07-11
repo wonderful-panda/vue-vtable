@@ -1,0 +1,5 @@
+div(:class="ctx.getRowClass(item, index)", :style="rowStyle")
+    div.vtable-cell(v-for="c in ctx.columns", :class="c.className", :style="cellStyle(ctx.widths[$index])")
+        component(v-if="c.component", :is="c.component", :item="item", :index="$index", :ctx="ctx.ctx")
+        template(v-if="!c.component") {{ c.value(item, $index, ctx.ctx) }}
+
