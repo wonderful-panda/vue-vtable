@@ -1,4 +1,0 @@
-{
-  "presets": ["es2015"],
-  "plugins": [["./build/jade-embed", {"sourceRoot": "temp", "jadeRoot": "src"}]]
-}

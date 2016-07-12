@@ -103,9 +103,8 @@ export default class Vtable extends Vue {
     updateSplitterPositions() {
         const boundingRect = this.$el.getBoundingClientRect();
         const xoffset = boundingRect.left + this.$el.clientLeft - this.$data.layout.scrollLeft;
-        const headerCells = [...this.$els.header.querySelectorAll("div.vtable-header-cell")];
-        this.$data.splitter.positions = headerCells.map(
-            el => el.getBoundingClientRect().right - xoffset);
+        const headerCells = this.$els.header.querySelectorAll("div.vtable-header-cell");
+        this.$data.splitter.positions = _.map(headerCells, el => el.getBoundingClientRect().right - xoffset);
     }
     updateScrollPosition(position) {
         this.$data.layout.scrollLeft = position.scrollLeft;
