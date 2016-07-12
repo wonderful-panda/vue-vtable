@@ -1,8 +1,6 @@
-import Vue from "vue";
-import app from "./app.vue";
-
+import * as Vue from "vue";
+import app from "./app";
 new Vue({
     el: "body",
     components: { app }
 });
-

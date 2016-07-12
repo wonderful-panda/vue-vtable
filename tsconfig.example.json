@@ -5,12 +5,13 @@
     "noImplicitAny": false,
     "sourceMap": true,
     "experimentalDecorators": true,
-    "rootDir": "src"
+    "rootDir": "example"
   },
   "filesGlob": [
     "**/*.ts"
   ],
   "exclude": [
+    "src",
     "node_modules"
   ]
 }

@@ -1,7 +1,7 @@
 import * as Vue from "vue";
 import * as _ from "lodash";
 import { component } from "vueit";
-import vtable from "../src/vtable";
+import { vtable, VtableColumn } from "..";
 
 interface AppData {
     columns: VtableColumn[];
@@ -12,7 +12,7 @@ interface AppData {
 }
 
 @component({
-    template: require("./app.jade"),
+    template: require("./app.html"),
     components: { vtable }
 })
 export default class App {
