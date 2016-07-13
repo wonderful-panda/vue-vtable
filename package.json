@@ -6,10 +6,10 @@
   "scripts": {
     "tsc": "tsc",
     "typings": "typings install",
-    "watchify": "watchify -vd -p browserify-hmr -e example/main.js -o example/dist/build.js",
+    "build": "gulp build",
+    "watch": "gulp watch",
     "serve": "http-server -c 1 -a localhost",
-    "dev": "npm-run-all --parallel watchify serve",
-    "build": "cross-env NODE_ENV=production browserify --no-bundle-external src/main.ts > dist/build.js"
+    "dev": "npm-run-all --parallel watch serve"
   },
   "dependencies": {
     "lodash": "^4.13.1",
