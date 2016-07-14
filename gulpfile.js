@@ -49,7 +49,7 @@ gulp.task("build", ["build:jade"], function () {
 });
 
 function buildExample(watch) {
-    const bundler = browserify("example/main.ts", {
+    const bundler = browserify("example/src/main.ts", {
         transform: ["stringify"],
         cache: {},
         packageCache: {}

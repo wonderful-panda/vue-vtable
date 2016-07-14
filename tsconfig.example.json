@@ -5,7 +5,7 @@
     "noImplicitAny": false,
     "sourceMap": true,
     "experimentalDecorators": true,
-    "rootDir": "example"
+    "rootDir": "example/src"
   },
   "filesGlob": [
     "**/*.ts"

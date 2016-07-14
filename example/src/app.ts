@@ -1,7 +1,7 @@
 import * as Vue from "vue";
 import * as _ from "lodash";
 import { component } from "vueit";
-import { vtable, VtableColumn } from "..";
+import { vtable, VtableColumn } from "../..";
 
 interface AppData {
     columns: VtableColumn[];
