@@ -5,6 +5,8 @@ const watchify = require("watchify");
 const browserify = require("browserify");
 const source = require("vinyl-source-stream");
 const buffer = require("vinyl-buffer");
+const _ = require("lodash");
+const through2 = require("through2");
 
 const jade = require("jade");
 
@@ -16,23 +18,37 @@ function normalizePath(filepath) {
     return path.normalize(filepath.replace(new RegExp("\\\\", "g"), "/"));
 }
 
-function errorHandler() {
-    return $gulp.plumber({ errorHandler: $gulp.notify.onError("<%= error.message %>") });
+function errorNotifier(message) {
+    return _.debounce($gulp.notify.onError(message), 100);
+}
+
+function errorHandler(message) {
+    return $gulp.plumber({ errorHandler: errorNotifier(message) });
+}
+
+function loadTemplate(file) {
+    const filepath = normalizePath(file.path);
+    compiledTemplates[filepath] = jade.compile(file.contents.toString())();
 }
 
 gulp.task("build:jade", function () {
     return gulp.src("src/**/*.jade")
-        .pipe(errorHandler())
+        .pipe(errorHandler("Failed to load templates"))
         .pipe($gulp.cached("jade"))
-        .pipe($gulp.tap(function (file) {
-            const filepath = normalizePath(file.path);
-            compiledTemplates[filepath] = jade.compile(file.contents.toString())();
-        }));
+        .pipe(through2.obj(function(file, encode, callback) {
+            try {
+                loadTemplate(file);
+                callback(null, file);
+            }
+            catch (e) {
+                callback(e, file);
+            }
+      }));
 });
 
 gulp.task("build", ["build:jade"], function () {
     return gulp.src(["src/**/*.ts", "typings/**/*.ts"])
-        .pipe(errorHandler())
+        .pipe(errorHandler("Failed to build typescript"))
         .pipe($gulp.typescript(tsproj))
         .pipe($gulp.babel({
             plugins: [
@@ -52,8 +68,12 @@ function buildExample(watch) {
         project: "tsconfig.example.json"
     });
     function build() {
+        const notifyError = errorNotifier("Failed to browserify");
         return bundler.bundle()
-            .on("error", $gulp.util.log.bind($gulp.util, "Browserify error"))
+            .on("error", function(arg) {
+                $gulp.util.log("Browserify error", arg);
+                notifyError(arg);
+            })
             .pipe(source("build.js"))
             .pipe(buffer())
             .pipe(gulp.dest("example/dist"));
