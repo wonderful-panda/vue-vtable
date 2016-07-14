@@ -1,36 +1,30 @@
 const path = require("path").posix;
 const gulp = require("gulp");
-const typescript = require("gulp-typescript");
-const babel = require("gulp-babel");
-const tap = require("gulp-tap");
-const cached = require("gulp-cached");
-const plumber = require("gulp-plumber");
-const notify = require("gulp-notify");
+const $gulp = require("gulp-load-plugins")();
 const watchify = require("watchify");
 const browserify = require("browserify");
 const source = require("vinyl-source-stream");
-const gutil = require("gulp-util");
 const buffer = require("vinyl-buffer");
 
 const jade = require("jade");
 
 const compiledTemplates = {};
 
-const tsproj = typescript.createProject("tsconfig.json");
+const tsproj = $gulp.typescript.createProject("tsconfig.json");
 
 function normalizePath(filepath) {
     return path.normalize(filepath.replace(new RegExp("\\\\", "g"), "/"));
 }
 
 function errorHandler() {
-    return plumber({ errorHandler: notify.onError("<%= error.message %>") });
+    return $gulp.plumber({ errorHandler: $gulp.notify.onError("<%= error.message %>") });
 }
 
 gulp.task("build:jade", function () {
     return gulp.src("src/**/*.jade")
         .pipe(errorHandler())
-        .pipe(cached("jade"))
-        .pipe(tap(function (file) {
+        .pipe($gulp.cached("jade"))
+        .pipe($gulp.tap(function (file) {
             const filepath = normalizePath(file.path);
             compiledTemplates[filepath] = jade.compile(file.contents.toString())();
         }));
@@ -39,8 +33,8 @@ gulp.task("build:jade", function () {
 gulp.task("build", ["build:jade"], function () {
     return gulp.src(["src/**/*.ts", "typings/**/*.ts"])
         .pipe(errorHandler())
-        .pipe(typescript(tsproj))
-        .pipe(babel({
+        .pipe($gulp.typescript(tsproj))
+        .pipe($gulp.babel({
             plugins: [
                 [makeTemplateInline, { compiledTemplates: compiledTemplates }]
             ]
@@ -59,7 +53,7 @@ function buildExample(watch) {
     });
     function build() {
         return bundler.bundle()
-            .on("error", gutil.log.bind(gutil, "Browserify error"))
+            .on("error", $gulp.util.log.bind($gulp.util, "Browserify error"))
             .pipe(source("build.js"))
             .pipe(buffer())
             .pipe(gulp.dest("example/dist"));
@@ -67,12 +61,12 @@ function buildExample(watch) {
     if (watch) {
         bundler.plugin(watchify)
             .on("update", function () {
-                gutil.log(gutil.colors.gray("Building scripts..."));
+                $gulp.util.log($gulp.util.colors.gray("Building scripts..."));
                 build();
             })
             .on("time", function (time) {
-                gutil.log(gutil.colors.gray("Finished buildExample after"),
-                    gutil.colors.magenta(time.toLocaleString() + " ms"));
+                $gulp.util.log($gulp.util.colors.gray("Finished buildExample after"),
+                    $gulp.util.colors.magenta(time.toLocaleString() + " ms"));
             });
     }
     build();
