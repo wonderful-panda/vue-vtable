@@ -19,5 +19,5 @@ div.vtable-container(:style="containerStyle")
                 :style="headerCellStyle(listCtx.widths[$index])") {{ c.title }}
 
     div(v-for="pos in splitter.positions",
-        :class="$index === draggingSplitter ? 'vtable-dragging-splitter' : 'vtable-splitter'",
+        :class="$index === splitter.dragging ? 'vtable-dragging-splitter' : 'vtable-splitter'",
         :style="splitterStyle(pos)", @mousedown="onSplitterMouseDown($index, $event)")
