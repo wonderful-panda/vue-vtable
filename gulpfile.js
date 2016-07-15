@@ -7,12 +7,13 @@ const source = require("vinyl-source-stream");
 const buffer = require("vinyl-buffer");
 const _ = require("lodash");
 const through2 = require("through2");
-
 const jade = require("jade");
+const del = require("del");
+
+const log = $gulp.util.log;
+const colors = $gulp.util.colors;
 
 const compiledTemplates = {};
-
-const tsproj = $gulp.typescript.createProject("tsconfig.json");
 
 function normalizePath(filepath) {
     return path.normalize(filepath.replace(new RegExp("\\\\", "g"), "/"));
@@ -28,14 +29,24 @@ function errorHandler(message) {
 
 function loadTemplate(file) {
     const filepath = normalizePath(file.path);
-    compiledTemplates[filepath] = jade.compile(file.contents.toString())();
+    const transforms = {
+        ".jade": text => jade.compile(text)()
+    };
+    const contents = (transforms[path.extname(filepath)] || (t => t))(file.contents.toString());
+    compiledTemplates[filepath] = contents;
 }
 
-gulp.task("build:jade", function () {
-    return gulp.src("src/**/*.jade")
-        .pipe(errorHandler("Failed to load templates"))
-        .pipe($gulp.cached("jade"))
-        .pipe(through2.obj(function(file, encode, callback) {
+gulp.task("clean", del.bind(null, ["dist", "example/.temp", "example/dist"]));
+
+gulp.task("load-templates", () => loadTemplates("src/**/*.jade"));
+
+gulp.task("load-templates:demo", () => loadTemplates("example/src/**/*.html"));
+
+function loadTemplates(src) {
+    return gulp.src(src)
+        .pipe(errorHandler("Failed to load templates(" + src + ")"))
+        .pipe($gulp.cached("templates:" + src))
+        .pipe(through2.obj(function (file, encode, callback) {
             try {
                 loadTemplate(file);
                 callback(null, file);
@@ -43,63 +54,59 @@ gulp.task("build:jade", function () {
             catch (e) {
                 callback(e, file);
             }
-      }));
-});
+        }));
+}
 
-gulp.task("build", ["build:jade"], function () {
-    return gulp.src(["src/**/*.ts", "typings/**/*.ts"])
-        .pipe(errorHandler("Failed to build typescript"))
-        .pipe($gulp.typescript(tsproj))
+const tsproj = $gulp.typescript.createProject("tsconfig.json");
+gulp.task("build", ["load-templates"],
+    () => buildTsProject("src/**/*.ts", "dist", tsproj));
+
+const demoproj = $gulp.typescript.createProject("tsconfig.example.json");
+gulp.task("build:demo", ["load-templates:demo"],
+    () => buildTsProject("example/src/**/*.ts", "example/.temp", demoproj));
+
+function buildTsProject(src, dest, proj) {
+    return gulp.src([src, "typings/**/*.ts"])
+        .pipe(errorHandler("Failed to build typescript(" + src + ")"))
+        .pipe($gulp.typescript(proj))
         .pipe($gulp.babel({
             plugins: [
                 [makeTemplateInline, { compiledTemplates: compiledTemplates }]
             ]
         }))
-        .pipe(gulp.dest("dist"));
+        .pipe(gulp.dest(dest));
+};
+
+gulp.task("bundle:demo", ["build", "build:demo"], () => bundleDemoProject(false));
+
+gulp.task("watch", ["build", "build:demo"], () => {
+    gulp.watch("src/**/*.{ts,jade}", ["build"]);
+    gulp.watch("example/src/**/*.{ts,html}", ["build:demo"]);
+    bundleDemoProject(true);
 });
 
-function buildExample(watch) {
-    const bundler = browserify("example/src/main.ts", {
-        transform: ["stringify"],
-        cache: {},
-        packageCache: {}
-    }).plugin("tsify", {
-        typescript: require("typescript"),
-        project: "tsconfig.example.json"
-    });
-    function build() {
-        const notifyError = errorNotifier("Failed to browserify");
-        return bundler.bundle()
-            .on("error", function(arg) {
-                $gulp.util.log("Browserify error", arg);
+function bundleDemoProject(watch) {
+    const notifyError = errorNotifier("Failed to browserify");
+    const b = browserify("example/.temp/main.js", { cache: {}, packageCache: {} });
+    function bundle() {
+        return b.bundle()
+            .on("error", arg => {
+                log(colors.magenta("Failed to Browserify"), arg);
                 notifyError(arg);
-            })
-            .pipe(source("build.js"))
+            }).pipe(source("build.js"))
             .pipe(buffer())
             .pipe(gulp.dest("example/dist"));
     }
     if (watch) {
-        bundler.plugin(watchify)
-            .on("update", function () {
-                $gulp.util.log($gulp.util.colors.gray("Building scripts..."));
-                build();
-            })
-            .on("time", function (time) {
-                $gulp.util.log($gulp.util.colors.gray("Finished buildExample after"),
-                    $gulp.util.colors.magenta(time.toLocaleString() + " ms"));
+        b.plugin(watchify)
+            .on("update", bundle)
+            .on("time", time => {
+                const timeValue = time < 1000 ? time.toString() + " ms" : (time / 1000).toString() + " s";
+                log(colors.gray("Finished Browserify after"), colors.magenta(timeValue));
             });
     }
-    build();
+    bundle();
 }
-
-gulp.task("build:example", ["build"], function () {
-    return buildExample();
-});
-
-gulp.task("watch", ["build"], function() {
-    gulp.watch(["src/**/*.ts", "src/**/*.jade"], ["build"]);
-    return buildExample(true);
-});
 
 // babel plugin: replace `require("xxx.jade")` with html string compiled from xxx.jade.
 function makeTemplateInline(babel) {
@@ -112,11 +119,13 @@ function makeTemplateInline(babel) {
                     return;
                 }
                 const arg = node.arguments[0];
-                if (arg.type !== "StringLiteral" || !arg.value.match(/^\..*\.jade$/)) {
+                if (arg.type !== "StringLiteral" || !arg.value.match(/^\..*\.[a-z0-9]+$/)) {
                     return;
                 }
-                const jadepath = normalizePath(path.join(path.dirname(p.hub.file.opts.filename), arg.value));
-                p.replaceWith(babel.types.stringLiteral(compiledTemplates[jadepath]));
+                const templatePath = normalizePath(path.join(path.dirname(p.hub.file.opts.filename), arg.value));
+                if (templatePath in compiledTemplates) {
+                    p.replaceWith(babel.types.stringLiteral(compiledTemplates[templatePath]));
+                }
             }
         }
     }

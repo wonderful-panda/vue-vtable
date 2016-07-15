@@ -4,8 +4,9 @@
   "author": "Iwata Hidetaka <iwata0303@gmail.com>",
   "main": "dist/index.js",
   "scripts": {
-    "tsc": "tsc",
     "typings": "typings install",
+    "gulp": "gulp",
+    "clean": "gulp clean",
     "build": "gulp build",
     "watch": "gulp watch",
     "serve": "http-server -c 1 -a localhost",
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "browserify": "^13.0.1",
+    "del": "^2.2.1",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-cached": "^1.1.0",
