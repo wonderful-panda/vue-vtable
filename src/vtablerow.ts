@@ -3,7 +3,7 @@ import { px } from "./utils";
 import { component, prop, p, pr, pd } from "vueit";
 
 @component({
-    template: require("./vtablerow.jade")
+    template: require("./vtablerow.html")
 })
 export default class VtableRow extends Vue {
     @pr item: any;

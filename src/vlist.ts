@@ -11,7 +11,7 @@ interface VlistData {
 }
 
 @component({
-    template: require("./vlist.jade"),
+    template: require("./vlist.html"),
     components: { resizeSensor }
 })
 export default class Vlist extends Vue {

@@ -15,7 +15,7 @@ interface VtableData {
 }
 
 @component({
-    template: require("./vtable.jade"),
+    template: require("./vtable.html"),
     components: { vlist, vtablerow, resizeSensor }
 })
 export default class Vtable extends Vue {

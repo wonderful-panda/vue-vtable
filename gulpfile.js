@@ -7,7 +7,6 @@ const source = require("vinyl-source-stream");
 const buffer = require("vinyl-buffer");
 const _ = require("lodash");
 const through2 = require("through2");
-const jade = require("jade");
 const del = require("del");
 const typescript = require("typescript");
 
@@ -30,16 +29,14 @@ function errorHandler(message) {
 
 function loadTemplate(file) {
     const filepath = normalizePath(file.path);
-    const transforms = {
-        ".jade": text => jade.compile(text)()
-    };
+    const transforms = {};
     const contents = (transforms[path.extname(filepath)] || (t => t))(file.contents.toString());
     compiledTemplates[filepath] = contents;
 }
 
 gulp.task("clean", del.bind(null, ["dist", "example/.temp", "example/dist"]));
 
-gulp.task("load-templates", () => loadTemplates("src/**/*.jade"));
+gulp.task("load-templates", () => loadTemplates("src/**/*.html"));
 
 gulp.task("load-templates:demo", () => loadTemplates("example/src/**/*.html"));
 
@@ -81,7 +78,7 @@ function buildTsProject(src, dest, proj) {
 gulp.task("bundle:demo", ["build", "build:demo"], () => bundleDemoProject(false));
 
 gulp.task("watch", ["build", "build:demo"], () => {
-    gulp.watch("src/**/*.{ts,jade}", ["build"]);
+    gulp.watch("src/**/*.{ts,html}", ["build"]);
     gulp.watch("example/src/**/*.{ts,html}", ["build:demo"]);
     bundleDemoProject(true);
 });
@@ -109,7 +106,7 @@ function bundleDemoProject(watch) {
     bundle();
 }
 
-// babel plugin: replace `require("xxx.jade")` with html string compiled from xxx.jade.
+// babel plugin: replace `require("xxx.html")` with its content.
 function makeTemplateInline(babel) {
     return {
         visitor: {
