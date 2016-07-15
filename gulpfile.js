@@ -9,6 +9,7 @@ const _ = require("lodash");
 const through2 = require("through2");
 const jade = require("jade");
 const del = require("del");
+const typescript = require("typescript");
 
 const log = $gulp.util.log;
 const colors = $gulp.util.colors;
@@ -57,16 +58,16 @@ function loadTemplates(src) {
         }));
 }
 
-const tsproj = $gulp.typescript.createProject("tsconfig.json");
+const tsproj = $gulp.typescript.createProject("tsconfig.json", { typescript });
 gulp.task("build", ["load-templates"],
     () => buildTsProject("src/**/*.ts", "dist", tsproj));
 
-const demoproj = $gulp.typescript.createProject("tsconfig.example.json");
+const demoproj = $gulp.typescript.createProject("tsconfig.example.json", { typescript });
 gulp.task("build:demo", ["load-templates:demo"],
     () => buildTsProject("example/src/**/*.ts", "example/.temp", demoproj));
 
 function buildTsProject(src, dest, proj) {
-    return gulp.src([src, "typings/**/*.ts"])
+    return gulp.src(src)
         .pipe(errorHandler("Failed to build typescript(" + src + ")"))
         .pipe($gulp.typescript(proj))
         .pipe($gulp.babel({
