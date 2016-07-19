@@ -1,9 +1,4 @@
 <div :class="ctx.getRowClass(item, index)" :style="rowStyle">
-    <div v-for="c in ctx.columns" class="vtable-cell" :class="c.className" :style="cellStyle(ctx.widths[$index])">
-        <component v-if="c.component" :is="c.component" :item="item" :index="index" :ctx="ctx.ctx">
-        </component>
-        <template v-if="!c.component">
-            {{ c.value(item, index, ctx.ctx) }}
-        </template>
-    </div>
+    <vtablecell v-for="c in ctx.columns" :item="item" :index="index" :column-index="$index" :height="height" :ctx="ctx">
+    </vtablecell>
 </div>

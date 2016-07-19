@@ -1,15 +1,17 @@
 import * as Vue from "vue";
 import { px } from "./utils";
 import { component, prop, p, pr, pd } from "vueit";
+import vtablecell from "./vtablecell";
 
 @component({
-    template: require("./vtablerow.html")
+    template: require("./vtablerow.html"),
+    components: { vtablecell }
 })
 export default class VtableRow extends Vue {
     @pr item: any;
     @pr index: number;
-    @prop({ required: true, validator: v => v > 0 }) height: number;
-    @p ctx: VtableListCtx;
+    @pr height: number;
+    @pr ctx: VtableListCtx;
 
     get rowStyle() {
         return {
@@ -22,16 +24,4 @@ export default class VtableRow extends Vue {
             margin: 0
         };
     }
-
-    cellStyle(width) {
-        return {
-            minWidth: px(width),
-            flexBasis: px(width),
-            lineHeight: px(this.height),
-            margin: `0 ${this.ctx.splitterWidth}px 0 0`,
-            boxSizing: "border-box",
-            overflow: "hidden"
-        };
-    }
-
 }
