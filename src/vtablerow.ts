@@ -1,6 +1,6 @@
 import * as Vue from "vue";
 import { px } from "./utils";
-import { component, prop, p, pr, pd } from "vueit";
+import { component, pr } from "vueit";
 import vtablecell from "./vtablecell";
 
 @component({

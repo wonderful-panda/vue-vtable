@@ -4,6 +4,7 @@
     "module": "commonjs",
     "noImplicitAny": false,
     "noEmitOnError": true,
+    "noUnusedLocals": true,
     "sourceMap": true,
     "experimentalDecorators": true,
     "rootDir": "src"

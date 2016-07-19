@@ -1,6 +1,6 @@
 import * as Vue from "vue";
 import * as resizeSensor from "vue-resizesensor";
-import { component, prop, p, pr, pd, watch } from "vueit";
+import { component, prop, p, pr, pd } from "vueit";
 import { px } from "./utils";
 
 interface VlistData {
