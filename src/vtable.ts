@@ -7,7 +7,7 @@ import vlist from "./vlist";
 import vtablerow from "./vtablerow";
 
 interface VtableData {
-    listCtx: VtableListCtx;
+    widths: number[];
     layout: {
         bodyWidth: number, bodyHeight: number, scrollLeft: number, contentWidth: number
     };
@@ -36,13 +36,7 @@ export default class Vtable extends Vue {
     data(): VtableData {
         const contentWidth = _.sumBy(this.columns, c => c.defaultWidth + this.splitterWidth);
         return {
-            listCtx: {
-                ctx: this.ctx,
-                columns: this.columns,
-                getRowClass: this.getRowClass,
-                widths: this.columns.map(c => c.defaultWidth),
-                splitterWidth: this.splitterWidth,
-            },
+            widths: this.columns.map(c => c.defaultWidth),
             layout: { bodyWidth: 0, bodyHeight: 0, scrollLeft: 0, contentWidth },
             splitter: { positions: [], dragging: -1 }
         };
@@ -92,6 +86,17 @@ export default class Vtable extends Vue {
             cursor: "col-resize"
         };
     }
+    /** ctx object will be passed to vlist */
+    get listCtx() {
+        return {
+            ctx: this.ctx,
+            columns: this.columns,
+            getRowClass: this.getRowClass,
+            splitterWidth: this.splitterWidth,
+            widths: this.$data.widths
+        };
+    }
+
     /* methods */
     updateBodySize() {
         const vlistBody = this.$refs.vlist.$data.body;
@@ -119,8 +124,8 @@ export default class Vtable extends Vue {
         const onMouseMove = e => {
             const offset = e.screenX - startX;
             const width = Math.max(startWidth + offset, minWidth);
-            $d.listCtx.widths.$set(index, width);
-            $d.layout.contentWidth = _.sumBy($d.listCtx.widths, w => w + this.splitterWidth);
+            $d.widths.$set(index, width);
+            $d.layout.contentWidth = _.sumBy($d.widths, w => w + this.splitterWidth);
             $d.splitter.dragging = index;
         };
         const onMouseUp = () => {
