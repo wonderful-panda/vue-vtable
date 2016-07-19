@@ -29,7 +29,8 @@ export default class Vtable extends Vue {
     @pr items: any[];
     @prop({ default: 1, validator: v => v > 0 }) rowStyleCycle: number;
     @prop({ default: 3, validator: v => v > 0 }) splitterWidth: number;
-    @pd(() => "vtable-row") getRowClass: (item: any, index: number) => string;
+    @pd("vtable-row") rowClass: string;
+    @p getRowClass: (item: any, index: number) => string;
     @p ctx: any;
 
     /* data */
@@ -87,11 +88,12 @@ export default class Vtable extends Vue {
         };
     }
     /** ctx object will be passed to vlist */
-    get listCtx() {
+    get listCtx(): VtableListCtx {
+        const rowClass = this.rowClass;
         return {
             ctx: this.ctx,
             columns: this.columns,
-            getRowClass: this.getRowClass,
+            getRowClass: this.getRowClass ? this.getRowClass : (item, index) => rowClass,
             splitterWidth: this.splitterWidth,
             widths: this.$data.widths
         };
