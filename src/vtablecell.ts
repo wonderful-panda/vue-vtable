@@ -19,7 +19,6 @@ export default class VtableCell extends Vue {
         const w = px(this.ctx.widths[this.columnIndex]);
         return {
             minWidth: w,
-            flexBasis: w,
             lineHeight: px(this.height),
             margin: `0 ${this.ctx.splitterWidth}px 0 0`,
             boxSizing: "border-box",
