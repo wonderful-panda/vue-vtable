@@ -65,6 +65,7 @@ export default class Vtable extends Vue {
     headerCellStyle(width: number): StyleObject {
         return {
             minWidth: px(width),
+            width: px(width),
             lineHeight: px(this.rowHeight),
             boxSizing: "border-box",
             margin: `0 ${this.splitterWidth}px 0 0`,
