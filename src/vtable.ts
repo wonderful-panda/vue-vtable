@@ -27,6 +27,7 @@ export default class Vtable extends Vue {
 
     /* props */
     @prop({ required: true, validator: v => v > 0 }) rowHeight: number;
+    @pd(0) headerHeight: number;
     @pr columns: VtableColumn[];
     @pr items: any[];
     @prop({ default: 1, validator: v => v > 0 }) rowStyleCycle: number;
@@ -57,8 +58,8 @@ export default class Vtable extends Vue {
             position: "relative",
             flex: "1 1 auto",
             width: "100%",
-            height: px(this.rowHeight),
-            lineHeight: px(this.rowHeight),
+            height: px(this.actualHeaderHeight),
+            lineHeight: px(this.actualHeaderHeight),
             boxSizing: "border-box",
             margin: 0,
             textWrap: "none"
@@ -68,7 +69,7 @@ export default class Vtable extends Vue {
         return {
             minWidth: px(width),
             width: px(width),
-            lineHeight: px(this.rowHeight),
+            lineHeight: px(this.actualHeaderHeight),
             boxSizing: "border-box",
             margin: `0 ${this.splitterWidth}px 0 0`,
             overflow: "hidden"
@@ -99,6 +100,9 @@ export default class Vtable extends Vue {
             splitterWidth: this.splitterWidth,
             widths: this.$data.widths
         };
+    }
+    get actualHeaderHeight() {
+        return this.headerHeight > 0 ? this.headerHeight : this.rowHeight;
     }
 
     /* methods */
