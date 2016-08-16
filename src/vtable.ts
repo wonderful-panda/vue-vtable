@@ -35,6 +35,7 @@ export default class Vtable extends Vue {
     @pd("vtable-row") rowClass: string;
     @p getRowClass: (item: any, index: number) => string;
     @p ctx: any;
+    @pd("$index") rowTrackBy: string;
 
     /* data */
     data(): VtableData {

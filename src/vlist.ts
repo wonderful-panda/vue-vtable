@@ -43,6 +43,7 @@ export default class Vlist extends Vue {
     @prop({ required: true, validator: v => v > 0 }) rowHeight: number;
     @prop({ default: 1, validator: v => v > 0 }) rowStyleCycle: number;
     @pd(() => ({})) style: any;
+    @pd("$index") rowTrackBy: string;
 
     /* data */
     data(): VlistData {

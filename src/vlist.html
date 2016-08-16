@@ -10,7 +10,7 @@
             </resize-sensor>
             <div :style="spacerStyle">
             </div>
-            <div v-for="item in renderedItems" track-by="$index" class="vlist-row" :style="rowStyle" @click="onRowClick(item, $index + firstIndex, $event)">
+            <div v-for="item in renderedItems" :track-by="rowTrackBy" class="vlist-row" :style="rowStyle" @click="onRowClick(item, $index + firstIndex, $event)">
                 <component :is="rowComponent" :item="item" :index="$index + firstIndex" :height="rowHeight" :ctx="ctx">
                 </component>
             </div>
