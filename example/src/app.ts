@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import { component } from "vueit";
-import { vtable, VtableColumn } from "../..";
+import { vtable } from "../..";
 
 interface AppData {
     columns: VtableColumn[];
