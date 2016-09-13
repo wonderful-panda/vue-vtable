@@ -2,16 +2,16 @@
     <div v-if="hasHeader" class="vlist-header-row" :style="headerStyle">
         <slot name="header"></slot>
     </div>
-    <div v-el:scrollable="v-el:scrollable" class="vlist-scrollable" :style="scrollableStyle" @scroll="onScroll">
+    <div v-el:scrollable class="vlist-scrollable" :style="scrollableStyle" @scroll="onScroll">
         <resize-sensor :debounce="50" @resized="updateBodySize">
         </resize-sensor>
-        <div class="vlist-body" :style="bodyStyle">
-            <resize-sensor :debounce="50" @resized="updateBodySize">
+        <div v-el:content class="vlist-content" :style="contentStyle">
+            <resize-sensor :debounce="50" @resized="contentSizeChanged">
             </resize-sensor>
             <div :style="spacerStyle">
             </div>
-            <div v-for="item in renderedItems" track-by="$index" class="vlist-row" :style="rowStyle" @click="onRowClick(item, $index + range.first, $event)">
-                <component :is="rowComponent" :item="item" :index="$index + range.first" :height="rowHeight" :ctx="ctx">
+            <div v-for="item in renderedItems" track-by="$index" class="vlist-row" :style="rowStyle" @click="onRowClick(item, $index + firstIndex, $event)">
+                <component :is="rowComponent" :item="item" :index="$index + firstIndex" :height="rowHeight" :ctx="ctx">
                 </component>
             </div>
         </div>

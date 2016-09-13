@@ -1,13 +1,29 @@
 import * as Vue from "vue";
+import * as _ from "lodash";
 import * as resizeSensor from "vue-resizesensor";
 import { component, prop, p, pr, pd } from "vueit";
 import { px } from "./utils";
 
 interface VlistData {
-    scroll: { left: number, top: number };
-    range: { first: number, last: number };
-    body: { width: number, height: number, vScrollBarWidth: number, hScrollBarHeight: number };
+    scrollLeft: number;
+    scrollTop: number;
+    bodyWidth: number;
+    bodyHeight: number;
+    vScrollBarWidth: number;
+    hScrollBarHeight: number;
     hasHeader: boolean;
+}
+
+export interface BodyResizeEventArgs {
+    bodyWidth: number;
+    bodyHeight: number;
+    vScrollBarWidth: number;
+    hScrollBarHeight: number;
+}
+
+export interface ScrollEventArgs {
+    scrollLeft: number;
+    scrollTop: number;
 }
 
 @component({
@@ -16,7 +32,7 @@ interface VlistData {
 })
 export default class Vlist extends Vue {
     $data: VlistData;
-    $els: { scrollable: HTMLElement };
+    $els: { scrollable: HTMLElement, content: HTMLElement };
 
     /* props */
     @pr rowComponent: any;
@@ -31,10 +47,8 @@ export default class Vlist extends Vue {
     /* data */
     data(): VlistData {
         return {
-            scroll: { left: 0, top: 0 },
-            range: { first: 0, last: 0 },
-            body: { width: 0, height: 0, vScrollBarWidth: 0, hScrollBarHeight: 0 },
-            hasHeader: true
+            scrollLeft: 0, scrollTop: 0, bodyWidth: 0, bodyHeight: 0,
+            vScrollBarWidth: 0, hScrollBarHeight: 0, hasHeader: true
         };
     }
 
@@ -53,19 +67,23 @@ export default class Vlist extends Vue {
             boxSizing: "border-box",
             minWidth: this.minWidth,
             position: "relative",
-            left: px(this.$data.scroll.left * -1),
+            left: px(this.$data.scrollLeft * -1),
             overflow: "hidden",
-            padding: `0 ${px(this.$data.body.vScrollBarWidth)} 0 0`
+            padding: `0 ${px(this.$data.vScrollBarWidth)} 0 0`
         };
     }
     get scrollableStyle() {
         return {
             overflow: "auto",
             position: "relative",
-            flex: "1 1 0px"
+            flex: "1 1 0px",
+            boxSizing: "border-box",
+            margin: 0,
+            padding: 0,
+            border: 0
         };
     }
-    get bodyStyle(): StyleObject {
+    get contentStyle(): StyleObject {
         return {
             display: "flex",
             flexFlow: "column nowrap",
@@ -78,7 +96,7 @@ export default class Vlist extends Vue {
     }
     get spacerStyle(): StyleObject {
         return {
-            height: px(this.rowHeight * this.$data.range.first),
+            height: px(this.rowHeight * this.firstIndex),
             flex: "0 0 auto"
         };
     };
@@ -91,65 +109,62 @@ export default class Vlist extends Vue {
     }
 
     /* computed */
+    get firstIndex() {
+        let value = Math.floor(this.$data.scrollTop / this.rowHeight);
+        if (this.rowStyleCycle > 1) {
+            value -= (value % this.rowStyleCycle);
+        }
+        return value;
+    }
+    get lastIndex() {
+        return Math.ceil((this.$data.scrollTop + this.$data.bodyHeight) / this.rowHeight);
+    }
     get renderedItems() {
-        const range = this.$data.range;
-        return this.items.slice(range.first, range.last + 1);
+        return this.items.slice(this.firstIndex, this.lastIndex + 1);
     }
 
     /* methods */
+    contentSizeChanged() {
+        const { bodyWidth, bodyHeight, vScrollBarWidth, hScrollBarHeight } = this.$data;
+        const c = this.$els.content;
+        const contentWidth = c.clientWidth;
+        const contentHeight = c.clientHeight;
+        if (0 < vScrollBarWidth && contentWidth < bodyWidth + vScrollBarWidth ||
+              vScrollBarWidth <= 0 && bodyWidth < contentWidth ||
+                0 < hScrollBarHeight && contentHeight < bodyHeight + hScrollBarHeight ||
+                  hScrollBarHeight <= 0 && bodyHeight < contentHeight) {
+            // must re-check scrollbar visibilities
+            this.updateBodySize();
+        }
+    }
     updateBodySize() {
-        const body = this.$data.body;
-        const el = this.$els.scrollable;
-        const bound = el.getBoundingClientRect();
-        const width = el.clientWidth;
-        const height = el.clientHeight;
-        const vScrollBarWidth = bound.width - width - el.clientLeft;
-        const hScrollBarHeight = bound.height - height - el.clientTop;
-        let changed = false;
-        if (body.width !== width) {
-            body.width = width;
-            changed = true;
-        }
-        if (body.height !== height) {
-            body.height = height;
-            changed = true;
-        }
-        if (body.vScrollBarWidth !== vScrollBarWidth) {
-            body.vScrollBarWidth = vScrollBarWidth;
-            changed = true;
-        }
-        if (body.hScrollBarHeight !== hScrollBarHeight) {
-            body.hScrollBarHeight = hScrollBarHeight;
-            changed = true;
-        }
-        if (changed) {
-            this.updateRenderRange();
-            this.$emit("body-resize", {
-                width,
-                height,
+        const data = this.$data;
+        const sc = this.$els.scrollable;
+        const bound = sc.getBoundingClientRect();
+        const bodyWidth = sc.clientWidth;
+        const bodyHeight = sc.clientHeight;
+        const vScrollBarWidth = Math.floor(bound.width - bodyWidth);
+        const hScrollBarHeight = Math.floor(bound.height - bodyHeight);
+        if (data.bodyWidth !== bodyWidth ||
+            data.bodyHeight !== bodyHeight ||
+            data.vScrollBarWidth !== vScrollBarWidth ||
+            data.hScrollBarHeight !== hScrollBarHeight) {
+
+            const args: BodyResizeEventArgs = {
+                bodyWidth,
+                bodyHeight,
                 vScrollBarWidth,
                 hScrollBarHeight
-            });
+            };
+            _.assign(data, args);
+            this.$emit("body-resize", args);
         }
     };
-    updateRenderRange() {
-        const el = this.$els.scrollable;
-        const {scroll, range} = this.$data;
-        scroll.left = el.scrollLeft;
-        scroll.top = el.scrollTop;
-        let firstIndex = Math.floor(scroll.top / this.rowHeight);
-        if (this.rowStyleCycle > 1) {
-            firstIndex -= (firstIndex % this.rowStyleCycle);
-        }
-        range.first = firstIndex;
-        range.last = Math.ceil((scroll.top + el.clientHeight) / this.rowHeight);
-    };
-    onScroll(event) {
-        this.updateRenderRange();
-        this.$emit("scroll", {
-            scrollLeft: event.target.scrollLeft,
-            scrollTop: event.target.scrollTop
-        });
+    onScroll(event: Event) {
+        const { scrollLeft, scrollTop } = this.$els.scrollable;
+        const args: ScrollEventArgs = { scrollLeft, scrollTop };
+        _.assign(this.$data, args);
+        this.$emit("scroll", args);
     }
     onRowClick(item: any, index: number, event: Event) {
         this.$emit('row-click', { item, index, event });

@@ -4,14 +4,17 @@ import { px } from "./utils";
 import { component, prop, p, pr, pd, watch } from "vueit";
 import * as resizeSensor from "vue-resizesensor";
 import vlist from "./vlist";
+import { BodyResizeEventArgs, ScrollEventArgs } from "./vlist";
 import vtablerow from "./vtablerow";
 
 interface VtableData {
     widths: number[];
-    layout: {
-        bodyWidth: number, bodyHeight: number, scrollLeft: number, contentWidth: number
-    };
-    splitter: { positions: number[], dragging: number }
+    bodyWidth: number;
+    bodyHeight: number;
+    scrollLeft: number;
+    contentWidth: number;
+    splitterPositions: number[],
+    draggingSplitter: number
 }
 
 @component({
@@ -20,7 +23,6 @@ interface VtableData {
 })
 export default class Vtable extends Vue {
     $data: VtableData;
-    $refs: { vlist: vlist };
     $els: { header: HTMLElement };
 
     /* props */
@@ -38,8 +40,8 @@ export default class Vtable extends Vue {
         const contentWidth = _.sumBy(this.columns, c => c.defaultWidth + this.splitterWidth);
         return {
             widths: this.columns.map(c => c.defaultWidth),
-            layout: { bodyWidth: 0, bodyHeight: 0, scrollLeft: 0, contentWidth },
-            splitter: { positions: [], dragging: -1 }
+            bodyWidth: 0, bodyHeight: 0, scrollLeft: 0, contentWidth,
+            splitterPositions: [], draggingSplitter: -1
         };
     }
 
@@ -73,16 +75,16 @@ export default class Vtable extends Vue {
         };
     }
     splitterStyle(pos) {
-        const {scrollLeft, bodyWidth, bodyHeight} = this.$data.layout;
+        const {scrollLeft, bodyWidth, bodyHeight} = this.$data;
         const left = pos - scrollLeft;
-        const clipLeft = left - bodyWidth;
+        const clipR = left - bodyWidth;
         return {
             position: "absolute",
             top: "0px",
             left,
             width: this.splitterWidth,
             height: px(bodyHeight),
-            clip: clipLeft > 0 ? `rect(${clipLeft}, 0, 0, 0)` : "auto",
+            clip: clipR > 0 ? `rect(${clipR}px, 0, 0, 0)` : "auto",
             boxSizing: "border-box",
             cursor: "col-resize"
         };
@@ -100,43 +102,46 @@ export default class Vtable extends Vue {
     }
 
     /* methods */
-    updateBodySize() {
-        const vlistBody = this.$refs.vlist.$data.body;
-        this.$data.layout.bodyWidth = this.$el.clientWidth - vlistBody.vScrollBarWidth;
-        this.$data.layout.bodyHeight = this.$el.clientHeight - vlistBody.hScrollBarHeight;
-        this.updateSplitterPositions();
+    updateBodySize(args: BodyResizeEventArgs) {
+        this.$data.bodyWidth = this.$el.clientWidth - args.vScrollBarWidth;
+        this.$data.bodyHeight = this.$el.clientHeight - args.hScrollBarHeight;
+        Vue.nextTick(() => this.updateSplitterPositions());
     }
     @watch("listCtx.widths")
     updateSplitterPositions() {
         const boundingRect = this.$el.getBoundingClientRect();
-        const xoffset = boundingRect.left + this.$el.clientLeft - this.$data.layout.scrollLeft;
+        const xoffset = boundingRect.left + this.$el.clientLeft - this.$data.scrollLeft;
         const headerCells = this.$els.header.querySelectorAll("div.vtable-header-cell");
-        this.$data.splitter.positions = _.map(headerCells, el => el.getBoundingClientRect().right - xoffset);
+        this.$data.splitterPositions = _.map(headerCells, el => el.getBoundingClientRect().right - xoffset);
     }
-    updateScrollPosition(position) {
-        this.$data.layout.scrollLeft = position.scrollLeft;
+    updateScrollPosition(args: ScrollEventArgs) {
+        this.$data.scrollLeft = args.scrollLeft;
     }
-    onSplitterMouseDown(index, event) {
+    onSplitterMouseDown(index, event: MouseEvent) {
+        event.preventDefault();
+        event.stopPropagation();
         const headerCell = this.$els.header.querySelectorAll("div.vtable-header-cell")[index];
         const column = this.columns[index];
         const startWidth = headerCell.clientWidth;
         const startX = event.screenX;
         const minWidth = column.minWidth || 5;
         const $d = this.$data;
-        const onMouseMove = e => {
+        const onMouseMove = (e: MouseEvent) => {
+            e.preventDefault();
+            e.stopPropagation();
             const offset = e.screenX - startX;
             const width = Math.max(startWidth + offset, minWidth);
             $d.widths.$set(index, width);
-            $d.layout.contentWidth = _.sumBy($d.widths, w => w + this.splitterWidth);
-            $d.splitter.dragging = index;
+            $d.contentWidth = _.sumBy($d.widths, w => w + this.splitterWidth);
+            $d.draggingSplitter = index;
         };
         const onMouseUp = () => {
             document.removeEventListener("mousemove", onMouseMove);
             document.removeEventListener("mouseup", onMouseUp);
-            $d.splitter.dragging = -1;
+            $d.draggingSplitter = -1;
         };
         document.addEventListener("mousemove", onMouseMove);
         document.addEventListener("mouseup", onMouseUp);
-        $d.splitter.dragging = index;
+        $d.draggingSplitter = index;
     }
 }
