@@ -12,14 +12,12 @@
            @row-click="$emit('row-click', $arguments[0])">
 
         <div slot="header" v-el:header="v-el:header" class="vtable-header" :style="headerStyle">
-            <resize-sensor :debounce="50" @resized="updateBodySize">
-            </resize-sensor>
             <div v-for="c in columns" class="vtable-header-cell" :class="c.className" :style="headerCellStyle(listCtx.widths[$index])">
                 {{ c.title }}
             </div>
         </div>
     </vlist>
-    <div v-for="pos in splitter.positions"
+    <div v-for="pos in splitter.positions" track-by="$index"
          :class="$index === splitter.dragging ? 'vtable-dragging-splitter' : 'vtable-splitter'"
          :style="splitterStyle(pos)"
          @mousedown="onSplitterMouseDown($index, $event)">
