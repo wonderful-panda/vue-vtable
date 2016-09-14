@@ -167,7 +167,7 @@ export default class Vlist extends Vue {
         this.$emit("scroll", args);
     }
     onRowClick(item: any, index: number, event: Event) {
-        this.$emit('row-click', { item, index, event });
+        this.$emit("row-click", { item, index, event });
     }
 
     attached() {

@@ -13,8 +13,8 @@ interface VtableData {
     bodyHeight: number;
     scrollLeft: number;
     contentWidth: number;
-    splitterPositions: number[],
-    draggingSplitter: number
+    splitterPositions: number[];
+    draggingSplitter: number;
 }
 
 @component({
