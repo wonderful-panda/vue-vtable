@@ -91,7 +91,8 @@ export default class Vlist extends Vue {
             flex: "1 1 auto",
             position: "relative",
             boxSizing: "border-box",
-            minHeight: px(this.rowHeight * this.items.length),
+            height: px(this.rowHeight * this.items.length),
+            overflow: "hidden",
             minWidth: this.minWidth
         };
     }
