@@ -6,8 +6,6 @@
         <resize-sensor :debounce="50" @resized="updateBodySize">
         </resize-sensor>
         <div v-el:content class="vlist-content" :style="contentStyle">
-            <resize-sensor :debounce="50" @resized="contentSizeChanged">
-            </resize-sensor>
             <div :style="spacerStyle">
             </div>
             <div v-for="item in renderedItems" :track-by="rowTrackBy" class="vlist-row" :style="rowStyle" @click="onRowClick(item, $index + firstIndex, $event)">

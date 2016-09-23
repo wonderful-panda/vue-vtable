@@ -1,7 +1,7 @@
 import * as Vue from "vue";
 import * as _ from "lodash";
 import * as resizeSensor from "vue-resizesensor";
-import { component, prop, p, pr, pd } from "vueit";
+import { component, prop, p, pr, pd, watch } from "vueit";
 import { px } from "./utils";
 
 interface VlistData {
@@ -37,7 +37,7 @@ export default class Vlist extends Vue {
     /* props */
     @pr rowComponent: any;
     @pr items: any[];
-    @p minWidth: number | string;
+    @p contentWidth: number | string;
     @p ctx: any;
 
     @prop({ required: true, validator: v => v > 0 }) rowHeight: number;
@@ -66,7 +66,7 @@ export default class Vlist extends Vue {
             display: "flex",
             flex: "0 0 auto",
             boxSizing: "border-box",
-            minWidth: this.minWidth,
+            minWidth: this.contentWidth,
             position: "relative",
             left: px(this.$data.scrollLeft * -1),
             overflow: "hidden",
@@ -91,9 +91,9 @@ export default class Vlist extends Vue {
             flex: "1 1 auto",
             position: "relative",
             boxSizing: "border-box",
-            height: px(this.rowHeight * this.items.length),
+            height: px(this.contentHeight),
             overflow: "hidden",
-            minWidth: this.minWidth
+            minWidth: this.contentWidth
         };
     }
     get spacerStyle(): StyleObject {
@@ -124,17 +124,25 @@ export default class Vlist extends Vue {
     get renderedItems() {
         return this.items.slice(this.firstIndex, this.lastIndex + 1);
     }
+    get contentHeight() {
+        return this.rowHeight * this.items.length;
+    }
 
     /* methods */
-    contentSizeChanged() {
-        const { bodyWidth, bodyHeight, vScrollBarWidth, hScrollBarHeight } = this.$data;
-        const c = this.$els.content;
-        const contentWidth = c.clientWidth;
-        const contentHeight = c.clientHeight;
-        if (0 < vScrollBarWidth && contentWidth < bodyWidth + vScrollBarWidth ||
-              vScrollBarWidth <= 0 && bodyWidth < contentWidth ||
-                0 < hScrollBarHeight && contentHeight < bodyHeight + hScrollBarHeight ||
-                  hScrollBarHeight <= 0 && bodyHeight < contentHeight) {
+    @watch("contentHeight")
+    contentHeightChanged(newValue, oldValue) {
+        const hScrollBarHeight = this.$data.hScrollBarHeight;
+        const height = this.$data.bodyHeight + hScrollBarHeight;
+        if ((0 < hScrollBarHeight) === (newValue < height)) {
+            // must re-check scrollbar visibilities
+            this.updateBodySize();
+        }
+    }
+    @watch("contentWidth")
+    contentWidthChanged(newValue, oldValue) {
+        const vScrollBarWidth = this.$data.vScrollBarWidth;
+        const width = this.$data.bodyWidth + vScrollBarWidth;
+        if ((0 < vScrollBarWidth) === (newValue < width)) {
             // must re-check scrollbar visibilities
             this.updateBodySize();
         }
