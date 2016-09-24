@@ -1,7 +1,0 @@
-<div class="vtable-cell" :class="column.className" :style="style">
-    <component v-if="column.component" :is="column.component" :item="item" :index="index" :ctx="ctx.ctx">
-    </component>
-    <template v-else>
-        {{ column.value(item, index, ctx.ctx) }}
-    <template>
-</div>

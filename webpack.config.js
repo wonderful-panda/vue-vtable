@@ -17,7 +17,7 @@ module.exports = {
     module: {
         loaders: [
           { test: /\.ts$/, loader: "ts-loader" },
-          { test: /\.html$/, loader: "html-loader" }
+          { test: /\.pug$/, loader: "pug-html-loader" }
         ]
     },
     externals: [

@@ -4,7 +4,7 @@ import { component, pr } from "vueit";
 import vtablecell from "./vtablecell";
 
 @component({
-    template: require("./vtablerow.html"),
+    template: require("./vtablerow.pug"),
     components: { vtablecell }
 })
 export default class VtableRow extends Vue {

@@ -18,7 +18,7 @@ interface VtableData {
 }
 
 @component({
-    template: require("./vtable.html"),
+    template: require("./vtable.pug"),
     components: { vlist, vtablerow, resizeSensor }
 })
 export default class Vtable extends Vue {

@@ -27,7 +27,7 @@ export interface ScrollEventArgs {
 }
 
 @component({
-    template: require("./vlist.html"),
+    template: require("./vlist.pug"),
     components: { resizeSensor }
 })
 export default class Vlist extends Vue {

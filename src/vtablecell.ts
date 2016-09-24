@@ -3,7 +3,7 @@ import { px } from "./utils";
 import { component, pr } from "vueit";
 
 @component({
-    template: require("./vtablecell.html")
+    template: require("./vtablecell.pug")
 })
 export default class VtableCell extends Vue {
     @pr item: any;

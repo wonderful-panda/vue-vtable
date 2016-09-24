@@ -1,0 +1,11 @@
+div.vlist-container(:style="[containerStyle, style]")
+    div.vlist-header-row(v-if="hasHeader", :style="headerStyle")
+        slot(name="header")
+    div.vlist-scrollable(v-el:scrollable, :style="scrollableStyle", @scroll="onScroll")
+        resize-sensor(:debounce="50", @resized="updateBodySize")
+        div.vlist-content(v-el:content, :style="contentStyle")
+            div.vlist-spacer(:style="spacerStyle")
+            div.vlist-row(v-for="item in renderedItems", :track-by="rowTrackBy", :style="rowStyle",
+                @click="onRowClick(item, $index + firstIndex, $event)")
+                    component(:is="rowComponent", :item="item", :index="$index + firstIndex",
+                          :height="rowHeight", :ctx="ctx")
