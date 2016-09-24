@@ -1,18 +1,38 @@
 # vue-vlist
 
-> Light weight vertical list component for Vue
+Table (grid view) component for Vue
+* resizable columns
+* light weight (render visible rows only)
 
-## Build Setup
+[DEMO](http://wonderful-panda.github.io/vue-vlist/example/)
 
-``` bash
-# install dependencies
-npm install
+## Component properties
 
-# serve with hot reload at localhost:8080
-npm run dev
+### vtable
+Culumn-resizable, light weight table component
 
-# build for production with minification
-npm run build
-```
+#### rowHeight
+#### headerHeight
+#### columns
+#### items
+#### rowStyleCycle
+#### splitterWidth
+#### rowClass
+#### getRowClass
+#### rowTrackBy
+#### ctx
 
-For more information see the [docs for vueify](https://github.com/vuejs/vueify).
+### vlist
+Light weight vertical list component
+
+#### rowComponent
+#### items
+#### contentWidth
+#### rowHeight
+#### rowStyleCycle
+#### style
+#### rowTrackBy
+#### ctx
+
+## License
+MIT
