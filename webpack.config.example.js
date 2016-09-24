@@ -15,9 +15,9 @@ module.exports = {
     module: {
         loaders: [
           { test: /\.js$/, loader: "babel-loader?presets[]=es2015", exclude: /node_modules/ },
-          { test: /\.ts$/, loader: "ts-loader" },
-          { test: /\.pug$/, loader: "pug-html-loader" },
-          { test: /\.html$/, loader: "html-loader" }
+          { test: /\.ts$/, loader: "ts-loader", exclude: /node_modules/ },
+          { test: /\.pug$/, loader: "pug-html-loader", exclude: /node_modules/ },
+          { test: /\.html$/, loader: "html-loader", exclude: /node_modules/ }
         ]
     },
     devServer: {

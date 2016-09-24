@@ -16,8 +16,8 @@ module.exports = {
     },
     module: {
         loaders: [
-          { test: /\.ts$/, loader: "ts-loader" },
-          { test: /\.pug$/, loader: "pug-html-loader" }
+          { test: /\.ts$/, loader: "ts-loader", exclude: /node_modules/ },
+          { test: /\.pug$/, loader: "pug-html-loader", exclude: /node_modules/ }
         ]
     },
     externals: [
