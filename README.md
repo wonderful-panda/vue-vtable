@@ -1,10 +1,10 @@
-# vue-vlist
+# vue-vtable
 
 Table (grid view) component for Vue
 * resizable columns
 * light weight (render visible rows only)
 
-[DEMO](http://wonderful-panda.github.io/vue-vlist/example/)
+[DEMO](http://wonderful-panda.github.io/vue-vtable/example/)
 
 ## Component properties
 
