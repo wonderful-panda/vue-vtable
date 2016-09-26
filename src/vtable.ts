@@ -50,7 +50,11 @@ export default class Vtable extends Vue {
     /* style */
     get containerStyle(): StyleObject {
         return {
-            display: "flex", position: "relative", margin: 0, padding: 0, overflow: "hidden"
+            display: "flex",
+            position: "relative",
+            margin: 0,
+            padding: 0,
+            overflow: "hidden"
         };
     }
     get headerStyle(): StyleObject {
@@ -122,7 +126,15 @@ export default class Vtable extends Vue {
     updateScrollPosition(args: ScrollEventArgs) {
         this.$data.scrollLeft = args.scrollLeft;
     }
-    onSplitterMouseDown(index, event: MouseEvent) {
+    splitterClass(index: number) {
+        if (index === this.$data.draggingSplitter) {
+            return "vtable-dragging-splitter";
+        }
+        else {
+            return "vtable-splitter";
+        }
+    }
+    onSplitterMouseDown(index: number, event: MouseEvent) {
         event.preventDefault();
         event.stopPropagation();
         const headerCell = this.$els.header.querySelectorAll("div.vtable-header-cell")[index];

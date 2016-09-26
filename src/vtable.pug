@@ -22,6 +22,6 @@ div.vtable-container(:style="containerStyle")
     div(
         v-for="pos in splitterPositions",
         track-by="$index",
-        :class="$index === draggingSplitter ? 'vtable-dragging-splitter' : 'vtable-splitter'",
+        :class="splitterClass($index)",
         :style="splitterStyle(pos)",
         @mousedown="onSplitterMouseDown($index, $event)")
