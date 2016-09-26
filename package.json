@@ -27,7 +27,7 @@
     "tslint": "^3.15.1",
     "typescript": "^2.0.0",
     "vue-resizesensor": "^0.0.4",
-    "vueit": "^0.0.2",
+    "vue-typescript": "^0.7.0",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.15.0"
   }

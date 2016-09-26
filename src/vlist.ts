@@ -1,18 +1,7 @@
 import * as Vue from "vue";
-import * as _ from "lodash";
 import * as resizeSensor from "vue-resizesensor";
-import { component, prop, p, pr, pd, watch } from "vueit";
+import { VueComponent, Prop, Watch } from "vue-typescript";
 import { px } from "./utils";
-
-interface VlistData {
-    scrollLeft: number;
-    scrollTop: number;
-    bodyWidth: number;
-    bodyHeight: number;
-    vScrollBarWidth: number;
-    hScrollBarHeight: number;
-    hasHeader: boolean;
-}
 
 export interface BodyResizeEventArgs {
     bodyWidth: number;
@@ -26,32 +15,32 @@ export interface ScrollEventArgs {
     scrollTop: number;
 }
 
-@component({
+@VueComponent({
     template: require("./vlist.pug"),
     components: { resizeSensor }
 })
 export default class Vlist extends Vue {
-    $data: VlistData;
     $els: { scrollable: HTMLElement, content: HTMLElement };
 
     /* props */
-    @pr rowComponent: any;
-    @pr items: any[];
-    @p contentWidth: number | string;
-    @p ctx: any;
+    @Prop({ required: true }) rowComponent: any;
+    @Prop({ required: true }) items: any[];
+    @Prop contentWidth: number | string;
+    @Prop ctx: any;
 
-    @prop({ required: true, validator: v => v > 0 }) rowHeight: number;
-    @prop({ default: 1, validator: v => v > 0 }) rowStyleCycle: number;
-    @pd(() => ({})) style: any;
-    @pd("$index") rowTrackBy: string;
+    @Prop({ required: true, validator: v => v > 0 }) rowHeight: number;
+    @Prop({ default: 1, validator: v => v > 0 }) rowStyleCycle: number;
+    @Prop({ default: () => ({}) }) style: any;
+    @Prop({ default: "$index" }) rowTrackBy: string;
 
     /* data */
-    data(): VlistData {
-        return {
-            scrollLeft: 0, scrollTop: 0, bodyWidth: 0, bodyHeight: 0,
-            vScrollBarWidth: 0, hScrollBarHeight: 0, hasHeader: true
-        };
-    }
+    scrollLeft: number = 0;
+    scrollTop: number = 0;
+    bodyWidth: number = 0;
+    bodyHeight: number = 0;
+    vScrollBarWidth: number = 0;
+    hScrollBarHeight: number = 0;
+    hasHeader: boolean = true;
 
     /* styles */
     get containerStyle(): StyleObject {
@@ -68,9 +57,9 @@ export default class Vlist extends Vue {
             boxSizing: "border-box",
             minWidth: this.contentWidth,
             position: "relative",
-            left: px(this.$data.scrollLeft * -1),
+            left: px(this.scrollLeft * -1),
             overflow: "hidden",
-            padding: `0 ${px(this.$data.vScrollBarWidth)} 0 0`
+            padding: `0 ${px(this.vScrollBarWidth)} 0 0`
         };
     }
     get scrollableStyle() {
@@ -112,14 +101,14 @@ export default class Vlist extends Vue {
 
     /* computed */
     get firstIndex() {
-        let value = Math.floor(this.$data.scrollTop / this.rowHeight);
+        let value = Math.floor(this.scrollTop / this.rowHeight);
         if (this.rowStyleCycle > 1) {
             value -= (value % this.rowStyleCycle);
         }
         return value;
     }
     get lastIndex() {
-        return Math.ceil((this.$data.scrollTop + this.$data.bodyHeight) / this.rowHeight);
+        return Math.ceil((this.scrollTop + this.bodyHeight) / this.rowHeight);
     }
     get renderedItems() {
         return this.items.slice(this.firstIndex, this.lastIndex + 1);
@@ -129,36 +118,35 @@ export default class Vlist extends Vue {
     }
 
     /* methods */
-    @watch("contentHeight")
+    @Watch("contentHeight")
     contentHeightChanged(newValue, oldValue) {
-        const hScrollBarHeight = this.$data.hScrollBarHeight;
-        const height = this.$data.bodyHeight + hScrollBarHeight;
+        const hScrollBarHeight = this.hScrollBarHeight;
+        const height = this.bodyHeight + hScrollBarHeight;
         if ((0 < hScrollBarHeight) === (newValue < height)) {
             // must re-check scrollbar visibilities
             this.updateBodySize();
         }
     }
-    @watch("contentWidth")
+    @Watch("contentWidth")
     contentWidthChanged(newValue, oldValue) {
-        const vScrollBarWidth = this.$data.vScrollBarWidth;
-        const width = this.$data.bodyWidth + vScrollBarWidth;
+        const vScrollBarWidth = this.vScrollBarWidth;
+        const width = this.bodyWidth + vScrollBarWidth;
         if ((0 < vScrollBarWidth) === (newValue < width)) {
             // must re-check scrollbar visibilities
             this.updateBodySize();
         }
     }
     updateBodySize() {
-        const data = this.$data;
         const sc = this.$els.scrollable;
         const bound = sc.getBoundingClientRect();
         const bodyWidth = sc.clientWidth;
         const bodyHeight = sc.clientHeight;
         const vScrollBarWidth = Math.floor(bound.width - bodyWidth);
         const hScrollBarHeight = Math.floor(bound.height - bodyHeight);
-        if (data.bodyWidth !== bodyWidth ||
-            data.bodyHeight !== bodyHeight ||
-            data.vScrollBarWidth !== vScrollBarWidth ||
-            data.hScrollBarHeight !== hScrollBarHeight) {
+        if (this.bodyWidth !== bodyWidth ||
+            this.bodyHeight !== bodyHeight ||
+            this.vScrollBarWidth !== vScrollBarWidth ||
+            this.hScrollBarHeight !== hScrollBarHeight) {
 
             const args: BodyResizeEventArgs = {
                 bodyWidth,
@@ -166,14 +154,18 @@ export default class Vlist extends Vue {
                 vScrollBarWidth,
                 hScrollBarHeight
             };
-            _.assign(data, args);
+            this.bodyWidth = bodyWidth;
+            this.bodyHeight = bodyHeight;
+            this.vScrollBarWidth = vScrollBarWidth;
+            this.hScrollBarHeight = hScrollBarHeight;
             this.$emit("body-resize", args);
         }
     };
     onScroll(event: Event) {
         const { scrollLeft, scrollTop } = this.$els.scrollable;
         const args: ScrollEventArgs = { scrollLeft, scrollTop };
-        _.assign(this.$data, args);
+        this.scrollLeft = scrollLeft;
+        this.scrollTop = scrollTop;
         this.$emit("scroll", args);
     }
     onRowClick(item: any, index: number, event: Event) {
@@ -181,6 +173,6 @@ export default class Vlist extends Vue {
     }
 
     attached() {
-        this.$data.hasHeader = (this.$el.querySelector("[slot=header]") != null);
+        this.hasHeader = (this.$el.querySelector("[slot=header]") != null);
     }
 }

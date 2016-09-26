@@ -1,50 +1,43 @@
 import * as Vue from "vue";
 import * as _ from "lodash";
 import { px } from "./utils";
-import { component, prop, p, pr, pd, watch } from "vueit";
+import { VueComponent, Prop, Watch } from "vue-typescript";
 import * as resizeSensor from "vue-resizesensor";
 import vlist from "./vlist";
 import { BodyResizeEventArgs, ScrollEventArgs } from "./vlist";
 import vtablerow from "./vtablerow";
 
-interface VtableData {
-    widths: number[];
-    bodyWidth: number;
-    bodyHeight: number;
-    scrollLeft: number;
-    contentWidth: number;
-    splitterPositions: number[];
-    draggingSplitter: number;
-}
-
-@component({
+@VueComponent({
     template: require("./vtable.pug"),
     components: { vlist, vtablerow, resizeSensor }
 })
 export default class Vtable extends Vue {
-    $data: VtableData;
     $els: { header: HTMLElement };
 
     /* props */
-    @prop({ required: true, validator: v => v > 0 }) rowHeight: number;
-    @pd(0) headerHeight: number;
-    @pr columns: VtableColumn[];
-    @pr items: any[];
-    @prop({ default: 1, validator: v => v > 0 }) rowStyleCycle: number;
-    @prop({ default: 3, validator: v => v > 0 }) splitterWidth: number;
-    @pd("vtable-row") rowClass: string;
-    @p getRowClass: (item: any, index: number) => string;
-    @p ctx: any;
-    @pd("$index") rowTrackBy: string;
+    @Prop({ required: true, validator: v => v > 0 }) rowHeight: number;
+    @Prop headerHeight: number = 0;
+    @Prop({ required: true }) columns: VtableColumn[];
+    @Prop({ required: true }) items: any[];
+    @Prop({ default: 1, validator: v => v > 0 }) rowStyleCycle: number;
+    @Prop({ default: 3, validator: v => v > 0 }) splitterWidth: number;
+    @Prop rowClass: string = "vtable-row";
+    @Prop getRowClass: (item: any, index: number) => string;
+    @Prop ctx: any;
+    @Prop rowTrackBy: string = "$index";
 
     /* data */
-    data(): VtableData {
-        const contentWidth = _.sumBy(this.columns, c => c.defaultWidth + this.splitterWidth);
-        return {
-            widths: this.columns.map(c => c.defaultWidth),
-            bodyWidth: 0, bodyHeight: 0, scrollLeft: 0, contentWidth,
-            splitterPositions: [], draggingSplitter: -1
-        };
+    widths: number[] = [];
+    bodyWidth: number = 0;
+    bodyHeight: number = 0;
+    scrollLeft: number = 0;
+    contentWidth: number = 0;
+    splitterPositions: number[] = [];
+    draggingSplitter: number = -1;
+
+    ready() {
+        this.widths = this.columns.map(c => c.defaultWidth);
+        this.contentWidth = _.sumBy(this.columns, c => c.defaultWidth + this.splitterWidth);
     }
 
     /* style */
@@ -81,7 +74,7 @@ export default class Vtable extends Vue {
         };
     }
     splitterStyle(pos) {
-        const {scrollLeft, bodyWidth, bodyHeight} = this.$data;
+        const {scrollLeft, bodyWidth, bodyHeight} = this;
         const left = pos - scrollLeft;
         const clipR = left - bodyWidth;
         return {
@@ -103,7 +96,7 @@ export default class Vtable extends Vue {
             columns: this.columns,
             getRowClass: this.getRowClass ? this.getRowClass : (item, index) => rowClass,
             splitterWidth: this.splitterWidth,
-            widths: this.$data.widths
+            widths: this.widths
         };
     }
     get actualHeaderHeight() {
@@ -112,22 +105,22 @@ export default class Vtable extends Vue {
 
     /* methods */
     updateBodySize(args: BodyResizeEventArgs) {
-        this.$data.bodyWidth = this.$el.clientWidth - args.vScrollBarWidth;
-        this.$data.bodyHeight = this.$el.clientHeight - args.hScrollBarHeight;
-        Vue.nextTick(() => this.updateSplitterPositions());
+        this.bodyWidth = this.$el.clientWidth - args.vScrollBarWidth;
+        this.bodyHeight = this.$el.clientHeight - args.hScrollBarHeight;
     }
-    @watch("listCtx.widths")
+    @Watch("bodyWidth")
+    @Watch("listCtx.widths")
     updateSplitterPositions() {
         const boundingRect = this.$el.getBoundingClientRect();
-        const xoffset = boundingRect.left + this.$el.clientLeft - this.$data.scrollLeft;
+        const xoffset = boundingRect.left + this.$el.clientLeft - this.scrollLeft;
         const headerCells = this.$els.header.querySelectorAll("div.vtable-header-cell");
-        this.$data.splitterPositions = _.map(headerCells, el => el.getBoundingClientRect().right - xoffset);
+        this.splitterPositions = _.map(headerCells, el => el.getBoundingClientRect().right - xoffset);
     }
     updateScrollPosition(args: ScrollEventArgs) {
-        this.$data.scrollLeft = args.scrollLeft;
+        this.scrollLeft = args.scrollLeft;
     }
     splitterClass(index: number) {
-        if (index === this.$data.draggingSplitter) {
+        if (index === this.draggingSplitter) {
             return "vtable-dragging-splitter";
         }
         else {
@@ -142,23 +135,22 @@ export default class Vtable extends Vue {
         const startWidth = headerCell.clientWidth;
         const startX = event.screenX;
         const minWidth = column.minWidth || 5;
-        const $d = this.$data;
         const onMouseMove = (e: MouseEvent) => {
             e.preventDefault();
             e.stopPropagation();
             const offset = e.screenX - startX;
             const width = Math.max(startWidth + offset, minWidth);
-            $d.widths.$set(index, width);
-            $d.contentWidth = _.sumBy($d.widths, w => w + this.splitterWidth);
-            $d.draggingSplitter = index;
+            this.widths.$set(index, width);
+            this.contentWidth = _.sumBy(this.widths, w => w + this.splitterWidth);
+            this.draggingSplitter = index;
         };
         const onMouseUp = () => {
             document.removeEventListener("mousemove", onMouseMove);
             document.removeEventListener("mouseup", onMouseUp);
-            $d.draggingSplitter = -1;
+            this.draggingSplitter = -1;
         };
         document.addEventListener("mousemove", onMouseMove);
         document.addEventListener("mouseup", onMouseUp);
-        $d.draggingSplitter = index;
+        this.draggingSplitter = index;
     }
 }
