@@ -1,8 +1,9 @@
 {
-  "name": "vue-vlist",
+  "name": "vue-vtable",
   "description": "Light weight vertical list component for Vue",
   "author": "Iwata Hidetaka <iwata0303@gmail.com>",
   "main": "dist/index.js",
+  "version": "0.0.1",
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack",
     "tslint": "tslint --project tsconfig.json",
