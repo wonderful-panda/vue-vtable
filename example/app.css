@@ -1,0 +1,45 @@
+html {
+    width: 100%;
+    height: 100%;
+}
+body {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-flow: column nowrap;
+}
+#main-list {
+    flex: 1 1 0px;
+    border: 1px #888 solid;
+}
+.vlist-header-row {
+    background-color: #bbf;
+    border-bottom: 1px #888 solid;
+}
+.vtable-row-selected {
+    font-weight: bold;
+}
+.vlist-row:nth-child(odd) {
+    background-color: #eef;
+}
+.vlist-row:hover {
+    background-color: #ddf;
+}
+.vtable-splitter {
+    border-right: 1px #aaa solid;
+}
+.vtable-dragging-splitter {
+    background-color: #aaf;
+}
+.vtable-cell, .vtable-header-cell {
+    padding: 0 0.2em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.cell-desc {
+    flex: 1 1 auto;
+}
+
