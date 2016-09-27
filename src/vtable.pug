@@ -9,19 +9,13 @@ div.vtable-container(:style="containerStyle")
         :ctx="listCtx",
         :row-track-by="rowTrackBy",
         @scroll="updateScrollPosition",
-        @body-resize="updateBodySize",
         @row-click="$emit('row-click', $arguments[0])")
 
             div.vtable-header(slot="header", v-el:header, :style="headerStyle")
-                div.vtable-header-cell(
-                    v-for="c in columns",
-                    :class="c.className",
-                    :style="headerCellStyle(listCtx.widths[$index])")
-                        | {{ c.title }}
+                template(v-for="c in columns")
+                    div.vtable-header-cell(
+                        :class="c.className",
+                        :style="headerCellStyle(listCtx.widths[$index])")
+                            | {{ c.title }}
+                    vtablesplitter(:index="$index", :ctx="listCtx")
 
-    div(
-        v-for="pos in splitterPositions",
-        track-by="$index",
-        :class="splitterClass($index)",
-        :style="splitterStyle(pos)",
-        @mousedown="onSplitterMouseDown($index, $event)")

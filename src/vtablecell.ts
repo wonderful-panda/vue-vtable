@@ -21,7 +21,7 @@ export default class VtableCell extends Vue {
             minWidth: w,
             width: w,
             lineHeight: px(this.height),
-            margin: `0 ${this.ctx.splitterWidth}px 0 0`,
+            margin: 0,
             boxSizing: "border-box",
             overflow: "hidden"
         };

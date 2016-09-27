@@ -3,6 +3,7 @@ declare function require(id: string): any;
 declare interface StyleObject {
     bottom?: string;
     boxSizing?: "border-box" | "content-box";
+    cursor?: string;
     display?: string;
     flex?: string;
     flexBasis?: string;
@@ -43,4 +44,6 @@ declare interface VtableListCtx {
     getRowClass: (item: any, index: number) => string;
     widths: number[];
     splitterWidth: number;
+    draggingSplitter: number;
+    onSplitterMouseDown: (index: number, event: MouseEvent) => void;
 }

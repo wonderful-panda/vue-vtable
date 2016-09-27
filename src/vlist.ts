@@ -3,13 +3,6 @@ import * as resizeSensor from "vue-resizesensor";
 import { VueComponent, Prop, Watch } from "vue-typescript";
 import { px } from "./utils";
 
-export interface BodyResizeEventArgs {
-    bodyWidth: number;
-    bodyHeight: number;
-    vScrollBarWidth: number;
-    hScrollBarHeight: number;
-}
-
 export interface ScrollEventArgs {
     scrollLeft: number;
     scrollTop: number;
@@ -148,17 +141,10 @@ export default class Vlist extends Vue {
             this.vScrollBarWidth !== vScrollBarWidth ||
             this.hScrollBarHeight !== hScrollBarHeight) {
 
-            const args: BodyResizeEventArgs = {
-                bodyWidth,
-                bodyHeight,
-                vScrollBarWidth,
-                hScrollBarHeight
-            };
             this.bodyWidth = bodyWidth;
             this.bodyHeight = bodyHeight;
             this.vScrollBarWidth = vScrollBarWidth;
             this.hScrollBarHeight = hScrollBarHeight;
-            this.$emit("body-resize", args);
         }
     };
     onScroll(event: Event) {

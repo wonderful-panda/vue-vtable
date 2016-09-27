@@ -1,15 +1,15 @@
 import * as Vue from "vue";
 import * as _ from "lodash";
 import { px } from "./utils";
-import { VueComponent, Prop, Watch } from "vue-typescript";
-import * as resizeSensor from "vue-resizesensor";
+import { VueComponent, Prop } from "vue-typescript";
 import vlist from "./vlist";
-import { BodyResizeEventArgs, ScrollEventArgs } from "./vlist";
+import { ScrollEventArgs } from "./vlist";
 import vtablerow from "./vtablerow";
+import vtablesplitter from "./vtablesplitter";
 
 @VueComponent({
     template: require("./vtable.pug"),
-    components: { vlist, vtablerow, resizeSensor }
+    components: { vlist, vtablerow, vtablesplitter }
 })
 export default class Vtable extends Vue {
     $els: { header: HTMLElement };
@@ -28,16 +28,12 @@ export default class Vtable extends Vue {
 
     /* data */
     widths: number[] = [];
-    bodyWidth: number = 0;
-    bodyHeight: number = 0;
     scrollLeft: number = 0;
-    contentWidth: number = 0;
     splitterPositions: number[] = [];
     draggingSplitter: number = -1;
 
     ready() {
         this.widths = this.columns.map(c => c.defaultWidth);
-        this.contentWidth = _.sumBy(this.columns, c => c.defaultWidth + this.splitterWidth);
     }
 
     /* style */
@@ -69,23 +65,8 @@ export default class Vtable extends Vue {
             width: px(width),
             lineHeight: px(this.actualHeaderHeight),
             boxSizing: "border-box",
-            margin: `0 ${this.splitterWidth}px 0 0`,
+            margin: 0,
             overflow: "hidden"
-        };
-    }
-    splitterStyle(pos) {
-        const {scrollLeft, bodyWidth, bodyHeight} = this;
-        const left = pos - scrollLeft;
-        const clipR = left - bodyWidth;
-        return {
-            position: "absolute",
-            top: "0px",
-            left,
-            width: this.splitterWidth,
-            height: px(bodyHeight),
-            clip: clipR > 0 ? `rect(${clipR}px, 0, 0, 0)` : "auto",
-            boxSizing: "border-box",
-            cursor: "col-resize"
         };
     }
     /** ctx object will be passed to vlist */
@@ -96,36 +77,21 @@ export default class Vtable extends Vue {
             columns: this.columns,
             getRowClass: this.getRowClass ? this.getRowClass : (item, index) => rowClass,
             splitterWidth: this.splitterWidth,
-            widths: this.widths
+            widths: this.widths,
+            draggingSplitter: this.draggingSplitter,
+            onSplitterMouseDown: this.onSplitterMouseDown
         };
     }
     get actualHeaderHeight() {
         return this.headerHeight > 0 ? this.headerHeight : this.rowHeight;
     }
+    get contentWidth() {
+        return _.sumBy(this.widths, w => w + this.splitterWidth);
+    }
 
     /* methods */
-    updateBodySize(args: BodyResizeEventArgs) {
-        this.bodyWidth = this.$el.clientWidth - args.vScrollBarWidth;
-        this.bodyHeight = this.$el.clientHeight - args.hScrollBarHeight;
-    }
-    @Watch("bodyWidth")
-    @Watch("listCtx.widths")
-    updateSplitterPositions() {
-        const boundingRect = this.$el.getBoundingClientRect();
-        const xoffset = boundingRect.left + this.$el.clientLeft - this.scrollLeft;
-        const headerCells = this.$els.header.querySelectorAll("div.vtable-header-cell");
-        this.splitterPositions = _.map(headerCells, el => el.getBoundingClientRect().right - xoffset);
-    }
     updateScrollPosition(args: ScrollEventArgs) {
         this.scrollLeft = args.scrollLeft;
-    }
-    splitterClass(index: number) {
-        if (index === this.draggingSplitter) {
-            return "vtable-dragging-splitter";
-        }
-        else {
-            return "vtable-splitter";
-        }
     }
     onSplitterMouseDown(index: number, event: MouseEvent) {
         event.preventDefault();
@@ -141,7 +107,6 @@ export default class Vtable extends Vue {
             const offset = e.screenX - startX;
             const width = Math.max(startWidth + offset, minWidth);
             this.widths.$set(index, width);
-            this.contentWidth = _.sumBy(this.widths, w => w + this.splitterWidth);
             this.draggingSplitter = index;
         };
         const onMouseUp = () => {

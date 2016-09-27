@@ -1,8 +1,10 @@
 div(:class="ctx.getRowClass(item, index)", :style="rowStyle")
-    vtablecell(
-        v-for="c in ctx.columns",
-        :item="item",
-        :index="index",
-        :column-index="$index",
-        :height="height",
-        :ctx="ctx")
+    template(v-for="c in ctx.columns")
+        vtablecell(
+            :item="item",
+            :index="index",
+            :column-index="$index",
+            :height="height",
+            :ctx="ctx")
+        vtablesplitter(:index="$index", :ctx="ctx")
+
