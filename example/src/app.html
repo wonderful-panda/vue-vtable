@@ -1,13 +1,15 @@
-<h1>
-  {{ message }}
-</h1>
-<div style="margin-bottom: 1em;">
-  <span>Row height:</span>
-  <input type="number" :value="rowHeight" @keyup.enter="rowHeight = parseInt($event.target.value)" />
-  <span>Row count:</span>
-  <input type="number" :value="items.length" @keyup.enter="items = createItems(parseInt($event.target.value))" />
+<div class="app-container">
+    <h1>
+      {{ message }}
+    </h1>
+    <div style="margin-bottom: 1em;">
+      <span>Row height:</span>
+      <input type="number" :value="rowHeight" @keyup.enter="rowHeight = parseInt($event.target.value)" />
+      <span>Row count:</span>
+      <input type="number" :value="itemCount" @keyup.enter="itemCount = parseInt($event.target.value)" />
+    </div>
+    <vtable id="main-list" :items="items" :row-height="rowHeight" :header-height="20" :columns="columns"
+            :get-row-class="getRowClass" :row-style-cycle="2" :get-item-key="getItemKey" :ctx="ctx"
+            @row-click="onRowClick">
+    </vtable>
 </div>
-<vtable id="main-list" :items="items" :row-height="rowHeight" :header-height="20" :columns="columns"
-        :get-row-class="getRowClass" :row-style-cycle="2" :row-trac-by="id" :ctx="ctx"
-        @row-click="onRowClick">
-</vtable>

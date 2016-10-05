@@ -13,11 +13,10 @@
   },
   "dependencies": {
     "lodash": "^4.13.1",
-    "vue": "^1.0.28"
+    "vue": "^2.0.1"
   },
   "devDependencies": {
     "@types/lodash": "0.0.27",
-    "@types/vue": "^1.0.26",
     "babel-core": "^6.14.0",
     "babel-loader": "^6.2.5",
     "babel-preset-es2015": "^6.14.0",
@@ -29,8 +28,8 @@
     "ts-loader": "^0.8.2",
     "tslint": "^3.15.1",
     "typescript": "^2.0.0",
-    "vue-resizesensor": "^0.0.4",
-    "vue-typescript": "^0.7.0",
+    "vue-resizesensor": "0.1.0",
+    "vueit": "0.1.1",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.15.0"
   }

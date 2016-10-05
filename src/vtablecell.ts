@@ -1,16 +1,16 @@
 import * as Vue from "vue";
 import { px } from "./utils";
-import { VueComponent, Prop } from "vue-typescript";
+import { component, pr } from "vueit";
 
-@VueComponent({
+@component({
     template: require("./vtablecell.pug")
 })
 export default class VtableCell extends Vue {
-    @Prop({ required: true }) item: any;
-    @Prop({ required: true }) index: number;
-    @Prop({ required: true }) columnIndex: number;
-    @Prop({ required: true }) height: number;
-    @Prop({ required: true }) ctx: VtableListCtx;
+    @pr item: any;
+    @pr index: number;
+    @pr columnIndex: number;
+    @pr height: number;
+    @pr ctx: VtableListCtx;
 
     get column() {
         return this.ctx.columns[this.columnIndex];

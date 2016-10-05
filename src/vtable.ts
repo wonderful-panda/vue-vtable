@@ -1,39 +1,47 @@
 import * as Vue from "vue";
 import * as _ from "lodash";
 import { px } from "./utils";
-import { VueComponent, Prop } from "vue-typescript";
+import { component, prop, p, pr } from "vueit";
 import vlist from "./vlist";
 import { ScrollEventArgs } from "./vlist";
 import vtablerow from "./vtablerow";
 import vtablesplitter from "./vtablesplitter";
 
-@VueComponent({
+interface VtableData {
+    widths: number[];
+    scrollLeft: number;
+    splitterPositions: number[];
+    draggingSplitter: number;
+}
+
+@component({
     template: require("./vtable.pug"),
     components: { vlist, vtablerow, vtablesplitter }
 })
 export default class Vtable extends Vue {
-    $els: { header: HTMLElement };
+    $data: VtableData;
+    $refs: { header: Element };
 
     /* props */
-    @Prop({ required: true, validator: v => v > 0 }) rowHeight: number;
-    @Prop headerHeight: number = 0;
-    @Prop({ required: true }) columns: VtableColumn[];
-    @Prop({ required: true }) items: any[];
-    @Prop({ default: 1, validator: v => v > 0 }) rowStyleCycle: number;
-    @Prop({ default: 3, validator: v => v > 0 }) splitterWidth: number;
-    @Prop rowClass: string = "vtable-row";
-    @Prop getRowClass: (item: any, index: number) => string;
-    @Prop ctx: any;
-    @Prop rowTrackBy: string = "$index";
+    @prop({ required: true, validator: v => v > 0 }) rowHeight: number;
+    @prop({ default: 0 }) headerHeight: number = 0;
+    @pr columns: VtableColumn[];
+    @pr items: any[];
+    @prop({ default: 1, validator: v => v > 0 }) rowStyleCycle: number;
+    @prop({ default: 3, validator: v => v > 0 }) splitterWidth: number;
+    @p rowClass: string = "vtable-row";
+    @p getRowClass: (item: any, index: number) => string;
+    @p ctx: any;
+    @pr getItemKey: (item: any) => number | string;
 
     /* data */
-    widths: number[] = [];
-    scrollLeft: number = 0;
-    splitterPositions: number[] = [];
-    draggingSplitter: number = -1;
-
-    ready() {
-        this.widths = this.columns.map(c => c.defaultWidth);
+    data(): VtableData {
+        return {
+            widths: this.columns.map(c => c.defaultWidth),
+            scrollLeft: 0,
+            splitterPositions: [],
+            draggingSplitter: -1
+        };
     }
 
     /* style */
@@ -77,8 +85,8 @@ export default class Vtable extends Vue {
             columns: this.columns,
             getRowClass: this.getRowClass ? this.getRowClass : (item, index) => rowClass,
             splitterWidth: this.splitterWidth,
-            widths: this.widths,
-            draggingSplitter: this.draggingSplitter,
+            widths: this.$data.widths,
+            draggingSplitter: this.$data.draggingSplitter,
             onSplitterMouseDown: this.onSplitterMouseDown
         };
     }
@@ -86,17 +94,17 @@ export default class Vtable extends Vue {
         return this.headerHeight > 0 ? this.headerHeight : this.rowHeight;
     }
     get contentWidth() {
-        return _.sumBy(this.widths, w => w + this.splitterWidth);
+        return _.sumBy(this.$data.widths, w => w + this.splitterWidth);
     }
 
     /* methods */
     updateScrollPosition(args: ScrollEventArgs) {
-        this.scrollLeft = args.scrollLeft;
+        this.$data.scrollLeft = args.scrollLeft;
     }
     onSplitterMouseDown(index: number, event: MouseEvent) {
         event.preventDefault();
         event.stopPropagation();
-        const headerCell = this.$els.header.querySelectorAll("div.vtable-header-cell")[index];
+        const headerCell = this.$refs.header.querySelectorAll("div.vtable-header-cell")[index];
         const column = this.columns[index];
         const startWidth = headerCell.clientWidth;
         const startX = event.screenX;
@@ -106,16 +114,19 @@ export default class Vtable extends Vue {
             e.stopPropagation();
             const offset = e.screenX - startX;
             const width = Math.max(startWidth + offset, minWidth);
-            this.widths.$set(index, width);
-            this.draggingSplitter = index;
+            Vue.set(this.$data.widths, index, width);
+            this.$data.draggingSplitter = index;
         };
         const onMouseUp = () => {
             document.removeEventListener("mousemove", onMouseMove);
             document.removeEventListener("mouseup", onMouseUp);
-            this.draggingSplitter = -1;
+            this.$data.draggingSplitter = -1;
         };
         document.addEventListener("mousemove", onMouseMove);
         document.addEventListener("mouseup", onMouseUp);
-        this.draggingSplitter = index;
+        this.$data.draggingSplitter = index;
+    }
+    onRowClick(arg) {
+        this.$emit("row-click", arg);
     }
 }

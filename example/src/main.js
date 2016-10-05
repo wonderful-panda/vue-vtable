@@ -44,6 +44,7 @@ const columns = [
 ];
 
 const app = Vue.extend({
+    name: "App",
     template: require("./app.html"),
     components: { vtable },
     data() {
@@ -51,27 +52,32 @@ const app = Vue.extend({
             columns,
             ctx: { selectedIndex: -1 },
             rowHeight: 20,
-            items: this.createItems(500),
+            itemCount: 100,
             message: "vtable demo"
         };
     },
-    methods: {
-        createItems(rowCount) {
-            return _.range(1, rowCount + 1).map(i => {
+    computed: {
+        items() {
+            return _.range(1, this.itemCount + 1).map(i => {
                 return { id: i, name: "name of " + i, checked: false };
             });
-        },
+        }
+    },
+    methods: {
         onRowClick: function(args) {
             args.item.checked = !args.item.checked;
             this.ctx.selectedIndex = args.index;
         },
         getRowClass: function(item, index) {
             return item.index === this.ctx.selectedIndex ? "vtable-row-selected" : "vtable-row";
+        },
+        getItemKey(item, index) {
+            return item.id;
         }
     }
 });
 
 new Vue({
-    el: "body",
+    el: "#app",
     components: { app: app }
 });

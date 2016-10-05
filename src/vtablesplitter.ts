@@ -1,13 +1,13 @@
 import * as Vue from "vue";
-import { VueComponent, Prop } from "vue-typescript";
+import { component, pr} from "vueit";
 import { px } from "./utils";
 
-@VueComponent({
+@component({
     template: require("./vtablesplitter.pug")
 })
 export default class VtableSplitter extends Vue {
-    @Prop({ required: true }) ctx: VtableListCtx;
-    @Prop({ required: true }) index: number;
+    @pr ctx: VtableListCtx;
+    @pr index: number;
 
     get className() {
         if (this.ctx.draggingSplitter === this.index) {

@@ -1,18 +1,18 @@
 import * as Vue from "vue";
 import { px } from "./utils";
-import { VueComponent, Prop } from "vue-typescript";
+import { component, pr } from "vueit";
 import vtablecell from "./vtablecell";
 import vtablesplitter from "./vtablesplitter";
 
-@VueComponent({
+@component({
     template: require("./vtablerow.pug"),
     components: { vtablecell, vtablesplitter }
 })
 export default class VtableRow extends Vue {
-    @Prop({ required: true }) item: any;
-    @Prop({ required: true }) index: number;
-    @Prop({ required: true }) height: number;
-    @Prop({ required: true }) ctx: VtableListCtx;
+    @pr item: any;
+    @pr index: number;
+    @pr height: number;
+    @pr ctx: VtableListCtx;
 
     get rowStyle() {
         return {

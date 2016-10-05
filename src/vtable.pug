@@ -7,15 +7,15 @@ div.vtable-container(:style="containerStyle")
         :row-style-cycle="rowStyleCycle",
         :content-width="contentWidth",
         :ctx="listCtx",
-        :row-track-by="rowTrackBy",
+        :get-item-key="getItemKey",
         @scroll="updateScrollPosition",
-        @row-click="$emit('row-click', $arguments[0])")
+        @row-click="onRowClick")
 
-            div.vtable-header(slot="header", v-el:header, :style="headerStyle")
-                template(v-for="c in columns")
+            div.vtable-header(slot="header", ref="header", :style="headerStyle")
+                template(v-for="(c, index) in columns")
                     div.vtable-header-cell(
                         :class="c.className",
-                        :style="headerCellStyle(listCtx.widths[$index])")
+                        :style="headerCellStyle(listCtx.widths[index])")
                             | {{ c.title }}
-                    vtablesplitter(:index="$index", :ctx="listCtx")
+                    vtablesplitter(:index="index", :ctx="listCtx")
 
