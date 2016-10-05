@@ -6,6 +6,9 @@ Table (grid view) component for Vue
 
 [DEMO](http://wonderful-panda.github.io/vue-vtable/example/)
 
+## Requirement
+Vue >= 2.0.1
+
 ## Component properties
 
 ### vtable
@@ -19,7 +22,7 @@ Culumn-resizable, light weight table component
 #### splitterWidth
 #### rowClass
 #### getRowClass
-#### rowTrackBy
+#### getItemKey
 #### ctx
 
 ### vlist
@@ -31,7 +34,7 @@ Light weight vertical list component
 #### rowHeight
 #### rowStyleCycle
 #### style
-#### rowTrackBy
+#### getItemKey
 #### ctx
 
 ## License
