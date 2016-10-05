@@ -69,7 +69,7 @@ const app = Vue.extend({
             this.ctx.selectedIndex = args.index;
         },
         getRowClass: function(item, index) {
-            return item.index === this.ctx.selectedIndex ? "vtable-row-selected" : "vtable-row";
+            return index === this.ctx.selectedIndex ? "vtable-row-selected" : "vtable-row";
         },
         getItemKey(item, index) {
             return item.id;
