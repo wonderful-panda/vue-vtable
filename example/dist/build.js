@@ -125,7 +125,7 @@
 	            this.ctx.selectedIndex = args.index;
 	        },
 	        getRowClass: function getRowClass(item, index) {
-	            return item.index === this.ctx.selectedIndex ? "vtable-row-selected" : "vtable-row";
+	            return index === this.ctx.selectedIndex ? "vtable-row-selected" : "vtable-row";
 	        },
 	        getItemKey: function getItemKey(item, index) {
 	            return item.id;
@@ -26441,7 +26441,7 @@
 /* 17 */
 /***/ function(module, exports) {
 
-	module.exports = "<div :class=\"ctx.getRowClass(item, index)\" :style=\"rowStyle\"><template v-for=\"(c, index) in ctx.columns\"><vtablecell :item=\"item\" :index=\"index\" :column-index=\"index\" :height=\"height\" :ctx=\"ctx\"></vtablecell><vtablesplitter :index=\"index\" :ctx=\"ctx\"></vtablesplitter></template></div>";
+	module.exports = "<div :class=\"ctx.getRowClass(item, index)\" :style=\"rowStyle\"><template v-for=\"(c, columnIndex) in ctx.columns\"><vtablecell :item=\"item\" :index=\"index\" :column-index=\"columnIndex\" :height=\"height\" :ctx=\"ctx\"></vtablecell><vtablesplitter :index=\"index\" :ctx=\"ctx\"></vtablesplitter></template></div>";
 
 /***/ },
 /* 18 */
