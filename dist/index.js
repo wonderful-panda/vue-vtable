@@ -420,22 +420,6 @@ return /******/ (function(modules) { // webpackBootstrap
 		
 		var AnnotatedOptionsKey = "vue-component-decorator:options";
 		var DesignTypeKey = "design:type";
-		/*
-		  data?: Object | ((this: V) => Object);
-		  el?: Element | String;
-		  render?(this: V, createElement: $createElement): VNode;
-		  beforeCreate?(this: V): void;
-		  created?(this: V): void;
-		  beforeDestroy?(this: V): void;
-		  destroyed?(this: V): void;
-		  beforeMount?(this: V): void;
-		  mounted?(this: V): void;
-		  beforeUpdate?(this: V): void;
-		  updated?(this: V): void;
-		}
-		
-		
-		 * */
 		var internalHooks = ["data", "render", "beforeCreate", "created", "beforeMount", "mounted", "beforeUpdate", "updated", "activated", "deactivated", "beforeDestroy", "destroyed"];
 		function assign(target, other) {
 		    Object.keys(other).forEach(function (k) {
@@ -446,6 +430,15 @@ return /******/ (function(modules) { // webpackBootstrap
 		function makeComponent(target, option) {
 		    option = assign({}, option);
 		    option.name = option.name || target["name"];
+		    // if option.template is precompiled template,
+		    // set `render` and `staticRenderFns` instead of `template`
+		    if (option.template && option.template["render"]) {
+		        var ct = option.template;
+		        option.render = ct.render;
+		        option.staticRenderFns = ct.staticRenderFns;
+		        delete option.template;
+		    }
+		    ;
 		    var proto = target.prototype;
 		    Object.getOwnPropertyNames(proto).filter(function (name) {
 		        return name !== "constructor";
@@ -1521,7 +1514,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 8 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"vlist-container\" :style=\"[containerStyle, style]\"><div class=\"vlist-header-row\" :style=\"headerStyle\"><slot name=\"header\"></slot></div><div class=\"vlist-scrollable\" ref=\"scrollable\" :style=\"scrollableStyle\" @scroll=\"onScroll\"><resize-sensor :debounce=\"50\" @resized=\"updateBodySize\"></resize-sensor><div class=\"vlist-content\" ref=\"content\" :style=\"contentStyle\"><div class=\"vlist-spacer\" :style=\"spacerStyle\"></div><div class=\"vlist-row\" v-for=\"(item, index) in renderedItems\" :key=\"getItemKey(item)\" :style=\"rowStyle\" @click=\"onRowClick(item, index + firstIndex, $event)\"><component :is=\"rowComponent\" :item=\"item\" :index=\"index + firstIndex\" :height=\"rowHeight\" :ctx=\"ctx\"></component></div></div></div></div>";
+	
+	    module.exports = {
+	      render: function(){with(this){return _h('div',{staticClass:"vlist-container",style:([containerStyle, style])},[_h('div',{staticClass:"vlist-header-row",style:(headerStyle)},[_t("header")]),_h('div',{ref:"scrollable",staticClass:"vlist-scrollable",style:(scrollableStyle),on:{"scroll":onScroll}},[_h('resize-sensor',{attrs:{"debounce":50},on:{"resized":updateBodySize}}),_h('div',{ref:"content",staticClass:"vlist-content",style:(contentStyle)},[_h('div',{staticClass:"vlist-spacer",style:(spacerStyle)}),_l((renderedItems),function(item,index){return _h('div',{key:getItemKey(item),staticClass:"vlist-row",style:(rowStyle),on:{"click":function($event){onRowClick(item, index + firstIndex, $event)}}},[_h(rowComponent,{tag:"component",attrs:{"item":item,"index":index + firstIndex,"height":rowHeight,"ctx":ctx}})])})])])])}},
+	      staticRenderFns: []
+	    };
+	  
 
 /***/ },
 /* 9 */
@@ -1790,7 +1788,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 12 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"vtable-cell\" :class=\"column.className\" :style=\"style\"><component v-if=\"column.component\" :is=\"column.component\" :item=\"item\" :index=\"index\" :ctx=\"ctx.ctx\"></component><template v-else=\"v-else\">{{ column.value(item, index, ctx.ctx) }}</template></div>";
+	
+	    module.exports = {
+	      render: function(){with(this){return _h('div',{staticClass:"vtable-cell",class:column.className,style:(style)},[(column.component)?_h(column.component,{tag:"component",attrs:{"item":item,"index":index,"ctx":ctx.ctx}}):[_s(column.value(item, index, ctx.ctx))]])}},
+	      staticRenderFns: []
+	    };
+	  
 
 /***/ },
 /* 13 */
@@ -1847,19 +1850,34 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 14 */
 /***/ function(module, exports) {
 
-	module.exports = "<div :class=\"className\" :style=\"style\" @mousedown=\"onMouseDown\"></div>";
+	
+	    module.exports = {
+	      render: function(){with(this){return _h('div',{class:className,style:(style),on:{"mousedown":onMouseDown}})}},
+	      staticRenderFns: []
+	    };
+	  
 
 /***/ },
 /* 15 */
 /***/ function(module, exports) {
 
-	module.exports = "<div :class=\"ctx.getRowClass(item, index)\" :style=\"rowStyle\"><template v-for=\"(c, columnIndex) in ctx.columns\"><vtablecell :item=\"item\" :index=\"index\" :column-index=\"columnIndex\" :height=\"height\" :ctx=\"ctx\"></vtablecell><vtablesplitter :index=\"index\" :ctx=\"ctx\"></vtablesplitter></template></div>";
+	
+	    module.exports = {
+	      render: function(){with(this){return _h('div',{class:ctx.getRowClass(item, index),style:(rowStyle)},[_l((ctx.columns),function(c,columnIndex){return [_h('vtablecell',{attrs:{"item":item,"index":index,"column-index":columnIndex,"height":height,"ctx":ctx}}),_h('vtablesplitter',{attrs:{"index":columnIndex,"ctx":ctx}})]})])}},
+	      staticRenderFns: []
+	    };
+	  
 
 /***/ },
 /* 16 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"vtable-container\" :style=\"containerStyle\"><vlist :style=\"{ flex: '1 1 auto' }\" :row-height=\"rowHeight\" :row-component=\"$options.components.vtablerow\" :items=\"items\" :row-style-cycle=\"rowStyleCycle\" :content-width=\"contentWidth\" :ctx=\"listCtx\" :get-item-key=\"getItemKey\" @scroll=\"updateScrollPosition\" @row-click=\"onRowClick\"><div class=\"vtable-header\" slot=\"header\" ref=\"header\" :style=\"headerStyle\"><template v-for=\"(c, index) in columns\"><div class=\"vtable-header-cell\" :class=\"c.className\" :style=\"headerCellStyle(listCtx.widths[index])\">{{ c.title }}</div><vtablesplitter :index=\"index\" :ctx=\"listCtx\"></vtablesplitter></template></div></vlist></div>";
+	
+	    module.exports = {
+	      render: function(){with(this){return _h('div',{staticClass:"vtable-container",style:(containerStyle)},[_h('vlist',{style:({ flex: '1 1 auto' }),attrs:{"row-height":rowHeight,"row-component":$options.components.vtablerow,"items":items,"row-style-cycle":rowStyleCycle,"content-width":contentWidth,"ctx":listCtx,"get-item-key":getItemKey},on:{"scroll":updateScrollPosition,"row-click":onRowClick}},[_h('div',{ref:"header",slot:"header",staticClass:"vtable-header",style:(headerStyle)},[_l((columns),function(c,index){return [_h('div',{staticClass:"vtable-header-cell",class:c.className,style:(headerCellStyle(listCtx.widths[index]))},[_s(c.title)]),_h('vtablesplitter',{attrs:{"index":index,"ctx":listCtx}})]})])])])}},
+	      staticRenderFns: []
+	    };
+	  
 
 /***/ }
 /******/ ])
