@@ -17,8 +17,13 @@ module.exports = {
     module: {
         loaders: [
           { test: /\.ts$/, loader: "ts-loader", exclude: /node_modules/ },
-          { test: /\.pug$/, loader: "pug-html-loader", exclude: /node_modules/ }
+          { test: /\.pug$/, loader: "vue-template-compiler-loader!simple-pug-loader", exclude: /node_modules/ }
         ]
+    },
+    resolveLoader: {
+        alias: {
+            "simple-pug-loader": path.join(__dirname, "simple-pug-loader")
+        }
     },
     externals: [
         "vue",

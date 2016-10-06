@@ -24,12 +24,12 @@
     "html-loader": "^0.4.3",
     "npm-run-all": "^3.1.0",
     "pug": "^2.0.0-beta6",
-    "pug-html-loader": "^1.0.8",
     "ts-loader": "^0.8.2",
     "tslint": "^3.15.1",
     "typescript": "^2.0.0",
     "vue-resizesensor": "0.1.0",
-    "vueit": "0.1.1",
+    "vue-template-compiler-loader": "^1.0.3",
+    "vueit": "^0.1.2",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.15.0"
   }
