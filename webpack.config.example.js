@@ -2,30 +2,25 @@ var path = require("path");
 
 module.exports = {
     context: path.join(__dirname, "example/src"),
-    entry: "./main.js",
+    entry: "./main.ts",
     output: {
         path: path.join(__dirname, "example/dist"),
         filename: "build.js"
     },
     devtool: 'source-map',
     resolve: {
-        extensions: ["", ".ts", ".js"],
-        root: path.join(__dirname, "example/src"),
-        alias: {
-            vue: "vue/dist/vue.js"
-        }
+        extensions: ["", ".ts"],
+        root: path.join(__dirname, "example/src")
     },
     module: {
         loaders: [
-          { test: /\.js$/, loader: "babel-loader?presets[]=es2015", exclude: /node_modules/ },
-          { test: /\.ts$/, loader: "babel-loader?presets[]=es2015!ts-loader", exclude: /node_modules/ },
-          { test: /\.pug$/, loader: "vue-template-compiler-loader!simple-pug-loader", exclude: /node_modules/ },
-          { test: /\.html$/, loader: "html-loader", exclude: /node_modules/ }
+          { test: /\.ts$/, loader: "babel?presets[]=es2015!ts", exclude: /node_modules/ },
+          { test: /\.pug$/, loader: "vue-template-compiler!simple-pug", exclude: /node_modules/ }
         ]
     },
     resolveLoader: {
         alias: {
-            "simple-pug-loader": path.join(__dirname, "simple-pug-loader")
+            "simple-pug": path.join(__dirname, "simple-pug-loader")
         }
     },
     devServer: {
