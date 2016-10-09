@@ -1,6 +1,7 @@
 import * as Vue from "vue";
 import { component, pr} from "vueit";
 import { px } from "./utils";
+import { VtableListCtx, StyleObject } from "../types";
 
 @component({
     compiledTemplate: require("./vtablesplitter.pug")

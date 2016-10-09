@@ -1,10 +1,9 @@
 import * as Vue from "vue";
 import { px } from "./utils";
 import { component, pr } from "vueit";
+import { VtableListCtx } from "../types";
 
-@component({
-    compiledTemplate: require("./vtablecell.pug")
-})
+@component()
 export default class VtableCell extends Vue {
     @pr item: any;
     @pr index: number;
@@ -26,5 +25,12 @@ export default class VtableCell extends Vue {
             overflow: "hidden"
         };
     }
-
+    render(h) {
+        return h("div", {
+            "class": ["vtable-cell", this.column.className],
+            style: this.style,
+        }, [
+            this.column.render(h, this.item, this.index, this.ctx.ctx)
+        ]);
+    }
 }

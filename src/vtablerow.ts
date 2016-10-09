@@ -3,6 +3,7 @@ import { px } from "./utils";
 import { component, pr } from "vueit";
 import vtablecell from "./vtablecell";
 import vtablesplitter from "./vtablesplitter";
+import * as types from "../types";
 
 @component({
     compiledTemplate: require("./vtablerow.pug"),
@@ -12,7 +13,7 @@ export default class VtableRow extends Vue {
     @pr item: any;
     @pr index: number;
     @pr height: number;
-    @pr ctx: VtableListCtx;
+    @pr ctx: types.VtableListCtx;
 
     get rowStyle() {
         return {

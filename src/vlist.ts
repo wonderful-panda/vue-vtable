@@ -1,4 +1,5 @@
 import * as Vue from "vue";
+import { StyleObject } from "../types";
 import * as resizeSensor from "vue-resizesensor";
 import { component, prop, p, pr, watch } from "vueit";
 import { px } from "./utils";

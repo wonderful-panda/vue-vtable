@@ -1,4 +1,5 @@
 import * as Vue from "vue";
+import { StyleObject, VtableColumn, VtableListCtx } from "../types";
 import * as _ from "lodash";
 import { px } from "./utils";
 import { component, prop, p, pr } from "vueit";

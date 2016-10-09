@@ -1,6 +1,7 @@
 import * as Vue from "vue";
 import vtable from "../../src/vtable";
-import { component, p } from "vueit";
+import { VtableColumn } from "../../types";
+import { component } from "vueit";
 
 interface Item {
     id: string;
@@ -12,53 +13,44 @@ interface AppCtx {
     selectedIndex: number;
 }
 
-@component()
-class IdComponent extends Vue {
-    @p item: Item;
-    @p index: number;
-    @p ctx: AppCtx;
-    render(createElement) {
-        const label = this.item.id + (this.ctx.selectedIndex === this.index ? " (selected)" : "");
-        const item = this.item;
-        return createElement("div", [
-            createElement("input", { attrs: { type: "checkbox" },
-                                     domProps: { "checked": item.checked },
-                                     on: { "change": ev => item.checked = ev.target.checked } }),
-            label
-        ]);
-    }
-}
-
 const columns: VtableColumn[] = [
     {
         title: "id",
         className: "cell-id",
         defaultWidth: 150,
-        component: IdComponent
+        render: (h, item, index, ctx) => {
+            const label = item.id + (ctx.selectedIndex === index ? " (selected)" : "");
+            return h("div", [
+                h("input", { attrs: { type: "checkbox" },
+                             domProps: { "checked": item.checked },
+                             on: { "change": ev => item.checked = ev.target.checked } }),
+                label
+            ]);
+        }
     },
     {
         title: "name",
         className: "cell-name",
         defaultWidth: 200,
-        value: item => item.name
+        render: (h, item) => item.name
     },
     {
         title: "extra1",
         className: "cell-extra",
         defaultWidth: 200,
-        value: item => "extra1 of " + item.id
+        render: (h, item) => "extra1 of " + item.id
     },
     {
         title: "extra2",
         className: "cell-extra",
         defaultWidth: 200,
-        value: item => "extra2 of " + item.id
+        render: (h, item) => "extra2 of " + item.id
     },
     {
         title: "description",
         className: "cell-desc",
         defaultWidth: 600,
-        value: item => "description of " + item.id
+        render: (h, item) => "description of " + item.id
     }
 ];
 
