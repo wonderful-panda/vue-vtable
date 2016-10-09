@@ -71,7 +71,7 @@ interface AppData {
 }
 
 @component({
-    template: require("./app.pug"),
+    compiledTemplate: require("./app.pug"),
     components: { vtable }
 })
 class App extends Vue {

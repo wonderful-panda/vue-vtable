@@ -3,7 +3,7 @@ import { component, pr} from "vueit";
 import { px } from "./utils";
 
 @component({
-    template: require("./vtablesplitter.pug")
+    compiledTemplate: require("./vtablesplitter.pug")
 })
 export default class VtableSplitter extends Vue {
     @pr ctx: VtableListCtx;

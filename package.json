@@ -29,7 +29,7 @@
     "typescript": "^2.0.0",
     "vue-resizesensor": "0.1.0",
     "vue-template-compiler-loader": "^1.0.3",
-    "vueit": "^0.1.2",
+    "vueit": "^0.1.3",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.15.0"
   }

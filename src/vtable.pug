@@ -1,21 +1,20 @@
-div.vtable-container(:style="containerStyle")
-    vlist(
-        :style="{ flex: '1 1 auto' }",
-        :row-height="rowHeight",
-        :row-component="$options.components.vtablerow",
-        :items="items",
-        :row-style-cycle="rowStyleCycle",
-        :content-width="contentWidth",
-        :ctx="listCtx",
-        :get-item-key="getItemKey",
-        @scroll="updateScrollPosition",
-        @row-click="onRowClick")
+vlist(
+    :style="{ flex: '1 1 auto' }",
+    :row-height="rowHeight",
+    :row-component="$options.components.vtablerow",
+    :items="items",
+    :row-style-cycle="rowStyleCycle",
+    :content-width="contentWidth",
+    :ctx="listCtx",
+    :get-item-key="getItemKey",
+    @scroll="updateScrollPosition",
+    @row-click="onRowClick")
 
-            div.vtable-header(slot="header", ref="header", :style="headerStyle")
-                template(v-for="(c, index) in columns")
-                    div.vtable-header-cell(
-                        :class="c.className",
-                        :style="headerCellStyle(listCtx.widths[index])")
-                            | {{ c.title }}
-                    vtablesplitter(:index="index", :ctx="listCtx")
+        div.vtable-header(slot="header", ref="header", :style="headerStyle")
+            template(v-for="(c, index) in columns")
+                div.vtable-header-cell(
+                    :class="c.className",
+                    :style="headerCellStyle(listCtx.widths[index])")
+                        | {{ c.title }}
+                vtablesplitter(:index="index", :ctx="listCtx")
 

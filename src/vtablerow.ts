@@ -5,7 +5,7 @@ import vtablecell from "./vtablecell";
 import vtablesplitter from "./vtablesplitter";
 
 @component({
-    template: require("./vtablerow.pug"),
+    compiledTemplate: require("./vtablerow.pug"),
     components: { vtablecell, vtablesplitter }
 })
 export default class VtableRow extends Vue {

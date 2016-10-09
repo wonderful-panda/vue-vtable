@@ -15,7 +15,7 @@ interface VtableData {
 }
 
 @component({
-    template: require("./vtable.pug"),
+    compiledTemplate: require("./vtable.pug"),
     components: { vlist, vtablerow, vtablesplitter }
 })
 export default class Vtable extends Vue {
@@ -45,15 +45,6 @@ export default class Vtable extends Vue {
     }
 
     /* style */
-    get containerStyle(): StyleObject {
-        return {
-            display: "flex",
-            position: "relative",
-            margin: 0,
-            padding: 0,
-            overflow: "hidden"
-        };
-    }
     get headerStyle(): StyleObject {
         return {
             display: "flex",

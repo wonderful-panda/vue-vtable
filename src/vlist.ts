@@ -18,7 +18,7 @@ interface VlistData {
 }
 
 @component({
-    template: require("./vlist.pug"),
+    compiledTemplate: require("./vlist.pug"),
     components: { resizeSensor }
 })
 export default class Vlist extends Vue {
