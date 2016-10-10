@@ -243,7 +243,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	], Vlist.prototype, "contentWidthChanged", null);
 	Vlist = __decorate([
 	    vueit_1.component({
-	        template: __webpack_require__(8),
+	        compiledTemplate: __webpack_require__(8),
 	        components: { resizeSensor }
 	    })
 	], Vlist);
@@ -418,25 +418,18 @@ return /******/ (function(modules) { // webpackBootstrap
 		    this.events = {};
 		};
 		
-		var AnnotatedOptionsKey = "vue-component-decorator:options";
+		var AnnotatedOptionsKey = "vueit:component-options";
 		var DesignTypeKey = "design:type";
 		var internalHooks = ["data", "render", "beforeCreate", "created", "beforeMount", "mounted", "beforeUpdate", "updated", "activated", "deactivated", "beforeDestroy", "destroyed"];
-		function assign(target, other) {
-		    Object.keys(other).forEach(function (k) {
-		        target[k] = other[k];
-		    });
-		    return target;
-		}
 		function makeComponent(target, option) {
-		    option = assign({}, option);
+		    option = Object.assign({}, option);
 		    option.name = option.name || target["name"];
-		    // if option.template is precompiled template,
-		    // set `render` and `staticRenderFns` instead of `template`
-		    if (option.template && option.template["render"]) {
-		        var ct = option.template;
-		        option.render = ct.render;
-		        option.staticRenderFns = ct.staticRenderFns;
-		        delete option.template;
+		    if (option.compiledTemplate) {
+		        option.render = option.compiledTemplate.render;
+		        option.staticRenderFns = option.compiledTemplate.staticRenderFns;
+		        if (option.template) {
+		            delete option.template;
+		        }
 		    }
 		    ;
 		    var proto = target.prototype;
@@ -484,7 +477,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		    if ("type" in option) {} else {
 		        var type = Reflect.getOwnMetadata(DesignTypeKey, target, propertyKey);
 		        if ([String, Number, Boolean, Function, Array].indexOf(type) > -1) {
-		            option = assign({ type: type }, option);
+		            option = Object.assign({ type: type }, option);
 		        }
 		    }
 		    getAnnotatedOptions(target).props[propertyKey] = option;
@@ -512,6 +505,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		            return makeComponent(target, option || {});
 		        };
 		    },
+		
 		    prop: prop,
 		    p: prop(),
 		    pr: prop({ required: true }),
@@ -1538,7 +1532,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	const vueit_1 = __webpack_require__(5);
 	const vlist_1 = __webpack_require__(1);
 	const vtablerow_1 = __webpack_require__(10);
-	const vtablesplitter_1 = __webpack_require__(13);
+	const vtablesplitter_1 = __webpack_require__(12);
 	let Vtable = class Vtable extends Vue {
 	    constructor() {
 	        super(...arguments);
@@ -1555,15 +1549,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    }
 	    /* style */
-	    get containerStyle() {
-	        return {
-	            display: "flex",
-	            position: "relative",
-	            margin: 0,
-	            padding: 0,
-	            overflow: "hidden"
-	        };
-	    }
 	    get headerStyle() {
 	        return {
 	            display: "flex",
@@ -1671,7 +1656,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	], Vtable.prototype, "getItemKey", void 0);
 	Vtable = __decorate([
 	    vueit_1.component({
-	        template: __webpack_require__(16),
+	        compiledTemplate: __webpack_require__(15),
 	        components: { vlist: vlist_1.default, vtablerow: vtablerow_1.default, vtablesplitter: vtablesplitter_1.default }
 	    })
 	], Vtable);
@@ -1694,7 +1679,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	const utils_1 = __webpack_require__(7);
 	const vueit_1 = __webpack_require__(5);
 	const vtablecell_1 = __webpack_require__(11);
-	const vtablesplitter_1 = __webpack_require__(13);
+	const vtablesplitter_1 = __webpack_require__(12);
 	let VtableRow = class VtableRow extends Vue {
 	    get rowStyle() {
 	        return {
@@ -1722,7 +1707,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	], VtableRow.prototype, "ctx", void 0);
 	VtableRow = __decorate([
 	    vueit_1.component({
-	        template: __webpack_require__(15),
+	        compiledTemplate: __webpack_require__(14),
 	        components: { vtablecell: vtablecell_1.default, vtablesplitter: vtablesplitter_1.default }
 	    })
 	], VtableRow);
@@ -1759,6 +1744,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            overflow: "hidden"
 	        };
 	    }
+	    render(h) {
+	        return h("div", {
+	            "class": ["vtable-cell", this.column.className],
+	            style: this.style,
+	        }, [
+	            this.column.render(h, this.item, this.index, this.ctx.ctx)
+	        ]);
+	    }
 	};
 	__decorate([
 	    vueit_1.pr
@@ -1776,9 +1769,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    vueit_1.pr
 	], VtableCell.prototype, "ctx", void 0);
 	VtableCell = __decorate([
-	    vueit_1.component({
-	        template: __webpack_require__(12)
-	    })
+	    vueit_1.component()
 	], VtableCell);
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = VtableCell;
@@ -1786,17 +1777,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 12 */
-/***/ function(module, exports) {
-
-	
-	    module.exports = {
-	      render: function(){with(this){return _h('div',{staticClass:"vtable-cell",class:column.className,style:(style)},[(column.component)?_h(column.component,{tag:"component",attrs:{"item":item,"index":index,"ctx":ctx.ctx}}):[_s(column.value(item, index, ctx.ctx))]])}},
-	      staticRenderFns: []
-	    };
-	  
-
-/***/ },
-/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1839,7 +1819,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	], VtableSplitter.prototype, "index", void 0);
 	VtableSplitter = __decorate([
 	    vueit_1.component({
-	        template: __webpack_require__(14)
+	        compiledTemplate: __webpack_require__(13)
 	    })
 	], VtableSplitter);
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -1847,7 +1827,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports) {
 
 	
@@ -1858,7 +1838,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports) {
 
 	
@@ -1869,12 +1849,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports) {
 
 	
 	    module.exports = {
-	      render: function(){with(this){return _h('div',{staticClass:"vtable-container",style:(containerStyle)},[_h('vlist',{style:({ flex: '1 1 auto' }),attrs:{"row-height":rowHeight,"row-component":$options.components.vtablerow,"items":items,"row-style-cycle":rowStyleCycle,"content-width":contentWidth,"ctx":listCtx,"get-item-key":getItemKey},on:{"scroll":updateScrollPosition,"row-click":onRowClick}},[_h('div',{ref:"header",slot:"header",staticClass:"vtable-header",style:(headerStyle)},[_l((columns),function(c,index){return [_h('div',{staticClass:"vtable-header-cell",class:c.className,style:(headerCellStyle(listCtx.widths[index]))},[_s(c.title)]),_h('vtablesplitter',{attrs:{"index":index,"ctx":listCtx}})]})])])])}},
+	      render: function(){with(this){return _h('vlist',{style:({ flex: '1 1 auto' }),attrs:{"row-height":rowHeight,"row-component":$options.components.vtablerow,"items":items,"row-style-cycle":rowStyleCycle,"content-width":contentWidth,"ctx":listCtx,"get-item-key":getItemKey},on:{"scroll":updateScrollPosition,"row-click":onRowClick}},[_h('div',{ref:"header",slot:"header",staticClass:"vtable-header",style:(headerStyle)},[_l((columns),function(c,index){return [_h('div',{staticClass:"vtable-header-cell",class:c.className,style:(headerCellStyle(listCtx.widths[index]))},[_s(c.title)]),_h('vtablesplitter',{attrs:{"index":index,"ctx":listCtx}})]})])])}},
 	      staticRenderFns: []
 	    };
 	  

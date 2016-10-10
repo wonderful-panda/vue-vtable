@@ -67,70 +67,54 @@
 	var Vue = __webpack_require__(1);
 	var vtable_1 = __webpack_require__(3);
 	var vueit_1 = __webpack_require__(7);
-	var IdComponent = function (_Vue) {
-	    _inherits(IdComponent, _Vue);
-	
-	    function IdComponent() {
-	        _classCallCheck(this, IdComponent);
-	
-	        return _possibleConstructorReturn(this, (IdComponent.__proto__ || Object.getPrototypeOf(IdComponent)).apply(this, arguments));
-	    }
-	
-	    _createClass(IdComponent, [{
-	        key: "render",
-	        value: function render(createElement) {
-	            var label = this.item.id + (this.ctx.selectedIndex === this.index ? " (selected)" : "");
-	            var item = this.item;
-	            return createElement("div", [createElement("input", { attrs: { type: "checkbox" },
-	                domProps: { "checked": item.checked },
-	                on: { "change": function change(ev) {
-	                        return item.checked = ev.target.checked;
-	                    } } }), label]);
-	        }
-	    }]);
-	
-	    return IdComponent;
-	}(Vue);
-	__decorate([vueit_1.p], IdComponent.prototype, "item", void 0);
-	__decorate([vueit_1.p], IdComponent.prototype, "index", void 0);
-	__decorate([vueit_1.p], IdComponent.prototype, "ctx", void 0);
-	IdComponent = __decorate([vueit_1.component()], IdComponent);
 	var columns = [{
 	    title: "id",
 	    className: "cell-id",
 	    defaultWidth: 150,
-	    component: IdComponent
+	    render: function render(h, item, index, ctx) {
+	        var label = item.id + (ctx.selectedIndex === index ? " (selected)" : "");
+	        return h("div", [h("input", { attrs: { type: "checkbox" },
+	            domProps: { "checked": item.checked },
+	            on: { "change": function change(ev) {
+	                    return item.checked = ev.target.checked;
+	                } } }), label]);
+	    }
 	}, {
 	    title: "name",
 	    className: "cell-name",
 	    defaultWidth: 200,
-	    value: function value(item) {
+	    render: function render(h, item) {
 	        return item.name;
 	    }
 	}, {
 	    title: "extra1",
 	    className: "cell-extra",
 	    defaultWidth: 200,
-	    value: function value(item) {
+	    render: function render(h, item) {
 	        return "extra1 of " + item.id;
 	    }
 	}, {
 	    title: "extra2",
 	    className: "cell-extra",
 	    defaultWidth: 200,
-	    value: function value(item) {
+	    render: function render(h, item) {
 	        return "extra2 of " + item.id;
 	    }
 	}, {
 	    title: "description",
 	    className: "cell-desc",
 	    defaultWidth: 600,
-	    value: function value(item) {
+	    render: function render(h, item) {
 	        return "description of " + item.id;
 	    }
 	}];
-	var App = function (_Vue2) {
-	    _inherits(App, _Vue2);
+	function _createItems(num) {
+	    return _.range(1, num + 1).map(function (i) {
+	        return { id: i.toString(), name: "name of " + i, checked: false };
+	    });
+	}
+	var App = function (_Vue) {
+	    _inherits(App, _Vue);
 	
 	    function App() {
 	        _classCallCheck(this, App);
@@ -145,9 +129,14 @@
 	                columns: columns,
 	                ctx: { selectedIndex: -1 },
 	                rowHeight: 20,
-	                itemCount: 100,
+	                items: _createItems(100),
 	                message: "vtable demo"
 	            };
+	        }
+	    }, {
+	        key: "createItems",
+	        value: function createItems(num) {
+	            return _createItems(num);
 	        }
 	    }, {
 	        key: "onRowClick",
@@ -165,19 +154,12 @@
 	        value: function getItemKey(item, index) {
 	            return item.id;
 	        }
-	    }, {
-	        key: "items",
-	        get: function get() {
-	            return _.range(1, this.$data.itemCount + 1).map(function (i) {
-	                return { id: i.toString(), name: "name of " + i, checked: false };
-	            });
-	        }
 	    }]);
 	
 	    return App;
 	}(Vue);
 	App = __decorate([vueit_1.component({
-	    template: __webpack_require__(19),
+	    compiledTemplate: __webpack_require__(18),
 	    components: { vtable: vtable_1.default }
 	})], App);
 	new Vue({
@@ -5932,7 +5914,7 @@
 	var vueit_1 = __webpack_require__(7);
 	var vlist_1 = __webpack_require__(9);
 	var vtablerow_1 = __webpack_require__(12);
-	var vtablesplitter_1 = __webpack_require__(15);
+	var vtablesplitter_1 = __webpack_require__(14);
 	var Vtable = function (_Vue) {
 	    _inherits(Vtable, _Vue);
 	
@@ -6018,17 +6000,6 @@
 	            this.$emit("row-click", arg);
 	        }
 	    }, {
-	        key: "containerStyle",
-	        get: function get() {
-	            return {
-	                display: "flex",
-	                position: "relative",
-	                margin: 0,
-	                padding: 0,
-	                overflow: "hidden"
-	            };
-	        }
-	    }, {
 	        key: "headerStyle",
 	        get: function get() {
 	            return {
@@ -6094,7 +6065,7 @@
 	__decorate([vueit_1.p], Vtable.prototype, "ctx", void 0);
 	__decorate([vueit_1.pr], Vtable.prototype, "getItemKey", void 0);
 	Vtable = __decorate([vueit_1.component({
-	    template: __webpack_require__(18),
+	    compiledTemplate: __webpack_require__(17),
 	    components: { vlist: vlist_1.default, vtablerow: vtablerow_1.default, vtablesplitter: vtablesplitter_1.default }
 	})], Vtable);
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -23154,25 +23125,18 @@
 		    this.events = {};
 		};
 		
-		var AnnotatedOptionsKey = "vue-component-decorator:options";
+		var AnnotatedOptionsKey = "vueit:component-options";
 		var DesignTypeKey = "design:type";
 		var internalHooks = ["data", "render", "beforeCreate", "created", "beforeMount", "mounted", "beforeUpdate", "updated", "activated", "deactivated", "beforeDestroy", "destroyed"];
-		function assign(target, other) {
-		    Object.keys(other).forEach(function (k) {
-		        target[k] = other[k];
-		    });
-		    return target;
-		}
 		function makeComponent(target, option) {
-		    option = assign({}, option);
+		    option = Object.assign({}, option);
 		    option.name = option.name || target["name"];
-		    // if option.template is precompiled template,
-		    // set `render` and `staticRenderFns` instead of `template`
-		    if (option.template && option.template["render"]) {
-		        var ct = option.template;
-		        option.render = ct.render;
-		        option.staticRenderFns = ct.staticRenderFns;
-		        delete option.template;
+		    if (option.compiledTemplate) {
+		        option.render = option.compiledTemplate.render;
+		        option.staticRenderFns = option.compiledTemplate.staticRenderFns;
+		        if (option.template) {
+		            delete option.template;
+		        }
 		    }
 		    ;
 		    var proto = target.prototype;
@@ -23220,7 +23184,7 @@
 		    if ("type" in option) {} else {
 		        var type = Reflect.getOwnMetadata(DesignTypeKey, target, propertyKey);
 		        if ([String, Number, Boolean, Function, Array].indexOf(type) > -1) {
-		            option = assign({ type: type }, option);
+		            option = Object.assign({ type: type }, option);
 		        }
 		    }
 		    getAnnotatedOptions(target).props[propertyKey] = option;
@@ -23248,6 +23212,7 @@
 		            return makeComponent(target, option || {});
 		        };
 		    },
+		
 		    prop: prop,
 		    p: prop(),
 		    pr: prop({ required: true }),
@@ -24462,7 +24427,7 @@
 	__decorate([vueit_1.watch("contentHeight")], Vlist.prototype, "contentHeightChanged", null);
 	__decorate([vueit_1.watch("contentWidth")], Vlist.prototype, "contentWidthChanged", null);
 	Vlist = __decorate([vueit_1.component({
-	    template: __webpack_require__(11),
+	    compiledTemplate: __webpack_require__(11),
 	    components: { resizeSensor: resizeSensor }
 	})], Vlist);
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -24587,7 +24552,7 @@
 	var utils_1 = __webpack_require__(6);
 	var vueit_1 = __webpack_require__(7);
 	var vtablecell_1 = __webpack_require__(13);
-	var vtablesplitter_1 = __webpack_require__(15);
+	var vtablesplitter_1 = __webpack_require__(14);
 	var VtableRow = function (_Vue) {
 	    _inherits(VtableRow, _Vue);
 	
@@ -24619,7 +24584,7 @@
 	__decorate([vueit_1.pr], VtableRow.prototype, "height", void 0);
 	__decorate([vueit_1.pr], VtableRow.prototype, "ctx", void 0);
 	VtableRow = __decorate([vueit_1.component({
-	    template: __webpack_require__(17),
+	    compiledTemplate: __webpack_require__(16),
 	    components: { vtablecell: vtablecell_1.default, vtablesplitter: vtablesplitter_1.default }
 	})], VtableRow);
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -24662,6 +24627,14 @@
 	    }
 	
 	    _createClass(VtableCell, [{
+	        key: "render",
+	        value: function render(h) {
+	            return h("div", {
+	                "class": ["vtable-cell", this.column.className],
+	                style: this.style
+	            }, [this.column.render(h, this.item, this.index, this.ctx.ctx)]);
+	        }
+	    }, {
 	        key: "column",
 	        get: function get() {
 	            return this.ctx.columns[this.columnIndex];
@@ -24688,25 +24661,12 @@
 	__decorate([vueit_1.pr], VtableCell.prototype, "columnIndex", void 0);
 	__decorate([vueit_1.pr], VtableCell.prototype, "height", void 0);
 	__decorate([vueit_1.pr], VtableCell.prototype, "ctx", void 0);
-	VtableCell = __decorate([vueit_1.component({
-	    template: __webpack_require__(14)
-	})], VtableCell);
+	VtableCell = __decorate([vueit_1.component()], VtableCell);
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = VtableCell;
 
 /***/ },
 /* 14 */
-/***/ function(module, exports) {
-
-	
-	    module.exports = {
-	      render: function(){with(this){return _h('div',{staticClass:"vtable-cell",class:column.className,style:(style)},[(column.component)?_h(column.component,{tag:"component",attrs:{"item":item,"index":index,"ctx":ctx.ctx}}):[_s(column.value(item, index, ctx.ctx))]])}},
-	      staticRenderFns: []
-	    };
-	  
-
-/***/ },
-/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24773,13 +24733,13 @@
 	__decorate([vueit_1.pr], VtableSplitter.prototype, "ctx", void 0);
 	__decorate([vueit_1.pr], VtableSplitter.prototype, "index", void 0);
 	VtableSplitter = __decorate([vueit_1.component({
-	    template: __webpack_require__(16)
+	    compiledTemplate: __webpack_require__(15)
 	})], VtableSplitter);
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = VtableSplitter;
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports) {
 
 	
@@ -24790,7 +24750,7 @@
 	  
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports) {
 
 	
@@ -24801,23 +24761,23 @@
 	  
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports) {
 
 	
 	    module.exports = {
-	      render: function(){with(this){return _h('div',{staticClass:"vtable-container",style:(containerStyle)},[_h('vlist',{style:({ flex: '1 1 auto' }),attrs:{"row-height":rowHeight,"row-component":$options.components.vtablerow,"items":items,"row-style-cycle":rowStyleCycle,"content-width":contentWidth,"ctx":listCtx,"get-item-key":getItemKey},on:{"scroll":updateScrollPosition,"row-click":onRowClick}},[_h('div',{ref:"header",slot:"header",staticClass:"vtable-header",style:(headerStyle)},[_l((columns),function(c,index){return [_h('div',{staticClass:"vtable-header-cell",class:c.className,style:(headerCellStyle(listCtx.widths[index]))},[_s(c.title)]),_h('vtablesplitter',{attrs:{"index":index,"ctx":listCtx}})]})])])])}},
+	      render: function(){with(this){return _h('vlist',{style:({ flex: '1 1 auto' }),attrs:{"row-height":rowHeight,"row-component":$options.components.vtablerow,"items":items,"row-style-cycle":rowStyleCycle,"content-width":contentWidth,"ctx":listCtx,"get-item-key":getItemKey},on:{"scroll":updateScrollPosition,"row-click":onRowClick}},[_h('div',{ref:"header",slot:"header",staticClass:"vtable-header",style:(headerStyle)},[_l((columns),function(c,index){return [_h('div',{staticClass:"vtable-header-cell",class:c.className,style:(headerCellStyle(listCtx.widths[index]))},[_s(c.title)]),_h('vtablesplitter',{attrs:{"index":index,"ctx":listCtx}})]})])])}},
 	      staticRenderFns: []
 	    };
 	  
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports) {
 
 	
 	    module.exports = {
-	      render: function(){with(this){return _h('div',{staticClass:"app-container"},[_h('h1',[_s(message)]),_h('div',{attrs:{"style":"margin-bottom: 1em"}},[_m(0),_h('input',{attrs:{"type":"number"},domProps:{"value":rowHeight},on:{"keyup":function($event){if($event.keyCode!==13)return;rowHeight = parseInt($event.target.value)}}}),_m(1),_h('input',{attrs:{"type":"number"},domProps:{"value":itemCount},on:{"keyup":function($event){if($event.keyCode!==13)return;itemCount = parseInt($event.target.value)}}})]),_h('vtable',{attrs:{"id":"main-list","items":items,"row-height":rowHeight,"header-height":20,"columns":columns,"get-row-class":getRowClass,"row-style-cycle":2,"get-item-key":getItemKey,"ctx":ctx},on:{"row-click":onRowClick}})])}},
+	      render: function(){with(this){return _h('div',{staticClass:"app-container"},[_h('h1',[_s(message)]),_h('div',{attrs:{"style":"margin-bottom: 1em"}},[_m(0),_h('input',{attrs:{"type":"number"},domProps:{"value":rowHeight},on:{"keyup":function($event){if($event.keyCode!==13)return;rowHeight = parseInt($event.target.value)}}}),_m(1),_h('input',{attrs:{"type":"number"},domProps:{"value":items.length},on:{"keyup":function($event){if($event.keyCode!==13)return;items = createItems(parseInt($event.target.value))}}})]),_h('vtable',{attrs:{"id":"main-list","items":items,"row-height":rowHeight,"header-height":20,"columns":columns,"get-row-class":getRowClass,"row-style-cycle":2,"get-item-key":getItemKey,"ctx":ctx},on:{"row-click":onRowClick}})])}},
 	      staticRenderFns: [function(){with(this){return _h('span',[" Row height:"])}},function(){with(this){return _h('span',[" Row count:"])}}]
 	    };
 	  
