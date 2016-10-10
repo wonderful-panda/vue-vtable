@@ -58,8 +58,14 @@ interface AppData {
     columns: VtableColumn[];
     ctx: AppCtx;
     rowHeight: number;
-    itemCount: number;
+    items: Item[];
     message: string;
+}
+
+function createItems(num: number): Item[] {
+    return _.range(1, num + 1).map(i => {
+        return { id: i.toString(), name: `name of ${ i }`, checked: false };
+    });
 }
 
 @component({
@@ -73,15 +79,13 @@ class App extends Vue {
             columns,
             ctx: { selectedIndex: -1 },
             rowHeight: 20,
-            itemCount: 100,
+            items: createItems(100),
             message: "vtable demo"
         };
     }
 
-    get items() {
-        return _.range(1, this.$data.itemCount + 1).map(i => {
-            return { id: i.toString(), name: `name of ${ i }`, checked: false };
-        });
+    createItems(num: number): Item[] {
+        return createItems(num);
     }
 
     onRowClick(args: { item: Item, index: number }) {

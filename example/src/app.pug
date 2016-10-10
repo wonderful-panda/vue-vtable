@@ -4,7 +4,7 @@ div.app-container
       span  Row height:
       input(type="number", :value="rowHeight", @keyup.enter="rowHeight = parseInt($event.target.value)")
       span  Row count:
-      input(type="number", :value="itemCount", @keyup.enter="itemCount = parseInt($event.target.value)")
+      input(type="number", :value="items.length", @keyup.enter="items = createItems(parseInt($event.target.value))")
 
     vtable(id="main-list", :items="items", :row-height="rowHeight", :header-height="20", :columns="columns",
            :get-row-class="getRowClass", :row-style-cycle="2", :get-item-key="getItemKey", :ctx="ctx",
