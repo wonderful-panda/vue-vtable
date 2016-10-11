@@ -2,11 +2,25 @@ import * as Vue from "vue";
 import { StyleObject, VtableColumn, VtableListCtx } from "../types";
 import * as _ from "lodash";
 import { px } from "./utils";
-import { component, prop, p, pr } from "vueit";
+import VueComponent from "vue-class-component";
 import vlist from "./vlist";
 import { ScrollEventArgs } from "./vlist";
 import vtablerow from "./vtablerow";
 import vtablesplitter from "./vtablesplitter";
+import { positive } from "./validation";
+
+interface VtableProps {
+    rowHeight: number;
+    headerHeight?: number;
+    columns: VtableColumn[];
+    items: any[];
+    rowStyleCycle?: number;
+    splitterWidth?: number;
+    rowClass?: string;
+    getRowClass?: (item: any, index: number) => string;
+    ctx?: any;
+    getItemKey: (item: any) => number | string;
+}
 
 interface VtableData {
     widths: number[];
@@ -15,27 +29,27 @@ interface VtableData {
     draggingSplitter: number;
 }
 
-@component({
-    compiledTemplate: require("./vtable.pug"),
-    components: { vlist, vtablerow, vtablesplitter }
-})
-export default class Vtable extends Vue {
-    $data: VtableData;
-    $refs: { header: Element };
+const required = true;
+const { render, staticRenderFns } = require("./vtable.pug");
 
-    /* props */
-    @prop({ required: true, validator: v => v > 0 }) rowHeight: number;
-    @prop({ default: 0 }) headerHeight: number = 0;
-    @pr columns: VtableColumn[];
-    @pr items: any[];
-    @prop({ default: 1, validator: v => v > 0 }) rowStyleCycle: number;
-    @prop({ default: 3, validator: v => v > 0 }) splitterWidth: number;
-    @p rowClass: string = "vtable-row";
-    @p getRowClass: (item: any, index: number) => string;
-    @p ctx: any;
-    @pr getItemKey: (item: any) => number | string;
+type C = Vue & Vtable & VtableProps;
 
-    /* data */
+@VueComponent<C>({
+    render,
+    staticRenderFns,
+    components: { vlist, vtablerow, vtablesplitter },
+    props: {
+        rowHeight: { type: Number, required, validator: positive },
+        headerHeight: { type: Number, default: 0 },
+        columns: { type: Array, required },
+        items: { type: Array, required },
+        rowStyleCycle: { type: Number, default: 1, validator: positive },
+        splitterWidth: { type: Number, default: 3, validator: positive },
+        rowClass: { type: String, default: "vtable-row" },
+        getRowClass: { type: Function },
+        ctx: {},
+        getItemKey: { type: Function, required }
+    },
     data(): VtableData {
         return {
             widths: this.columns.map(c => c.defaultWidth),
@@ -44,9 +58,13 @@ export default class Vtable extends Vue {
             draggingSplitter: -1
         };
     }
+})
+export default class Vtable extends Vue {
+    $data: VtableData;
+    $refs: { header: Element };
 
     /* style */
-    get headerStyle(): StyleObject {
+    get headerStyle(this: C): StyleObject {
         return {
             display: "flex",
             position: "relative",
@@ -59,7 +77,7 @@ export default class Vtable extends Vue {
             textWrap: "none"
         };
     }
-    headerCellStyle(width: number): StyleObject {
+    headerCellStyle(this: C, width: number): StyleObject {
         return {
             minWidth: px(width),
             width: px(width),
@@ -70,7 +88,7 @@ export default class Vtable extends Vue {
         };
     }
     /** ctx object will be passed to vlist */
-    get listCtx(): VtableListCtx {
+    get listCtx(this: C): VtableListCtx {
         const rowClass = this.rowClass;
         return {
             ctx: this.ctx,
@@ -82,18 +100,18 @@ export default class Vtable extends Vue {
             onSplitterMouseDown: this.onSplitterMouseDown
         };
     }
-    get actualHeaderHeight() {
+    get actualHeaderHeight(this: C) {
         return this.headerHeight > 0 ? this.headerHeight : this.rowHeight;
     }
-    get contentWidth() {
+    get contentWidth(this: C) {
         return _.sumBy(this.$data.widths, w => w + this.splitterWidth);
     }
 
     /* methods */
-    updateScrollPosition(args: ScrollEventArgs) {
+    updateScrollPosition(this: C, args: ScrollEventArgs) {
         this.$data.scrollLeft = args.scrollLeft;
     }
-    onSplitterMouseDown(index: number, event: MouseEvent) {
+    onSplitterMouseDown(this: C, index: number, event: MouseEvent) {
         event.preventDefault();
         event.stopPropagation();
         const headerCell = this.$refs.header.querySelectorAll("div.vtable-header-cell")[index];
@@ -118,7 +136,7 @@ export default class Vtable extends Vue {
         document.addEventListener("mouseup", onMouseUp);
         this.$data.draggingSplitter = index;
     }
-    onRowClick(arg) {
+    onRowClick(this: C, arg) {
         this.$emit("row-click", arg);
     }
 }

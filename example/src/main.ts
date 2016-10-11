@@ -1,7 +1,7 @@
 import * as Vue from "vue";
+import VueComponent from "vue-class-component";
 import vtable from "../../src/vtable";
 import { VtableColumn } from "../../types";
-import { component } from "vueit";
 
 interface Item {
     id: string;
@@ -68,8 +68,10 @@ function createItems(num: number): Item[] {
     });
 }
 
-@component({
-    compiledTemplate: require("./app.pug"),
+const { render, staticRenderFns } = require("./app.pug");
+@VueComponent({
+    render,
+    staticRenderFns,
     components: { vtable }
 })
 class App extends Vue {

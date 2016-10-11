@@ -1,35 +1,38 @@
 import * as Vue from "vue";
-import { component, pr} from "vueit";
 import { px } from "./utils";
 import { VtableListCtx, StyleObject } from "../types";
+import { notNegative } from "./validation";
 
-@component({
-    compiledTemplate: require("./vtablesplitter.pug")
-})
-export default class VtableSplitter extends Vue {
-    @pr ctx: VtableListCtx;
-    @pr index: number;
+interface VtableSplitterProps {
+    ctx: VtableListCtx;
+    index: number;
+}
 
-    get className() {
-        if (this.ctx.draggingSplitter === this.index) {
-            return "vtable-dragging-splitter";
-        }
-        else {
-            return "vtable-splitter";
-        }
-    }
+const required = true;
 
-    get style(): StyleObject {
-        return {
-            minWidth: px(this.ctx.splitterWidth),
-            maxWidth: px(this.ctx.splitterWidth),
+export default Vue.extend({
+    name: "VtableSplitter",
+    functional: true,
+    props: {
+        ctx: { type: Object, required },
+        index: { type: Number, required, validator: notNegative }
+    },
+    render(this: void, h, context) {
+        const p: VtableSplitterProps = context.props;
+        const className = (p.ctx.draggingSplitter === p.index
+                           ? "vtable-dragging-splitter" : "vtable-splitter");
+        const style: StyleObject = {
+            minWidth: px(p.ctx.splitterWidth),
+            maxWidth: px(p.ctx.splitterWidth),
             height: "100%",
             boxSizing: "border-box",
             cursor: "col-resize"
         };
-    }
+        const on = {
+            mousedown: ev => p.ctx.onSplitterMouseDown(p.index, ev)
+        }
 
-    onMouseDown(event: MouseEvent) {
-        this.ctx.onSplitterMouseDown(this.index, event);
+        return h("div", { class: className, style, on });
     }
-}
+});
+

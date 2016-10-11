@@ -1,12 +1,24 @@
 import * as Vue from "vue";
 import { StyleObject } from "../types";
 import * as resizeSensor from "vue-resizesensor";
-import { component, prop, p, pr, watch } from "vueit";
+import VueComponent from "vue-class-component";
 import { px } from "./utils";
+import { positive } from "./validation";
 
 export interface ScrollEventArgs {
     scrollLeft: number;
     scrollTop: number;
+}
+
+interface VlistProps {
+    rowComponent: any;
+    items: any[];
+    getItemKey: (item: any) => number | string;
+    contentWidth?: number | string;
+    ctx?: any;
+    rowHeight: number;
+    rowStyleCycle?: number;
+    style?: StyleObject;
 }
 
 interface VlistData {
@@ -18,26 +30,25 @@ interface VlistData {
     hScrollBarHeight: number;
 }
 
-@component({
-    compiledTemplate: require("./vlist.pug"),
-    components: { resizeSensor }
-})
-export default class Vlist extends Vue {
-    $data: VlistData;
-    $refs: { scrollable: Element, content: Element };
+const required = true;
+const { render, staticRenderFns } = require("./vlist.pug");
 
-    /* props */
-    @pr rowComponent: any;
-    @pr items: any[];
-    @pr getItemKey: (item: any) => number | string;
-    @p contentWidth: number | string;
-    @p ctx: any;
+type C = Vue & Vlist & VlistProps;
 
-    @prop({ required: true, validator: v => v > 0 }) rowHeight: number;
-    @prop({ default: 1, validator: v => v > 0 }) rowStyleCycle: number;
-    @prop({ default: () => ({}) }) style: any;
-
-    /* data */
+@VueComponent<C>({
+    render,
+    staticRenderFns,
+    components: { resizeSensor },
+    props: {
+        rowComponent: { required },
+        items: { type: Array, required },
+        getItemKey: { type: Function, required },
+        contentWidth: { type: [Number, String] },
+        ctx: {},
+        rowHeight: { type: Number, required, validator: positive },
+        rowStyleCycle: { type: Number, default: 1, validator: positive },
+        style: { type: Object, default: () => ({}) },
+    },
     data(): VlistData {
         return {
             scrollLeft: 0,
@@ -46,17 +57,40 @@ export default class Vlist extends Vue {
             bodyHeight: 0,
             vScrollBarWidth: 0,
             hScrollBarHeight: 0
+        };
+    },
+    watch: {
+        contentHeight: function(this: C, newValue, oldValue) {
+            const hScrollBarHeight = this.$data.hScrollBarHeight;
+            const height = this.$data.bodyHeight + hScrollBarHeight;
+            if ((0 < hScrollBarHeight) === (newValue < height)) {
+                // must re-check scrollbar visibilities
+                this.updateBodySize();
+            }
+        },
+        contentWidth: function(this: C, newValue, oldValue) {
+            const vScrollBarWidth = this.$data.vScrollBarWidth;
+            const width = this.$data.bodyWidth + vScrollBarWidth;
+            if ((0 < vScrollBarWidth) === (newValue < width)) {
+                // must re-check scrollbar visibilities
+                this.updateBodySize();
+            }
         }
     }
+})
+export default class Vlist extends Vue {
+    $data: VlistData;
+    $refs: { scrollable: Element, content: Element };
+
     /* styles */
-    get containerStyle(): StyleObject {
+    get containerStyle(this: C): StyleObject {
         return {
             display: "flex",
             flexFlow: "column nowrap",
             overflow: "hidden"
         };
     }
-    get headerStyle(): StyleObject {
+    get headerStyle(this: C): StyleObject {
         return {
             display: "flex",
             flex: "0 0 auto",
@@ -68,7 +102,7 @@ export default class Vlist extends Vue {
             padding: `0 ${px(this.$data.vScrollBarWidth)} 0 0`
         };
     }
-    get scrollableStyle() {
+    get scrollableStyle(this: C) {
         return {
             overflow: "auto",
             position: "relative",
@@ -79,7 +113,7 @@ export default class Vlist extends Vue {
             border: 0
         };
     }
-    get contentStyle(): StyleObject {
+    get contentStyle(this: C): StyleObject {
         return {
             display: "flex",
             flexFlow: "column nowrap",
@@ -91,13 +125,13 @@ export default class Vlist extends Vue {
             minWidth: this.contentWidth
         };
     }
-    get spacerStyle(): StyleObject {
+    get spacerStyle(this: C): StyleObject {
         return {
             height: px(this.rowHeight * this.firstIndex),
             flex: "0 0 auto"
         };
     };
-    get rowStyle(): StyleObject {
+    get rowStyle(this: C): StyleObject {
         return {
             display: "flex",
             width: "100%",
@@ -106,44 +140,26 @@ export default class Vlist extends Vue {
     }
 
     /* computed */
-    get firstIndex() {
+    get firstIndex(this: C) {
         let value = Math.floor(this.$data.scrollTop / this.rowHeight);
         if (this.rowStyleCycle > 1) {
             value -= (value % this.rowStyleCycle);
         }
         return value;
     }
-    get lastIndex() {
+    get lastIndex(this: C) {
         const {scrollTop, bodyHeight} = this.$data;
         return Math.ceil((scrollTop + bodyHeight) / this.rowHeight);
     }
-    get renderedItems() {
+    get renderedItems(this: C) {
         return this.items.slice(this.firstIndex, this.lastIndex + 1);
     }
-    get contentHeight() {
+    get contentHeight(this: C) {
         return this.rowHeight * this.items.length;
     }
 
     /* methods */
-    @watch("contentHeight")
-    contentHeightChanged(newValue, oldValue) {
-        const hScrollBarHeight = this.$data.hScrollBarHeight;
-        const height = this.$data.bodyHeight + hScrollBarHeight;
-        if ((0 < hScrollBarHeight) === (newValue < height)) {
-            // must re-check scrollbar visibilities
-            this.updateBodySize();
-        }
-    }
-    @watch("contentWidth")
-    contentWidthChanged(newValue, oldValue) {
-        const vScrollBarWidth = this.$data.vScrollBarWidth;
-        const width = this.$data.bodyWidth + vScrollBarWidth;
-        if ((0 < vScrollBarWidth) === (newValue < width)) {
-            // must re-check scrollbar visibilities
-            this.updateBodySize();
-        }
-    }
-    updateBodySize() {
+    updateBodySize(this: C) {
         const sc = this.$refs.scrollable;
         const bound = sc.getBoundingClientRect();
         const bodyWidth = sc.clientWidth;
@@ -162,14 +178,14 @@ export default class Vlist extends Vue {
             data.hScrollBarHeight = hScrollBarHeight;
         }
     };
-    onScroll(event: Event) {
+    onScroll(this: C, event: Event) {
         const { scrollLeft, scrollTop } = this.$refs.scrollable;
         const args: ScrollEventArgs = { scrollLeft, scrollTop };
         this.$data.scrollLeft = scrollLeft;
         this.$data.scrollTop = scrollTop;
         this.$emit("scroll", args);
     }
-    onRowClick(item: any, index: number, event: Event) {
+    onRowClick(this: C, item: any, index: number, event: Event) {
         this.$emit("row-click", { item, index, event });
     }
 }

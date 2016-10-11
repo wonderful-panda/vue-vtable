@@ -1,36 +1,44 @@
 import * as Vue from "vue";
 import { px } from "./utils";
-import { component, pr } from "vueit";
 import { VtableListCtx } from "../types";
+import { positive, notNegative } from "./validation";
 
-@component()
-export default class VtableCell extends Vue {
-    @pr item: any;
-    @pr index: number;
-    @pr columnIndex: number;
-    @pr height: number;
-    @pr ctx: VtableListCtx;
+interface VtableCellProps {
+    item: any;
+    index: number;
+    columnIndex: number;
+    height: number;
+    ctx: VtableListCtx;
+}
 
-    get column() {
-        return this.ctx.columns[this.columnIndex];
-    }
-    get style() {
-        const w = px(this.ctx.widths[this.columnIndex]);
-        return {
+const required = true;
+
+export default Vue.extend({
+    name: "VtableCell",
+    functional: true,
+    props: {
+        item: { required },
+        index: { type: Number, required, validator: notNegative },
+        columnIndex: { type: Number, required, validator: notNegative },
+        height: { type: Number, required, validator: positive },
+        ctx: { type: Object, required }
+    },
+    render(this: void, h, context) {
+        const p: VtableCellProps = context.props;
+        const column = p.ctx.columns[p.columnIndex];
+        const w = px(p.ctx.widths[p.columnIndex]);
+        const style = {
             minWidth: w,
             width: w,
-            lineHeight: px(this.height),
+            lineHeight: px(p.height),
             margin: 0,
             boxSizing: "border-box",
             overflow: "hidden"
         };
+        return h("div", { class: ["vtable-cell", column.className], style }, [
+                    column.render(h, p.item, p.index, p.ctx.ctx)
+               ]);
     }
-    render(h) {
-        return h("div", {
-            "class": ["vtable-cell", this.column.className],
-            style: this.style,
-        }, [
-            this.column.render(h, this.item, this.index, this.ctx.ctx)
-        ]);
-    }
-}
+
+});
+
