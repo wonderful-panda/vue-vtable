@@ -2,7 +2,7 @@ import * as Vue from "vue";
 import { StyleObject, VtableColumn, VtableListCtx } from "../types";
 import * as _ from "lodash";
 import { px } from "./utils";
-import VueComponent from "vue-class-component";
+import { component, prop as p } from "vueit";
 import vlist from "./vlist";
 import { ScrollEventArgs } from "./vlist";
 import vtablerow from "./vtablerow";
@@ -29,27 +29,9 @@ interface VtableData {
     draggingSplitter: number;
 }
 
-const required = true;
-const { render, staticRenderFns } = require("./vtable.pug");
-
-type C = Vue & Vtable & VtableProps;
-
-@VueComponent<C>({
-    render,
-    staticRenderFns,
+@component<Vtable>({
+    compiledTemplate: require("./vtable.pug"),
     components: { vlist, vtablerow, vtablesplitter },
-    props: {
-        rowHeight: { type: Number, required, validator: positive },
-        headerHeight: { type: Number, default: 0 },
-        columns: { type: Array, required },
-        items: { type: Array, required },
-        rowStyleCycle: { type: Number, default: 1, validator: positive },
-        splitterWidth: { type: Number, default: 3, validator: positive },
-        rowClass: { type: String, default: "vtable-row" },
-        getRowClass: { type: Function },
-        ctx: {},
-        getItemKey: { type: Function, required }
-    },
     data(): VtableData {
         return {
             widths: this.columns.map(c => c.defaultWidth),
@@ -59,12 +41,23 @@ type C = Vue & Vtable & VtableProps;
         };
     }
 })
-export default class Vtable extends Vue {
+export default class Vtable extends Vue implements VtableProps {
     $data: VtableData;
     $refs: { header: Element };
 
+    @p.required({ validator: positive }) rowHeight: number;
+    @p.default(0) headerHeight?: number;
+    @p.required columns: VtableColumn[];
+    @p.required items: any[];
+    @p.default(1, { validator: positive }) rowStyleCycle?: number;
+    @p.default(3, { validator: positive }) splitterWidth?: number;
+    @p.default("vtable-row") rowClass?: string;
+    @p getRowClass?: (item: any, index: number) => string;
+    @p ctx?: any;
+    @p.required getItemKey: (item: any) => number | string;
+
     /* style */
-    get headerStyle(this: C): StyleObject {
+    get headerStyle(): StyleObject {
         return {
             display: "flex",
             position: "relative",
@@ -77,7 +70,7 @@ export default class Vtable extends Vue {
             textWrap: "none"
         };
     }
-    headerCellStyle(this: C, width: number): StyleObject {
+    headerCellStyle(width: number): StyleObject {
         return {
             minWidth: px(width),
             width: px(width),
@@ -88,7 +81,7 @@ export default class Vtable extends Vue {
         };
     }
     /** ctx object will be passed to vlist */
-    get listCtx(this: C): VtableListCtx {
+    get listCtx(): VtableListCtx {
         const rowClass = this.rowClass;
         return {
             ctx: this.ctx,
@@ -100,18 +93,18 @@ export default class Vtable extends Vue {
             onSplitterMouseDown: this.onSplitterMouseDown
         };
     }
-    get actualHeaderHeight(this: C) {
+    get actualHeaderHeight() {
         return this.headerHeight > 0 ? this.headerHeight : this.rowHeight;
     }
-    get contentWidth(this: C) {
+    get contentWidth() {
         return _.sumBy(this.$data.widths, w => w + this.splitterWidth);
     }
 
     /* methods */
-    updateScrollPosition(this: C, args: ScrollEventArgs) {
+    updateScrollPosition(args: ScrollEventArgs) {
         this.$data.scrollLeft = args.scrollLeft;
     }
-    onSplitterMouseDown(this: C, index: number, event: MouseEvent) {
+    onSplitterMouseDown(index: number, event: MouseEvent) {
         event.preventDefault();
         event.stopPropagation();
         const headerCell = this.$refs.header.querySelectorAll("div.vtable-header-cell")[index];
@@ -136,7 +129,7 @@ export default class Vtable extends Vue {
         document.addEventListener("mouseup", onMouseUp);
         this.$data.draggingSplitter = index;
     }
-    onRowClick(this: C, arg) {
+    onRowClick(arg) {
         this.$emit("row-click", arg);
     }
 }

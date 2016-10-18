@@ -1,5 +1,5 @@
 import * as Vue from "vue";
-import VueComponent from "vue-class-component";
+import { component } from "vueit";
 import vtable from "../../src/vtable";
 import { VtableColumn } from "../../types";
 
@@ -68,10 +68,8 @@ function createItems(num: number): Item[] {
     });
 }
 
-const { render, staticRenderFns } = require("./app.pug");
-@VueComponent({
-    render,
-    staticRenderFns,
+@component({
+    compiledTemplate: require("./app.pug"),
     components: { vtable }
 })
 class App extends Vue {

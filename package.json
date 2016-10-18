@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "lodash": "^4.13.1",
-    "vue": "^2.0.1"
+    "vue": "^2.0.1",
+    "vueit": "git+https://github.com/wonderful-panda/vueit.git"
   },
   "devDependencies": {
     "@types/lodash": "0.0.27",
@@ -27,7 +28,6 @@
     "ts-loader": "^0.8.2",
     "tslint": "^3.15.1",
     "typescript": "^2.0.0",
-    "vue-class-component": "^4.0.1",
     "vue-resizesensor": "0.1.0",
     "vue-template-compiler-loader": "^1.0.3",
     "webpack": "^1.13.2",

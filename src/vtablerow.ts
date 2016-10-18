@@ -1,5 +1,5 @@
 import * as Vue from "vue";
-import VueComponent from "vue-class-component";
+import { component, prop as p } from "vueit";
 import { px } from "./utils";
 import vtablecell from "./vtablecell";
 import vtablesplitter from "./vtablesplitter";
@@ -13,22 +13,15 @@ interface VtableRowProps {
     ctx: VtableListCtx;
 }
 
-const required = true;
-
-const { render, staticRenderFns } = require("./vtablerow.pug");
-
-@VueComponent({
-    render,
-    staticRenderFns,
-    components: { vtablecell, vtablesplitter },
-    props: {
-        item: { required },
-        index: { type: Number, required, validator: notNegative },
-        height: { type: Number, required, validator: positive },
-        ctx: { type: Object, required }
-    },
+@component({
+    compiledTemplate: require("./vtablerow.pug"),
+    components: { vtablecell, vtablesplitter }
 })
-export default class VtableRow extends Vue {
+export default class VtableRow extends Vue implements VtableRowProps {
+    @p.required item: any;
+    @p.required({ validator: notNegative }) index: number;
+    @p.required({ validator: positive }) height: number;
+    @p.required ctx: VtableListCtx;
     get rowStyle(this: VtableRowProps) {
         return {
             display: "flex",

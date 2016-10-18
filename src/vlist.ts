@@ -1,7 +1,7 @@
 import * as Vue from "vue";
 import { StyleObject } from "../types";
 import * as resizeSensor from "vue-resizesensor";
-import VueComponent from "vue-class-component";
+import { component, prop as p, watch } from "vueit";
 import { px } from "./utils";
 import { positive } from "./validation";
 
@@ -11,7 +11,7 @@ export interface ScrollEventArgs {
 }
 
 interface VlistProps {
-    rowComponent: any;
+    rowComponent: string | Vue;
     items: any[];
     getItemKey: (item: any) => number | string;
     contentWidth?: number | string;
@@ -30,25 +30,9 @@ interface VlistData {
     hScrollBarHeight: number;
 }
 
-const required = true;
-const { render, staticRenderFns } = require("./vlist.pug");
-
-type C = Vue & Vlist & VlistProps;
-
-@VueComponent<C>({
-    render,
-    staticRenderFns,
+@component<Vlist>({
+    compiledTemplate: require("./vlist.pug"),
     components: { resizeSensor },
-    props: {
-        rowComponent: { required },
-        items: { type: Array, required },
-        getItemKey: { type: Function, required },
-        contentWidth: { type: [Number, String] },
-        ctx: {},
-        rowHeight: { type: Number, required, validator: positive },
-        rowStyleCycle: { type: Number, default: 1, validator: positive },
-        style: { type: Object, default: () => ({}) },
-    },
     data(): VlistData {
         return {
             scrollLeft: 0,
@@ -58,39 +42,30 @@ type C = Vue & Vlist & VlistProps;
             vScrollBarWidth: 0,
             hScrollBarHeight: 0
         };
-    },
-    watch: {
-        contentHeight: function(this: C, newValue, oldValue) {
-            const hScrollBarHeight = this.$data.hScrollBarHeight;
-            const height = this.$data.bodyHeight + hScrollBarHeight;
-            if ((0 < hScrollBarHeight) === (newValue < height)) {
-                // must re-check scrollbar visibilities
-                this.updateBodySize();
-            }
-        },
-        contentWidth: function(this: C, newValue, oldValue) {
-            const vScrollBarWidth = this.$data.vScrollBarWidth;
-            const width = this.$data.bodyWidth + vScrollBarWidth;
-            if ((0 < vScrollBarWidth) === (newValue < width)) {
-                // must re-check scrollbar visibilities
-                this.updateBodySize();
-            }
-        }
     }
 })
-export default class Vlist extends Vue {
+export default class Vlist extends Vue implements VlistProps {
     $data: VlistData;
     $refs: { scrollable: Element, content: Element };
 
+    @p.required rowComponent: string | Vue;
+    @p.required items: any[];
+    @p.required getItemKey: (item: any) => string;
+    @p({ type: [Number, String] })  contentWidth?: number | string;
+    @p ctx?: any;
+    @p.required({ validator: positive }) rowHeight: number;
+    @p.default(1, { validator: positive }) rowStyleCycle?: number;
+    @p style?: StyleObject;
+
     /* styles */
-    get containerStyle(this: C): StyleObject {
+    get containerStyle(): StyleObject {
         return {
             display: "flex",
             flexFlow: "column nowrap",
             overflow: "hidden"
         };
     }
-    get headerStyle(this: C): StyleObject {
+    get headerStyle(): StyleObject {
         return {
             display: "flex",
             flex: "0 0 auto",
@@ -102,7 +77,7 @@ export default class Vlist extends Vue {
             padding: `0 ${px(this.$data.vScrollBarWidth)} 0 0`
         };
     }
-    get scrollableStyle(this: C) {
+    get scrollableStyle() {
         return {
             overflow: "auto",
             position: "relative",
@@ -113,7 +88,7 @@ export default class Vlist extends Vue {
             border: 0
         };
     }
-    get contentStyle(this: C): StyleObject {
+    get contentStyle(): StyleObject {
         return {
             display: "flex",
             flexFlow: "column nowrap",
@@ -125,13 +100,13 @@ export default class Vlist extends Vue {
             minWidth: this.contentWidth
         };
     }
-    get spacerStyle(this: C): StyleObject {
+    get spacerStyle(): StyleObject {
         return {
             height: px(this.rowHeight * this.firstIndex),
             flex: "0 0 auto"
         };
     };
-    get rowStyle(this: C): StyleObject {
+    get rowStyle(): StyleObject {
         return {
             display: "flex",
             width: "100%",
@@ -140,26 +115,26 @@ export default class Vlist extends Vue {
     }
 
     /* computed */
-    get firstIndex(this: C) {
+    get firstIndex() {
         let value = Math.floor(this.$data.scrollTop / this.rowHeight);
         if (this.rowStyleCycle > 1) {
             value -= (value % this.rowStyleCycle);
         }
         return value;
     }
-    get lastIndex(this: C) {
+    get lastIndex() {
         const {scrollTop, bodyHeight} = this.$data;
         return Math.ceil((scrollTop + bodyHeight) / this.rowHeight);
     }
-    get renderedItems(this: C) {
+    get renderedItems() {
         return this.items.slice(this.firstIndex, this.lastIndex + 1);
     }
-    get contentHeight(this: C) {
+    get contentHeight() {
         return this.rowHeight * this.items.length;
     }
 
     /* methods */
-    updateBodySize(this: C) {
+    updateBodySize() {
         const sc = this.$refs.scrollable;
         const bound = sc.getBoundingClientRect();
         const bodyWidth = sc.clientWidth;
@@ -178,14 +153,35 @@ export default class Vlist extends Vue {
             data.hScrollBarHeight = hScrollBarHeight;
         }
     };
-    onScroll(this: C, event: Event) {
+    onScroll(event: Event) {
         const { scrollLeft, scrollTop } = this.$refs.scrollable;
         const args: ScrollEventArgs = { scrollLeft, scrollTop };
         this.$data.scrollLeft = scrollLeft;
         this.$data.scrollTop = scrollTop;
         this.$emit("scroll", args);
     }
-    onRowClick(this: C, item: any, index: number, event: Event) {
+    onRowClick(item: any, index: number, event: Event) {
         this.$emit("row-click", { item, index, event });
     }
+
+    @watch("contentHeight")
+    onContentHeightChanged(newValue, oldValue) {
+        const hScrollBarHeight = this.$data.hScrollBarHeight;
+        const height = this.$data.bodyHeight + hScrollBarHeight;
+        if ((0 < hScrollBarHeight) === (newValue < height)) {
+            // must re-check scrollbar visibilities
+            this.updateBodySize();
+        }
+    }
+
+    @watch("contentWidth")
+    onContentWidthChanged(newValue, oldValue) {
+        const vScrollBarWidth = this.$data.vScrollBarWidth;
+        const width = this.$data.bodyWidth + vScrollBarWidth;
+        if ((0 < vScrollBarWidth) === (newValue < width)) {
+            // must re-check scrollbar visibilities
+            this.updateBodySize();
+        }
+    }
+
 }
