@@ -1,5 +1,5 @@
 import * as Vue from "vue";
-import { StyleObject } from "../types";
+import { StyleObject, VlistProps } from "../types";
 import * as resizeSensor from "vue-resizesensor";
 import { component, prop as p, watch } from "vueit";
 import { px } from "./utils";
@@ -8,17 +8,6 @@ import { positive } from "./validation";
 export interface ScrollEventArgs {
     scrollLeft: number;
     scrollTop: number;
-}
-
-interface VlistProps {
-    rowComponent: string | Vue;
-    items: any[];
-    getItemKey: (item: any) => number | string;
-    contentWidth?: number | string;
-    ctx?: any;
-    rowHeight: number;
-    rowStyleCycle?: number;
-    style?: StyleObject;
 }
 
 interface VlistData {

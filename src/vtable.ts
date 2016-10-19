@@ -1,5 +1,5 @@
 import * as Vue from "vue";
-import { StyleObject, VtableColumn, VtableListCtx } from "../types";
+import { StyleObject, VtableColumn, VtableListCtx, VtableProps } from "../types";
 import * as _ from "lodash";
 import { px } from "./utils";
 import { component, prop as p } from "vueit";
@@ -8,19 +8,6 @@ import { ScrollEventArgs } from "./vlist";
 import vtablerow from "./vtablerow";
 import vtablesplitter from "./vtablesplitter";
 import { positive } from "./validation";
-
-interface VtableProps {
-    rowHeight: number;
-    headerHeight?: number;
-    columns: VtableColumn[];
-    items: any[];
-    rowStyleCycle?: number;
-    splitterWidth?: number;
-    rowClass?: string;
-    getRowClass?: (item: any, index: number) => string;
-    ctx?: any;
-    getItemKey: (item: any) => number | string;
-}
 
 interface VtableData {
     widths: number[];

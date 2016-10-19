@@ -7,7 +7,7 @@ export interface VtableColumn {
     defaultWidth: number;
     minWidth?: number;
     className?: string;
-    render?: (h: $createElement, item: any, index: number, ctx: any) => Vue.VNode;
+    render?: (h: $createElement, item: any, index: number, ctx: any) => Vue.VNode|string;
 }
 
 export interface VtableListCtx {
@@ -47,5 +47,29 @@ export interface StyleObject {
     textWrap?: "normal" | "none" | "unrestricted" | "suppress",
     top?: string;
     width?: string;
+}
+
+export interface VtableProps {
+    rowHeight: number;
+    headerHeight?: number;
+    columns: VtableColumn[];
+    items: any[];
+    rowStyleCycle?: number;
+    splitterWidth?: number;
+    rowClass?: string;
+    getRowClass?: (item: any, index: number) => string;
+    ctx?: any;
+    getItemKey: (item: any) => number | string;
+}
+
+export interface VlistProps {
+    rowComponent: string | Vue;
+    items: any[];
+    getItemKey: (item: any) => number | string;
+    contentWidth?: number | string;
+    ctx?: any;
+    rowHeight: number;
+    rowStyleCycle?: number;
+    style?: StyleObject;
 }
 
