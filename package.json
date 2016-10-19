@@ -15,7 +15,7 @@
   "dependencies": {
     "lodash": "^4.13.1",
     "vue": "^2.0.1",
-    "vueit": "git+https://github.com/wonderful-panda/vueit.git"
+    "vueit": "^0.4.0"
   },
   "devDependencies": {
     "@types/lodash": "0.0.27",
