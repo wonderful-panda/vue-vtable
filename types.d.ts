@@ -36,10 +36,10 @@ export interface StyleObject {
     left?: string;
     lineHeight?: string;
     margin?: number | string;
-    maxWidth?: number | string;
-    maxHeight?: number | string;
-    minWidth?: number | string;
-    minHeight?: number | string;
+    maxWidth?: string;
+    maxHeight?: string;
+    minWidth?: string;
+    minHeight?: string;
     overflow?: "auto" | "scroll" | "hidden" | "visible";
     padding?: number | string;
     position?: "static" | "relative" | "absolute" | "fixed" | "sticky";

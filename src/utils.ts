@@ -1,3 +1,8 @@
-export function px(value: number): string {
-    return `${value}px`;
+export function px(value: number | string): string {
+    if (typeof value === "string") {
+        return value;
+    }
+    else {
+        return px(value);
+    }
 }

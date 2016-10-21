@@ -59,7 +59,7 @@ export default class Vlist extends Vue implements VlistProps {
             display: "flex",
             flex: "0 0 auto",
             boxSizing: "border-box",
-            minWidth: this.contentWidth,
+            minWidth: px(this.contentWidth),
             position: "relative",
             left: px(this.$data.scrollLeft * -1),
             overflow: "hidden",
@@ -86,7 +86,7 @@ export default class Vlist extends Vue implements VlistProps {
             boxSizing: "border-box",
             height: px(this.contentHeight),
             overflow: "hidden",
-            minWidth: this.contentWidth
+            minWidth: px(this.contentWidth)
         };
     }
     get spacerStyle(): StyleObject {
