@@ -1,6 +1,6 @@
-import vlist from "./vlist";
-import vtable from "./vtable";
+import Vlist from "./vlist";
+import Vtable from "./vtable";
 
 export = {
-    vlist, vtable
+    Vlist, Vtable
 };
