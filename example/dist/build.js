@@ -24393,7 +24393,11 @@
 	"use strict";
 	
 	function px(value) {
-	    return value + "px";
+	    if (typeof value === "string") {
+	        return value;
+	    } else {
+	        return px(value);
+	    }
 	}
 	exports.px = px;
 
@@ -24512,7 +24516,7 @@
 	                display: "flex",
 	                flex: "0 0 auto",
 	                boxSizing: "border-box",
-	                minWidth: this.contentWidth,
+	                minWidth: utils_1.px(this.contentWidth),
 	                position: "relative",
 	                left: utils_1.px(this.$data.scrollLeft * -1),
 	                overflow: "hidden",
@@ -24543,7 +24547,7 @@
 	                boxSizing: "border-box",
 	                height: utils_1.px(this.contentHeight),
 	                overflow: "hidden",
-	                minWidth: this.contentWidth
+	                minWidth: utils_1.px(this.contentWidth)
 	            };
 	        }
 	    }, {

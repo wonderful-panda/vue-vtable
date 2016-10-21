@@ -58,7 +58,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	const vlist_1 = __webpack_require__(1);
 	const vtable_1 = __webpack_require__(10);
 	module.exports = {
-	    vlist: vlist_1.default, vtable: vtable_1.default
+	    Vlist: vlist_1.default, Vtable: vtable_1.default
 	};
 
 
@@ -95,7 +95,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            display: "flex",
 	            flex: "0 0 auto",
 	            boxSizing: "border-box",
-	            minWidth: this.contentWidth,
+	            minWidth: utils_1.px(this.contentWidth),
 	            position: "relative",
 	            left: utils_1.px(this.$data.scrollLeft * -1),
 	            overflow: "hidden",
@@ -122,7 +122,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            boxSizing: "border-box",
 	            height: utils_1.px(this.contentHeight),
 	            overflow: "hidden",
-	            minWidth: this.contentWidth
+	            minWidth: utils_1.px(this.contentWidth)
 	        };
 	    }
 	    get spacerStyle() {
@@ -1593,7 +1593,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 	function px(value) {
-	    return `${value}px`;
+	    if (typeof value === "string") {
+	        return value;
+	    }
+	    else {
+	        return px(value);
+	    }
 	}
 	exports.px = px;
 
