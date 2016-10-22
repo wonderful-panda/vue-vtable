@@ -3,7 +3,7 @@
   "description": "Light weight vertical list component for Vue",
   "author": "Iwata Hidetaka <iwata0303@gmail.com>",
   "main": "dist/index.js",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack",
     "tslint": "tslint --project tsconfig.json",
