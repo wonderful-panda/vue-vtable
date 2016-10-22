@@ -24396,7 +24396,7 @@
 	    if (typeof value === "string") {
 	        return value;
 	    } else {
-	        return px(value);
+	        return value + "px";
 	    }
 	}
 	exports.px = px;

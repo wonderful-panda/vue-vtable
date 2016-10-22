@@ -1597,7 +1597,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return value;
 	    }
 	    else {
-	        return px(value);
+	        return `${value}px`;
 	    }
 	}
 	exports.px = px;

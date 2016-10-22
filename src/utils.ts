@@ -3,6 +3,6 @@ export function px(value: number | string): string {
         return value;
     }
     else {
-        return px(value);
+        return `${value}px`;
     }
 }
