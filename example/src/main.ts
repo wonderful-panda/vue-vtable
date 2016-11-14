@@ -13,7 +13,7 @@ interface AppCtx {
     selectedIndex: number;
 }
 
-const columns: VtableColumn[] = [
+const columns: VtableColumn<Item>[] = [
     {
         title: "id",
         className: "cell-id",
@@ -55,7 +55,7 @@ const columns: VtableColumn[] = [
 ];
 
 interface AppData {
-    columns: VtableColumn[];
+    columns: VtableColumn<Item>[];
     ctx: AppCtx;
     rowHeight: number;
     items: Item[];

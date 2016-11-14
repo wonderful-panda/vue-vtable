@@ -6,23 +6,23 @@ import vtablesplitter from "./vtablesplitter";
 import { VtableListCtx } from "../types";
 import { positive, notNegative } from "./validation";
 
-interface VtableRowProps {
-    item: any;
+interface VtableRowProps<T> {
+    item: T;
     index: number;
     height: number;
-    ctx: VtableListCtx;
+    ctx: VtableListCtx<T>;
 }
 
 @component({
     compiledTemplate: require("./vtablerow.pug"),
-    components: { vtablecell, vtablesplitter }
+    components: { vtablecell: vtablecell, vtablesplitter }
 })
-export default class VtableRow extends Vue implements VtableRowProps {
-    @p.required item: any;
+export default class VtableRow<T> extends Vue implements VtableRowProps<T> {
+    @p.required item: T;
     @p.required({ validator: notNegative }) index: number;
     @p.required({ validator: positive }) height: number;
-    @p.required ctx: VtableListCtx;
-    get rowStyle(this: VtableRowProps) {
+    @p.required ctx: VtableListCtx<T>;
+    get rowStyle(this: VtableRowProps<T>) {
         return {
             display: "flex",
             flex: "1 1 auto",

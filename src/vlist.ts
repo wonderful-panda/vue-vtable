@@ -19,7 +19,7 @@ interface VlistData {
     hScrollBarHeight: number;
 }
 
-@component<Vlist>({
+@component<Vlist<T>>({
     compiledTemplate: require("./vlist.pug"),
     components: { resizeSensor },
     data(): VlistData {
@@ -33,13 +33,13 @@ interface VlistData {
         };
     }
 })
-export default class Vlist extends Vue implements VlistProps {
+export default class Vlist<T> extends Vue implements VlistProps<T> {
     $data: VlistData;
     $refs: { scrollable: Element, content: Element };
 
     @p.required rowComponent: string | Vue;
-    @p.required items: any[];
-    @p.required getItemKey: (item: any) => string;
+    @p.required items: T[];
+    @p.required getItemKey: (item: T) => string;
     @p({ type: [Number, String] })  contentWidth?: number | string;
     @p ctx?: any;
     @p.required({ validator: positive }) rowHeight: number;

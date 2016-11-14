@@ -8,7 +8,7 @@ import { VtableListCtx, StyleObject } from "../types";
 export default class vtablesplitter extends Vue {
 
     @prop.required index: number;
-    @prop.required ctx: VtableListCtx;
+    @prop.required ctx: VtableListCtx<any>;
     render(h, context) {
         const className = (this.ctx.draggingSplitter === this.index
                            ? "vtable-dragging-splitter" : "vtable-splitter");

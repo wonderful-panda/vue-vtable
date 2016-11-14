@@ -4,12 +4,12 @@ import { px } from "./utils";
 import { VtableListCtx } from "../types";
 
 @functionalComponent
-export default class VtableCell extends Vue {
-    @prop.required item: any;
+export default class VtableCell<T> extends Vue {
+    @prop.required item: T;
     @prop.required index: number;
     @prop.required columnIndex: number;
     @prop.required height: number;
-    @prop.required ctx: VtableListCtx;
+    @prop.required ctx: VtableListCtx<T>;
 
     render(h, context) {
         const column = this.ctx.columns[this.columnIndex];

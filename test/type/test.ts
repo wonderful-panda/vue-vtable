@@ -4,7 +4,7 @@ import { Vtable, VtableColumn, VtableProps } from "../..";
 
 const items = _.range(0, 100);
 
-const columns: VtableColumn[] = [
+const columns: VtableColumn<number>[] = [
     {
         title: "column1",
         className: "col1",
@@ -24,7 +24,7 @@ export default Vue.extend({
     name: "Test",
     components: { Vtable },
     render(h: typeof Vue.prototype.$createElement) {
-        const props: VtableProps = {
+        const props: VtableProps<number> = {
             columns,
             items,
             getItemKey: i => i,

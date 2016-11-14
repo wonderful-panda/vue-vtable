@@ -2,18 +2,18 @@ import * as Vue from "vue"
 
 type $createElement = typeof Vue.prototype.$createElement;
 
-export interface VtableColumn {
+export interface VtableColumn<T> {
     title: string;
     defaultWidth: number;
     minWidth?: number;
     className?: string;
-    render?: (h: $createElement, item: any, index: number, ctx: any) => Vue.VNode|string;
+    render?: (h: $createElement, item: T, index: number, ctx: any) => Vue.VNode|string;
 }
 
-export interface VtableListCtx {
+export interface VtableListCtx<T> {
     ctx: any;
-    columns: VtableColumn[],
-    getRowClass: (item: any, index: number) => string;
+    columns: VtableColumn<T>[],
+    getRowClass: (item: T, index: number) => string;
     widths: number[];
     splitterWidth: number;
     draggingSplitter: number;
@@ -49,23 +49,23 @@ export interface StyleObject {
     width?: string;
 }
 
-export interface VtableProps {
+export interface VtableProps<T> {
     rowHeight: number;
     headerHeight?: number;
-    columns: VtableColumn[];
-    items: any[];
+    columns: VtableColumn<T>[];
+    items: T[];
     rowStyleCycle?: number;
     splitterWidth?: number;
     rowClass?: string;
-    getRowClass?: (item: any, index: number) => string;
+    getRowClass?: (item: T, index: number) => string;
     ctx?: any;
-    getItemKey: (item: any) => number | string;
+    getItemKey: (item: T) => number | string;
 }
 
-export interface VlistProps {
+export interface VlistProps<T> {
     rowComponent: string | Vue;
-    items: any[];
-    getItemKey: (item: any) => number | string;
+    items: T[];
+    getItemKey: (item: T) => number | string;
     contentWidth?: number | string;
     ctx?: any;
     rowHeight: number;

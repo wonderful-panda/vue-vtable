@@ -16,7 +16,7 @@ interface VtableData {
     draggingSplitter: number;
 }
 
-@component<Vtable>({
+@component<Vtable<T>>({
     compiledTemplate: require("./vtable.pug"),
     components: { vlist, vtablerow, vtablesplitter },
     data(): VtableData {
@@ -28,20 +28,20 @@ interface VtableData {
         };
     }
 })
-export default class Vtable extends Vue implements VtableProps {
+export default class Vtable<T> extends Vue implements VtableProps<T> {
     $data: VtableData;
     $refs: { header: Element };
 
     @p.required({ validator: positive }) rowHeight: number;
     @p.default(0) headerHeight?: number;
-    @p.required columns: VtableColumn[];
-    @p.required items: any[];
+    @p.required columns: VtableColumn<T>[];
+    @p.required items: T[];
     @p.default(1, { validator: positive }) rowStyleCycle?: number;
     @p.default(3, { validator: positive }) splitterWidth?: number;
     @p.default("vtable-row") rowClass?: string;
-    @p getRowClass?: (item: any, index: number) => string;
+    @p getRowClass?: (item: T, index: number) => string;
     @p ctx?: any;
-    @p.required getItemKey: (item: any) => number | string;
+    @p.required getItemKey: (item: T) => number | string;
 
     /* style */
     get headerStyle(): StyleObject {
@@ -68,7 +68,7 @@ export default class Vtable extends Vue implements VtableProps {
         };
     }
     /** ctx object will be passed to vlist */
-    get listCtx(): VtableListCtx {
+    get listCtx(): VtableListCtx<T> {
         const rowClass = this.rowClass;
         return {
             ctx: this.ctx,
