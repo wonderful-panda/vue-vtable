@@ -137,6 +137,12 @@
 	            };
 	        }
 	    }, {
+	        key: "updateParams",
+	        value: function updateParams() {
+	            this.$data.rowHeight = parseInt(this.$refs.rowHeight.value);
+	            this.$data.items = this.createItems(parseInt(this.$refs.rowCount.value));
+	        }
+	    }, {
 	        key: "createItems",
 	        value: function createItems(num) {
 	            return _createItems(num);
@@ -24971,7 +24977,7 @@
 
 	
 	    module.exports = {
-	      render: function(){with(this){return _h('div',{staticClass:"app-container"},[_h('h1',[_s(message)]),_h('div',{attrs:{"style":"margin-bottom: 1em"}},[_m(0),_h('input',{attrs:{"type":"number"},domProps:{"value":rowHeight},on:{"keyup":function($event){if($event.keyCode!==13)return;rowHeight = parseInt($event.target.value)}}}),_m(1),_h('input',{attrs:{"type":"number"},domProps:{"value":items.length},on:{"keyup":function($event){if($event.keyCode!==13)return;items = createItems(parseInt($event.target.value))}}})]),_h('vtable',{attrs:{"id":"main-list","items":items,"row-height":rowHeight,"header-height":20,"columns":columns,"get-row-class":getRowClass,"row-style-cycle":2,"get-item-key":getItemKey,"ctx":ctx},on:{"row-click":onRowClick}})])}},
+	      render: function(){with(this){return _h('div',{staticClass:"app-container"},[_h('h1',[_s(message)]),_h('div',{attrs:{"style":"margin-bottom: 1em"}},[_m(0),_h('input',{ref:"rowHeight",attrs:{"type":"number"},domProps:{"value":rowHeight}}),_m(1),_h('input',{ref:"rowCount",attrs:{"type":"number"},domProps:{"value":items.length}}),_h('input',{attrs:{"type":"button","value":"update","style":"margin-left: 1em"},on:{"click":updateParams}})]),_h('vtable',{attrs:{"id":"main-list","items":items,"row-height":rowHeight,"header-height":20,"columns":columns,"get-row-class":getRowClass,"row-style-cycle":2,"get-item-key":getItemKey,"ctx":ctx},on:{"row-click":onRowClick}})])}},
 	      staticRenderFns: [function(){with(this){return _h('span',[" Row height:"])}},function(){with(this){return _h('span',[" Row count:"])}}]
 	    };
 	  
