@@ -2,9 +2,10 @@ div.app-container
     h1 {{ message }}
     div(style="margin-bottom: 1em;")
       span  Row height:
-      input(type="number", :value="rowHeight", @keyup.enter="rowHeight = parseInt($event.target.value)")
+      input(ref="rowHeight", type="number", :value="rowHeight")
       span  Row count:
-      input(type="number", :value="items.length", @keyup.enter="items = createItems(parseInt($event.target.value))")
+      input(ref="rowCount", type="number", :value="items.length")
+      input(type="button", value="update", @click="updateParams", style="margin-left: 1em;")
 
     vtable(id="main-list", :items="items", :row-height="rowHeight", :header-height="20", :columns="columns",
            :get-row-class="getRowClass", :row-style-cycle="2", :get-item-key="getItemKey", :ctx="ctx",

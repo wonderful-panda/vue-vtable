@@ -73,6 +73,10 @@ function createItems(num: number): Item[] {
     components: { vtable }
 })
 class App extends Vue {
+    $refs: {
+        rowHeight: HTMLInputElement;
+        rowCount: HTMLInputElement;
+    };
     $data: AppData;
     data(): AppData {
         return {
@@ -82,6 +86,11 @@ class App extends Vue {
             items: createItems(100),
             message: "vtable demo"
         };
+    }
+
+    updateParams() {
+        this.$data.rowHeight = parseInt(this.$refs.rowHeight.value);
+        this.$data.items = this.createItems(parseInt(this.$refs.rowCount.value));
     }
 
     createItems(num: number): Item[] {
