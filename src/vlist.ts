@@ -1,5 +1,6 @@
 import * as Vue from "vue";
-import { StyleObject, VlistProps } from "../types";
+import { CssProperties } from "vue-css-definition";
+import { VlistProps } from "../types";
 import * as resizeSensor from "vue-resizesensor";
 import { component, prop as p, watch } from "vueit";
 import { px } from "./utils";
@@ -44,17 +45,17 @@ export default class Vlist<T> extends Vue implements VlistProps<T> {
     @p ctx?: any;
     @p.required({ validator: positive }) rowHeight: number;
     @p.default(1, { validator: positive }) rowStyleCycle?: number;
-    @p style?: StyleObject;
+    @p style?: CssProperties;
 
     /* styles */
-    get containerStyle(): StyleObject {
+    get containerStyle(): CssProperties {
         return {
             display: "flex",
             flexFlow: "column nowrap",
             overflow: "hidden"
         };
     }
-    get headerStyle(): StyleObject {
+    get headerStyle(): CssProperties {
         return {
             display: "flex",
             flex: "0 0 auto",
@@ -77,7 +78,7 @@ export default class Vlist<T> extends Vue implements VlistProps<T> {
             border: 0
         };
     }
-    get contentStyle(): StyleObject {
+    get contentStyle(): CssProperties {
         return {
             display: "flex",
             flexFlow: "column nowrap",
@@ -89,13 +90,13 @@ export default class Vlist<T> extends Vue implements VlistProps<T> {
             minWidth: px(this.contentWidth)
         };
     }
-    get spacerStyle(): StyleObject {
+    get spacerStyle(): CssProperties {
         return {
             height: px(this.rowHeight * this.firstIndex),
             flex: "0 0 auto"
         };
     };
-    get rowStyle(): StyleObject {
+    get rowStyle(): CssProperties {
         return {
             display: "flex",
             width: "100%",

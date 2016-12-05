@@ -1,5 +1,6 @@
 import * as Vue from "vue";
-import { StyleObject, VtableColumn, VtableListCtx, VtableProps } from "../types";
+import { CssProperties } from "vue-css-definition";
+import { VtableColumn, VtableListCtx, VtableProps } from "../types";
 import * as _ from "lodash";
 import { px } from "./utils";
 import { component, prop as p } from "vueit";
@@ -44,7 +45,7 @@ export default class Vtable<T> extends Vue implements VtableProps<T> {
     @p.required getItemKey: (item: T) => number | string;
 
     /* style */
-    get headerStyle(): StyleObject {
+    get headerStyle(): CssProperties {
         return {
             display: "flex",
             position: "relative",
@@ -53,17 +54,17 @@ export default class Vtable<T> extends Vue implements VtableProps<T> {
             height: px(this.actualHeaderHeight),
             lineHeight: px(this.actualHeaderHeight),
             boxSizing: "border-box",
-            margin: 0,
-            textWrap: "none"
+            margin: "0",
+            whiteSpace: "none"
         };
     }
-    headerCellStyle(width: number): StyleObject {
+    headerCellStyle(width: number): CssProperties {
         return {
             minWidth: px(width),
             width: px(width),
             lineHeight: px(this.actualHeaderHeight),
             boxSizing: "border-box",
-            margin: 0,
+            margin: "0",
             overflow: "hidden"
         };
     }

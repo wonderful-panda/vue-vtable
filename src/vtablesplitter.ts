@@ -1,7 +1,8 @@
 import * as Vue from "vue";
+import { CssProperties } from "vue-css-definition";
 import { functionalComponent, prop } from "vueit";
 import { px } from "./utils";
-import { VtableListCtx, StyleObject } from "../types";
+import { VtableListCtx } from "../types";
 
 
 @functionalComponent
@@ -12,7 +13,7 @@ export default class vtablesplitter extends Vue {
     render(h, context) {
         const className = (this.ctx.draggingSplitter === this.index
                            ? "vtable-dragging-splitter" : "vtable-splitter");
-        const style: StyleObject = {
+        const style: CssProperties = {
             minWidth: px(this.ctx.splitterWidth),
             maxWidth: px(this.ctx.splitterWidth),
             height: "100%",
