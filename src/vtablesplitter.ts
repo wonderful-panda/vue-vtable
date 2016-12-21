@@ -1,30 +1,35 @@
-import * as Vue from "vue";
 import { CssProperties } from "vue-css-definition";
-import { functionalComponent, prop } from "vueit";
+import * as tc from "vue-typed-component";
 import { px } from "./utils";
 import { VtableListCtx } from "../types";
 
 
-@functionalComponent
-export default class vtablesplitter extends Vue {
+export interface VtableSplitterProps {
+    index: number;
+    ctx: VtableListCtx<any>;
+}
 
-    @prop.required index: number;
-    @prop.required ctx: VtableListCtx<any>;
-    render(h, context) {
-        const className = (this.ctx.draggingSplitter === this.index
+export default tc.functionalComponent<VtableSplitterProps>(
+    "VtableSplitter",
+    {
+        index: { type: Number, required: true },
+        ctx: { type: Object, required: true },
+    },
+    (h, { props }) => {
+        const className = (props.ctx.draggingSplitter === props.index
                            ? "vtable-dragging-splitter" : "vtable-splitter");
         const style: CssProperties = {
-            minWidth: px(this.ctx.splitterWidth),
-            maxWidth: px(this.ctx.splitterWidth),
+            minWidth: px(props.ctx.splitterWidth),
+            maxWidth: px(props.ctx.splitterWidth),
             height: "100%",
             boxSizing: "border-box",
             cursor: "col-resize"
         };
         const on = {
-            mousedown: ev => this.ctx.onSplitterMouseDown(this.index, ev)
+            mousedown: ev => props.ctx.onSplitterMouseDown(props.index, ev)
         }
 
         return h("div", { class: className, style, on });
     }
-};
+);
 

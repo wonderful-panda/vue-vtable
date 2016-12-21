@@ -1,11 +1,10 @@
 import * as Vue from "vue";
 import { CssProperties } from "vue-css-definition";
-import { VtableColumn, VtableListCtx, VtableProps } from "../types";
+import { VtableListCtx, VtableProps, VtableEvents, RowClickEventArgs, ScrollEventArgs } from "../types";
 import * as _ from "lodash";
 import { px } from "./utils";
-import { component, prop as p } from "vueit";
+import * as tc from "vue-typed-component";
 import vlist from "./vlist";
-import { ScrollEventArgs } from "./vlist";
 import vtablerow from "./vtablerow";
 import vtablesplitter from "./vtablesplitter";
 import { positive } from "./validation";
@@ -17,32 +16,32 @@ interface VtableData {
     draggingSplitter: number;
 }
 
-@component<Vtable<T>>({
-    compiledTemplate: require("./vtable.pug"),
+@tc.component<VtableProps<T>, Vtable<T>>({
+    ...require("./vtable.pug"),
     components: { vlist, vtablerow, vtablesplitter },
+    props: {
+        rowHeight: { type: Number, required: true, validator: positive },
+        headerHeight: { type: Number, default: 0 },
+        columns: { type: Array, required: true },
+        items: { type: Array, required: true },
+        rowStyleCycle: { type: Number, default: 1, validator: positive },
+        splitterWidth: { type: Number, default: 3, validator: positive },
+        rowClass: { type: String, default: "vtable-row" },
+        getRowClass: { type: Function },
+        ctx: {},
+        getItemKey: { type: Function, required: true }
+    },
+})
+export default class Vtable<T> extends tc.StatefulEvTypedComponent<VtableProps<T>, VtableEvents<T>, VtableData> {
+    $refs: { header: Element };
     data(): VtableData {
         return {
-            widths: this.columns.map(c => c.defaultWidth),
+            widths: this.$props.columns.map(c => c.defaultWidth),
             scrollLeft: 0,
             splitterPositions: [],
             draggingSplitter: -1
         };
     }
-})
-export default class Vtable<T> extends Vue implements VtableProps<T> {
-    $data: VtableData;
-    $refs: { header: Element };
-
-    @p.required({ validator: positive }) rowHeight: number;
-    @p.default(0) headerHeight?: number;
-    @p.required columns: VtableColumn<T>[];
-    @p.required items: T[];
-    @p.default(1, { validator: positive }) rowStyleCycle?: number;
-    @p.default(3, { validator: positive }) splitterWidth?: number;
-    @p.default("vtable-row") rowClass?: string;
-    @p getRowClass?: (item: T, index: number) => string;
-    @p ctx?: any;
-    @p.required getItemKey: (item: T) => number | string;
 
     /* style */
     get headerStyle(): CssProperties {
@@ -70,22 +69,23 @@ export default class Vtable<T> extends Vue implements VtableProps<T> {
     }
     /** ctx object will be passed to vlist */
     get listCtx(): VtableListCtx<T> {
-        const rowClass = this.rowClass;
+        const { ctx, rowClass, columns, getRowClass, splitterWidth } = this.$props;
         return {
-            ctx: this.ctx,
-            columns: this.columns,
-            getRowClass: this.getRowClass ? this.getRowClass : (item, index) => rowClass,
-            splitterWidth: this.splitterWidth,
+            ctx,
+            columns,
+            getRowClass: getRowClass ? getRowClass : (item, index) => rowClass,
+            splitterWidth: splitterWidth,
             widths: this.$data.widths,
             draggingSplitter: this.$data.draggingSplitter,
             onSplitterMouseDown: this.onSplitterMouseDown
         };
     }
     get actualHeaderHeight() {
-        return this.headerHeight > 0 ? this.headerHeight : this.rowHeight;
+        const { headerHeight, rowHeight } = this.$props;
+        return headerHeight > 0 ? headerHeight : rowHeight;
     }
     get contentWidth() {
-        return _.sumBy(this.$data.widths, w => w + this.splitterWidth);
+        return _.sumBy(this.$data.widths, w => w + this.$props.splitterWidth);
     }
 
     /* methods */
@@ -96,7 +96,7 @@ export default class Vtable<T> extends Vue implements VtableProps<T> {
         event.preventDefault();
         event.stopPropagation();
         const headerCell = this.$refs.header.querySelectorAll("div.vtable-header-cell")[index];
-        const column = this.columns[index];
+        const column = this.$props.columns[index];
         const startWidth = headerCell.clientWidth;
         const startX = event.screenX;
         const minWidth = column.minWidth || 5;
@@ -117,7 +117,7 @@ export default class Vtable<T> extends Vue implements VtableProps<T> {
         document.addEventListener("mouseup", onMouseUp);
         this.$data.draggingSplitter = index;
     }
-    onRowClick(arg) {
-        this.$emit("row-click", arg);
+    onRowClick(arg: RowClickEventArgs<T>) {
+        this.$events.emit("row-click", arg);
     }
 }

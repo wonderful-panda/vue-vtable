@@ -1,30 +1,38 @@
-import * as Vue from "vue";
-import { functionalComponent, prop } from "vueit";
+import * as tc from "vue-typed-component";
 import { px } from "./utils";
 import { VtableListCtx } from "../types";
 
-@functionalComponent
-export default class VtableCell<T> extends Vue {
-    @prop.required item: T;
-    @prop.required index: number;
-    @prop.required columnIndex: number;
-    @prop.required height: number;
-    @prop.required ctx: VtableListCtx<T>;
+export interface VtableCellProps {
+    item: any;
+    index: number;
+    columnIndex: number;
+    height: number;
+    ctx: VtableListCtx<any>;
+};
 
-    render(h, context) {
-        const column = this.ctx.columns[this.columnIndex];
-        const w = px(this.ctx.widths[this.columnIndex]);
+export default tc.functionalComponent<VtableCellProps>(
+    "VtableCell",
+    {
+        item: { required: true },
+        index: { type: Number, required: true },
+        columnIndex: { type: Number, required: true },
+        height: { type: Number, required: true },
+        ctx: { type: Object, required: true }
+    },
+    (h, { props }) => {
+        const column = props.ctx.columns[props.columnIndex];
+        const w = px(props.ctx.widths[props.columnIndex]);
         const style = {
             minWidth: w,
             width: w,
-            lineHeight: px(this.height),
+            lineHeight: px(props.height),
             margin: 0,
             boxSizing: "border-box",
             overflow: "hidden"
         };
         return h("div", { class: ["vtable-cell", column.className], style }, [
-                    column.render(h, this.item, this.index, this.ctx.ctx)
+                    column.render(h, props.item, props.index, props.ctx.ctx)
                ]);
     }
-}
+);
 

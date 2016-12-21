@@ -1,5 +1,4 @@
-import * as Vue from "vue";
-import { component, prop as p } from "vueit";
+import * as tc from "vue-typed-component";
 import { px } from "./utils";
 import vtablecell from "./vtablecell";
 import vtablesplitter from "./vtablesplitter";
@@ -13,22 +12,24 @@ interface VtableRowProps<T> {
     ctx: VtableListCtx<T>;
 }
 
-@component({
-    compiledTemplate: require("./vtablerow.pug"),
-    components: { vtablecell: vtablecell, vtablesplitter }
+@tc.component<VtableRowProps<T>, VtableRow<T>>({
+    ...require("./vtablerow.pug"),
+    components: { vtablecell: vtablecell, vtablesplitter },
+    props: {
+        item: { required: true },
+        index: { type: Number, required: true, validator: notNegative },
+        height: { type: Number, required: true, validator: positive },
+        ctx: { type: Object, required: true }
+    }
 })
-export default class VtableRow<T> extends Vue implements VtableRowProps<T> {
-    @p.required item: T;
-    @p.required({ validator: notNegative }) index: number;
-    @p.required({ validator: positive }) height: number;
-    @p.required ctx: VtableListCtx<T>;
-    get rowStyle(this: VtableRowProps<T>) {
+export default class VtableRow<T> extends tc.TypedComponent<VtableRowProps<T>> {
+    get rowStyle() {
         return {
             display: "flex",
             flex: "1 1 auto",
             width: "100%",
-            height: px(this.height),
-            lineHeight: px(this.height),
+            height: px(this.$props.height),
+            lineHeight: px(this.$props.height),
             boxSizing: "border-box",
             margin: 0
         };

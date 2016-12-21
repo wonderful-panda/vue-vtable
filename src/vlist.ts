@@ -1,15 +1,9 @@
-import * as Vue from "vue";
 import { CssProperties } from "vue-css-definition";
-import { VlistProps } from "../types";
+import { VlistProps, VlistEvents } from "../types";
 import * as resizeSensor from "vue-resizesensor";
-import { component, prop as p, watch } from "vueit";
+import * as tc from "vue-typed-component";
 import { px } from "./utils";
 import { positive } from "./validation";
-
-export interface ScrollEventArgs {
-    scrollLeft: number;
-    scrollTop: number;
-}
 
 interface VlistData {
     scrollLeft: number;
@@ -20,9 +14,27 @@ interface VlistData {
     hScrollBarHeight: number;
 }
 
-@component<Vlist<T>>({
-    compiledTemplate: require("./vlist.pug"),
+@tc.component<VlistProps<T>, Vlist<T>>({
+    ...require("./vlist.pug"),
     components: { resizeSensor },
+    props: {
+        rowComponent: { type: [String, Object], required: true },
+        items: { type: Array, required: true },
+        getItemKey: { type: Function, required: true },
+        contentWidth: { type: [Number, String] },
+        ctx: {},
+        rowHeight: { type: Number, required: true, validator: positive },
+        rowStyleCycle: { type: Number, default: 1 },
+        style: { type: Object }
+    },
+    watch: {
+        contentWidth: "onContentWidthChanged",
+        contentHeight: "onContentHeightChanged"
+    }
+})
+export default class Vlist<T> extends tc.StatefulEvTypedComponent<VlistProps<T>, VlistEvents<T>, VlistData> {
+    $refs: { scrollable: Element, content: Element };
+
     data(): VlistData {
         return {
             scrollLeft: 0,
@@ -33,19 +45,6 @@ interface VlistData {
             hScrollBarHeight: 0
         };
     }
-})
-export default class Vlist<T> extends Vue implements VlistProps<T> {
-    $data: VlistData;
-    $refs: { scrollable: Element, content: Element };
-
-    @p.required rowComponent: string | Vue;
-    @p.required items: T[];
-    @p.required getItemKey: (item: T) => string;
-    @p({ type: [Number, String] })  contentWidth?: number | string;
-    @p ctx?: any;
-    @p.required({ validator: positive }) rowHeight: number;
-    @p.default(1, { validator: positive }) rowStyleCycle?: number;
-    @p style?: CssProperties;
 
     /* styles */
     get containerStyle(): CssProperties {
@@ -60,7 +59,7 @@ export default class Vlist<T> extends Vue implements VlistProps<T> {
             display: "flex",
             flex: "0 0 auto",
             boxSizing: "border-box",
-            minWidth: px(this.contentWidth),
+            minWidth: px(this.$props.contentWidth),
             position: "relative",
             left: px(this.$data.scrollLeft * -1),
             overflow: "hidden",
@@ -87,12 +86,12 @@ export default class Vlist<T> extends Vue implements VlistProps<T> {
             boxSizing: "border-box",
             height: px(this.contentHeight),
             overflow: "hidden",
-            minWidth: px(this.contentWidth)
+            minWidth: px(this.$props.contentWidth)
         };
     }
     get spacerStyle(): CssProperties {
         return {
-            height: px(this.rowHeight * this.firstIndex),
+            height: px(this.$props.rowHeight * this.firstIndex),
             flex: "0 0 auto"
         };
     };
@@ -100,27 +99,27 @@ export default class Vlist<T> extends Vue implements VlistProps<T> {
         return {
             display: "flex",
             width: "100%",
-            height: px(this.rowHeight)
+            height: px(this.$props.rowHeight)
         };
     }
 
     /* computed */
     get firstIndex() {
-        let value = Math.floor(this.$data.scrollTop / this.rowHeight);
-        if (this.rowStyleCycle > 1) {
-            value -= (value % this.rowStyleCycle);
+        let value = Math.floor(this.$data.scrollTop / this.$props.rowHeight);
+        if (this.$props.rowStyleCycle > 1) {
+            value -= (value % this.$props.rowStyleCycle);
         }
         return value;
     }
     get lastIndex() {
         const {scrollTop, bodyHeight} = this.$data;
-        return Math.ceil((scrollTop + bodyHeight) / this.rowHeight);
+        return Math.ceil((scrollTop + bodyHeight) / this.$props.rowHeight);
     }
     get renderedItems() {
-        return this.items.slice(this.firstIndex, this.lastIndex + 1);
+        return this.$props.items.slice(this.firstIndex, this.lastIndex + 1);
     }
     get contentHeight() {
-        return this.rowHeight * this.items.length;
+        return this.$props.rowHeight * this.$props.items.length;
     }
 
     /* methods */
@@ -145,16 +144,14 @@ export default class Vlist<T> extends Vue implements VlistProps<T> {
     };
     onScroll(event: Event) {
         const { scrollLeft, scrollTop } = this.$refs.scrollable;
-        const args: ScrollEventArgs = { scrollLeft, scrollTop };
         this.$data.scrollLeft = scrollLeft;
         this.$data.scrollTop = scrollTop;
-        this.$emit("scroll", args);
+        this.$events.emit("scroll", { scrollLeft, scrollTop, event });
     }
-    onRowClick(item: any, index: number, event: Event) {
-        this.$emit("row-click", { item, index, event });
+    onRowClick(item: T, index: number, event: Event) {
+        this.$events.emit("row-click", { item, index, event });
     }
 
-    @watch("contentHeight")
     onContentHeightChanged(newValue, oldValue) {
         const hScrollBarHeight = this.$data.hScrollBarHeight;
         const height = this.$data.bodyHeight + hScrollBarHeight;
@@ -164,7 +161,6 @@ export default class Vlist<T> extends Vue implements VlistProps<T> {
         }
     }
 
-    @watch("contentWidth")
     onContentWidthChanged(newValue, oldValue) {
         const vScrollBarWidth = this.$data.vScrollBarWidth;
         const width = this.$data.bodyWidth + vScrollBarWidth;

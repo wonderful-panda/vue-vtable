@@ -1,5 +1,5 @@
 import * as Vue from "vue";
-import { component } from "vueit";
+import * as tc from "vue-typed-component";
 import vtable from "../../src/vtable";
 import { VtableColumn } from "../../types";
 
@@ -68,11 +68,12 @@ function createItems(num: number): Item[] {
     });
 }
 
-@component({
-    compiledTemplate: require("./app.pug"),
-    components: { vtable }
+@tc.component<{}, App>({
+    ...require("./app.pug"),
+    components: { vtable },
+    props: {}
 })
-class App extends Vue {
+class App extends tc.TypedComponent<{}> {
     $refs: {
         rowHeight: HTMLInputElement;
         rowCount: HTMLInputElement;

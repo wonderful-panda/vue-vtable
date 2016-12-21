@@ -45,3 +45,23 @@ export interface VlistProps<T> {
     style?: CssProperties;
 }
 
+export interface RowClickEventArgs<T> {
+    index: number;
+    item: T;
+    event: Event;
+}
+
+export interface ScrollEventArgs {
+    scrollLeft: number;
+    scrollTop: number;
+    event: Event;
+}
+
+export interface VlistEvents<T> {
+    "row-click": RowClickEventArgs<T>;
+    "scroll": ScrollEventArgs;
+}
+
+export interface VtableEvents<T> {
+    "row-click": RowClickEventArgs<T>;
+}

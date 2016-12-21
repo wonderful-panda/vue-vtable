@@ -1,1 +1,1 @@
-declare function require(id: string): any;
+declare function require(id: string): { render: any, staticRenderFns: any[] };
