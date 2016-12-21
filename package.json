@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "lodash": "^4.13.1",
-    "vue": "^2.0.1",
+    "vue": "^2.1.6",
     "vue-typed-component": "^0.1.0"
   },
   "devDependencies": {
