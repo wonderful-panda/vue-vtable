@@ -26,7 +26,7 @@ export default tc.functionalComponent<VtableSplitterProps>(
             cursor: "col-resize"
         };
         const on = {
-            mousedown: ev => props.ctx.onSplitterMouseDown(props.index, ev)
+            mousedown: (ev: MouseEvent) => props.ctx.onSplitterMouseDown(props.index, ev)
         }
 
         return h("div", { class: className, style, on });

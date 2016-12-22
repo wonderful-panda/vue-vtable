@@ -23,7 +23,7 @@ const columns: VtableColumn<Item>[] = [
             return h("div", [
                 h("input", { attrs: { type: "checkbox" },
                              domProps: { "checked": item.checked },
-                             on: { "change": ev => item.checked = ev.target.checked } }),
+                             on: { "change": (ev: Event) => item.checked = (ev.target as any).checked } }),
                 label
             ]);
         }

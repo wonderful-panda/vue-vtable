@@ -8,7 +8,7 @@ export interface VtableColumn<T> {
     defaultWidth: number;
     minWidth?: number;
     className?: string;
-    render?: (h: $createElement, item: T, index: number, ctx: any) => Vue.VNode|string;
+    render: (h: $createElement, item: T, index: number, ctx: any) => Vue.VNode|string;
 }
 
 export interface VtableListCtx<T> {
@@ -23,14 +23,14 @@ export interface VtableListCtx<T> {
 
 export interface VtableProps<T> {
     rowHeight: number;
-    headerHeight?: number;
+    headerHeight: number;
     columns: VtableColumn<T>[];
     items: T[];
-    rowStyleCycle?: number;
-    splitterWidth?: number;
-    rowClass?: string;
-    getRowClass?: (item: T, index: number) => string;
-    ctx?: any;
+    rowStyleCycle: number;
+    splitterWidth: number;
+    rowClass: string;
+    getRowClass: (item: T, index: number) => string;
+    ctx: any;
     getItemKey: (item: T) => number | string;
 }
 

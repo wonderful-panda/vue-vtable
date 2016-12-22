@@ -152,7 +152,7 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<VlistProps<T>,
         this.$events.emit("row-click", { item, index, event });
     }
 
-    onContentHeightChanged(newValue, oldValue) {
+    onContentHeightChanged(newValue: number, oldValue: number) {
         const hScrollBarHeight = this.$data.hScrollBarHeight;
         const height = this.$data.bodyHeight + hScrollBarHeight;
         if ((0 < hScrollBarHeight) === (newValue < height)) {
@@ -161,7 +161,7 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<VlistProps<T>,
         }
     }
 
-    onContentWidthChanged(newValue, oldValue) {
+    onContentWidthChanged(newValue: number, oldValue: number) {
         const vScrollBarWidth = this.$data.vScrollBarWidth;
         const width = this.$data.bodyWidth + vScrollBarWidth;
         if ((0 < vScrollBarWidth) === (newValue < width)) {

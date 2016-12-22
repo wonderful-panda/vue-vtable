@@ -24,7 +24,7 @@ export default Vue.extend({
     name: "Test",
     components: { Vtable },
     render(h: typeof Vue.prototype.$createElement) {
-        const props: VtableProps<number> = {
+        const props: Partial<VtableProps<number>> = {
             columns,
             items,
             getItemKey: i => i,

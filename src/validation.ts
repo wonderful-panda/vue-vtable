@@ -1,6 +1,6 @@
-export function positive(n) {
+export function positive(n: any) {
     return typeof n === "number" && n > 0;
 };
-export function notNegative(n) {
+export function notNegative(n: any) {
     return typeof n === "number" && n >= 0;
 };
