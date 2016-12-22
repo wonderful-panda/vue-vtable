@@ -222,7 +222,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	Vlist = __decorate([
 	    tc.component(__assign({}, __webpack_require__(10), { components: { resizeSensor }, props: {
-	            rowComponent: { type: [String, Object], required: true },
+	            rowComponent: { required: true },
 	            items: { type: Array, required: true },
 	            getItemKey: { type: Function, required: true },
 	            contentWidth: { type: [Number, String] },
@@ -741,7 +741,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 	function px(value) {
-	    if (typeof value === "string") {
+	    if (typeof value === "string" || value === undefined) {
 	        return value;
 	    }
 	    else {
@@ -749,6 +749,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	}
 	exports.px = px;
+	function supplier(value) {
+	    return () => value;
+	}
+	exports.supplier = supplier;
 
 
 /***/ },
@@ -848,8 +852,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return {
 	            ctx,
 	            columns,
-	            getRowClass: getRowClass ? getRowClass : (item, index) => rowClass,
-	            splitterWidth: splitterWidth,
+	            getRowClass: (item, index) => (getRowClass(item, index) || rowClass),
+	            splitterWidth,
 	            widths: this.$data.widths,
 	            draggingSplitter: this.$data.draggingSplitter,
 	            onSplitterMouseDown: this.onSplitterMouseDown
@@ -857,7 +861,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    get actualHeaderHeight() {
 	        const { headerHeight, rowHeight } = this.$props;
-	        return headerHeight > 0 ? headerHeight : rowHeight;
+	        return (headerHeight > 0) ? headerHeight : rowHeight;
 	    }
 	    get contentWidth() {
 	        return _.sumBy(this.$data.widths, w => w + this.$props.splitterWidth);
@@ -904,7 +908,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            rowStyleCycle: { type: Number, default: 1, validator: validation_1.positive },
 	            splitterWidth: { type: Number, default: 3, validator: validation_1.positive },
 	            rowClass: { type: String, default: "vtable-row" },
-	            getRowClass: { type: Function },
+	            getRowClass: { type: Function, default: utils_1.supplier(() => undefined) },
 	            ctx: {},
 	            getItemKey: { type: Function, required: true }
 	        } })),
@@ -1021,7 +1025,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        cursor: "col-resize"
 	    };
 	    const on = {
-	        mousedown: ev => props.ctx.onSplitterMouseDown(props.index, ev)
+	        mousedown: (ev) => props.ctx.onSplitterMouseDown(props.index, ev)
 	    };
 	    return h("div", { class: className, style, on });
 	});
