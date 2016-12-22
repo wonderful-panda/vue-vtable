@@ -18,7 +18,7 @@ interface VlistData {
     ...require("./vlist.pug"),
     components: { resizeSensor },
     props: {
-        rowComponent: { type: [String, Object], required: true },
+        rowComponent: { required: true },
         items: { type: Array, required: true },
         getItemKey: { type: Function, required: true },
         contentWidth: { type: [Number, String] },
