@@ -23,7 +23,7 @@ const columns: VtableColumn<number>[] = [
 export default Vue.extend({
     name: "Test",
     components: { Vtable },
-    render(h: typeof Vue.prototype.$createElement) {
+    render(h: Vue.CreateElement) {
         const props: Partial<VtableProps<number>> = {
             columns,
             items,

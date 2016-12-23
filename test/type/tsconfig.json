@@ -6,9 +6,9 @@
     "noImplicitAny": true,
     "noEmitOnError": true,
     "noUnusedLocals": true,
+    "strictNullChecks": true,
     "sourceMap": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "experimentalDecorators": true
   },
   "files": [
     "test.ts"
