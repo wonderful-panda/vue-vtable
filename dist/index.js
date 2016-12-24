@@ -778,7 +778,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	
 	    module.exports = {
-	      render: function(){with(this){return _c('div',{staticClass:"vlist-container",style:([containerStyle, style])},[_c('div',{staticClass:"vlist-header-row",style:(headerStyle)},[_t("header")],true),_c('div',{ref:"scrollable",staticClass:"vlist-scrollable",style:(scrollableStyle),on:{"scroll":onScroll}},[_c('resize-sensor',{attrs:{"debounce":50},on:{"resized":updateBodySize}}),_c('div',{ref:"content",staticClass:"vlist-content",style:(contentStyle)},[_c('div',{staticClass:"vlist-spacer",style:(spacerStyle)}),_l((renderedItems),function(item,index){return _c('div',{key:getItemKey(item),staticClass:"vlist-row",style:(rowStyle),on:{"click":function($event){onRowClick(item, index + firstIndex, $event)}}},[_c(rowComponent,{tag:"component",attrs:{"item":item,"index":index + firstIndex,"height":rowHeight,"ctx":ctx}})])})],true)])])}},
+	      render: function(){with(this){return _c('div',{staticClass:"vlist-container",style:([containerStyle, style])},[_c('div',{staticClass:"vlist-header-row",style:(headerStyle)},[_t("header")],2),_c('div',{ref:"scrollable",staticClass:"vlist-scrollable",style:(scrollableStyle),on:{"scroll":onScroll}},[_c('resize-sensor',{attrs:{"debounce":50},on:{"resized":updateBodySize}}),_c('div',{ref:"content",staticClass:"vlist-content",style:(contentStyle)},[_c('div',{staticClass:"vlist-spacer",style:(spacerStyle)}),_l((renderedItems),function(item,index){return _c('div',{key:getItemKey(item),staticClass:"vlist-row",style:(rowStyle),on:{"click":function($event){onRowClick(item, index + firstIndex, $event)}}},[_c(rowComponent,{tag:"component",attrs:{"item":item,"index":index + firstIndex,"height":rowHeight,"ctx":ctx}})],1)})],2)],1)])}},
 	      staticRenderFns: []
 	    };
 	  
@@ -1037,7 +1037,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	
 	    module.exports = {
-	      render: function(){with(this){return _c('div',{class:ctx.getRowClass(item, index),style:(rowStyle)},[_l((ctx.columns),function(c,columnIndex){return [_c('vtablecell',{attrs:{"item":item,"index":index,"column-index":columnIndex,"height":height,"ctx":ctx}}),_c('vtablesplitter',{attrs:{"index":columnIndex,"ctx":ctx}})]})],true)}},
+	      render: function(){with(this){return _c('div',{class:ctx.getRowClass(item, index),style:(rowStyle)},[_l((ctx.columns),function(c,columnIndex){return [_c('vtablecell',{attrs:{"item":item,"index":index,"column-index":columnIndex,"height":height,"ctx":ctx}}),_c('vtablesplitter',{attrs:{"index":columnIndex,"ctx":ctx}})]})],2)}},
 	      staticRenderFns: []
 	    };
 	  
@@ -1048,7 +1048,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	
 	    module.exports = {
-	      render: function(){with(this){return _c('vlist',{style:({ flex: '1 1 auto' }),attrs:{"row-height":rowHeight,"row-component":$options.components.vtablerow,"items":items,"row-style-cycle":rowStyleCycle,"content-width":contentWidth,"ctx":listCtx,"get-item-key":getItemKey},on:{"scroll":updateScrollPosition,"row-click":onRowClick}},[_c('div',{ref:"header",staticClass:"vtable-header",style:(headerStyle),slot:"header"},[_l((columns),function(c,index){return [_c('div',{staticClass:"vtable-header-cell",class:c.className,style:(headerCellStyle(listCtx.widths[index]))},[_v(_s(c.title))]),_c('vtablesplitter',{attrs:{"index":index,"ctx":listCtx}})]})],true)])}},
+	      render: function(){with(this){return _c('vlist',{style:({ flex: '1 1 auto' }),attrs:{"row-height":rowHeight,"row-component":$options.components.vtablerow,"items":items,"row-style-cycle":rowStyleCycle,"content-width":contentWidth,"ctx":listCtx,"get-item-key":getItemKey},on:{"scroll":updateScrollPosition,"row-click":onRowClick}},[_c('div',{ref:"header",staticClass:"vtable-header",style:(headerStyle),slot:"header"},[_l((columns),function(c,index){return [_c('div',{staticClass:"vtable-header-cell",class:c.className,style:(headerCellStyle(listCtx.widths[index]))},[_v(_s(c.title))]),_c('vtablesplitter',{attrs:{"index":index,"ctx":listCtx}})]})],2)])}},
 	      staticRenderFns: []
 	    };
 	  
