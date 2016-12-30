@@ -86,8 +86,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	const resizeSensor = __webpack_require__(2);
 	const tc = __webpack_require__(4);
-	const utils_1 = __webpack_require__(8);
-	const validation_1 = __webpack_require__(9);
+	const utils_1 = __webpack_require__(9);
+	const p = tc.PropOptions;
 	let Vlist = class Vlist extends tc.StatefulEvTypedComponent {
 	    data() {
 	        return {
@@ -222,14 +222,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	Vlist = __decorate([
 	    tc.component(__assign({}, __webpack_require__(10), { components: { resizeSensor }, props: {
-	            rowComponent: { required: true },
-	            items: { type: Array, required: true },
-	            getItemKey: { type: Function, required: true },
-	            contentWidth: { type: [Number, String] },
-	            ctx: {},
-	            rowHeight: { type: Number, required: true, validator: validation_1.positive },
-	            rowStyleCycle: { type: Number, default: 1 },
-	            style: { type: Object }
+	            rowComponent: p.Any.Required,
+	            items: p.Arr.Required,
+	            getItemKey: p.Func.Required,
+	            contentWidth: p.ofType([Number, String]),
+	            ctx: p.Any,
+	            rowHeight: p.Num.Required.$positive(),
+	            rowStyleCycle: p.Num.Default(1).$positive(),
+	            style: p.Obj
 	        }, watch: {
 	            contentWidth: "onContentWidthChanged",
 	            contentHeight: "onContentHeightChanged"
@@ -344,6 +344,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var Vue = __webpack_require__(5);
 	var vue_class_component_1 = __webpack_require__(6);
+	var po = __webpack_require__(8);
 	// for component which has props
 	var TypedComponent = (function (_super) {
 	    __extends(TypedComponent, _super);
@@ -413,6 +414,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	}
 	exports.functionalComponent = functionalComponent;
+	var PropOptions;
+	(function (PropOptions) {
+	    PropOptions.Str = po.Str;
+	    PropOptions.Num = po.Num;
+	    PropOptions.Bool = po.Bool;
+	    PropOptions.Func = po.Func;
+	    PropOptions.Obj = po.Obj;
+	    PropOptions.Arr = po.Arr;
+	    PropOptions.Any = po.Any;
+	    PropOptions.ofType = po.ofType;
+	})(PropOptions = exports.PropOptions || (exports.PropOptions = {}));
 
 
 /***/ },
@@ -740,6 +752,81 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	"use strict";
+	var __assign = (this && this.__assign) || Object.assign || function(t) {
+	    for (var s, i = 1, n = arguments.length; i < n; i++) {
+	        s = arguments[i];
+	        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+	            t[p] = s[p];
+	    }
+	    return t;
+	};
+	function createPropOptionBuilder(type, createValidators) {
+	    function createPartial(base) {
+	        return Object.assign({
+	            Validator: function (validator) { return (__assign({}, base, { validator: validator })); }
+	        }, base, createValidators(base));
+	    }
+	    return Object.assign({
+	        Required: createPartial({ type: type, required: true }),
+	        Default: function (value) { return createPartial({ type: type, default: value }); }
+	    }, createPartial({ type: type }));
+	}
+	exports.Str = createPropOptionBuilder(String, function (base) {
+	    var $ = function (validator) { return (__assign({}, base, { validator: validator })); };
+	    return {
+	        $in: function () {
+	            var values = [];
+	            for (var _i = 0; _i < arguments.length; _i++) {
+	                values[_i] = arguments[_i];
+	            }
+	            return $(function (v) { return values.indexOf(v) >= 0; });
+	        },
+	        $match: function (pattern) { return $(function (v) { return pattern.test(v); }); }
+	    };
+	});
+	exports.Num = createPropOptionBuilder(Number, function (base) {
+	    var $ = function (validator) { return (__assign({}, base, { validator: validator })); };
+	    return {
+	        $lessThan: function (max) { return $(function (v) { return v < max; }); },
+	        $greaterThan: function (min) { return $(function (v) { return min < v; }); },
+	        $lessEqual: function (max) { return $(function (v) { return v <= max; }); },
+	        $greaterEqual: function (min) { return $(function (v) { return min <= v; }); },
+	        $between: function (min, max) { return $(function (v) { return min <= v && v <= max; }); },
+	        $nonZero: function () { return $(function (v) { return v !== 0; }); },
+	        $positive: function () { return $(function (v) { return v > 0; }); },
+	        $nonNegative: function () { return $(function (v) { return v >= 0; }); },
+	    };
+	});
+	exports.Arr = createPropOptionBuilder(Array, function (base) {
+	    var $ = function (validator) { return (__assign({}, base, { validator: validator })); };
+	    return {
+	        $maxLength: function (max) { return $(function (v) { return v.length <= max; }); },
+	        $notEmpty: function () { return $(function (v) { return v.length > 0; }); },
+	        $all: function (test) { return $(function (v) {
+	            for (var i = 0; i < v.length; ++i) {
+	                if (!test(v[i])) {
+	                    return false;
+	                }
+	            }
+	            return true;
+	        }); }
+	    };
+	});
+	exports.Bool = createPropOptionBuilder(Boolean, function (base) { return undefined; });
+	exports.Func = createPropOptionBuilder(Function, function (base) { return undefined; });
+	exports.Obj = createPropOptionBuilder(Object, function (base) { return undefined; });
+	exports.Any = createPropOptionBuilder(null, function (base) { return undefined; });
+	function ofType(type) {
+	    return createPropOptionBuilder(type, function (base) { return undefined; });
+	}
+	exports.ofType = ofType;
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	"use strict";
 	function px(value) {
 	    if (typeof value === "string" || value === undefined) {
 	        return value;
@@ -753,23 +840,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return () => value;
 	}
 	exports.supplier = supplier;
-
-
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
-
-	"use strict";
-	function positive(n) {
-	    return typeof n === "number" && n > 0;
-	}
-	exports.positive = positive;
-	;
-	function notNegative(n) {
-	    return typeof n === "number" && n >= 0;
-	}
-	exports.notNegative = notNegative;
-	;
 
 
 /***/ },
@@ -807,12 +877,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	const Vue = __webpack_require__(5);
 	const _ = __webpack_require__(3);
-	const utils_1 = __webpack_require__(8);
+	const utils_1 = __webpack_require__(9);
 	const tc = __webpack_require__(4);
 	const vlist_1 = __webpack_require__(1);
 	const vtablerow_1 = __webpack_require__(12);
 	const vtablesplitter_1 = __webpack_require__(14);
-	const validation_1 = __webpack_require__(9);
+	const p = tc.PropOptions;
 	let Vtable = class Vtable extends tc.StatefulEvTypedComponent {
 	    data() {
 	        return {
@@ -901,16 +971,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	Vtable = __decorate([
 	    tc.component(__assign({}, __webpack_require__(16), { components: { vlist: vlist_1.default, vtablerow: vtablerow_1.default, vtablesplitter: vtablesplitter_1.default }, props: {
-	            rowHeight: { type: Number, required: true, validator: validation_1.positive },
-	            headerHeight: { type: Number, default: 0 },
-	            columns: { type: Array, required: true },
-	            items: { type: Array, required: true },
-	            rowStyleCycle: { type: Number, default: 1, validator: validation_1.positive },
-	            splitterWidth: { type: Number, default: 3, validator: validation_1.positive },
-	            rowClass: { type: String, default: "vtable-row" },
-	            getRowClass: { type: Function, default: utils_1.supplier(() => undefined) },
-	            ctx: {},
-	            getItemKey: { type: Function, required: true }
+	            rowHeight: p.Num.Required.$positive(),
+	            headerHeight: p.Num.Default(0).$nonNegative(),
+	            columns: p.Arr.Required,
+	            items: p.Arr.Required,
+	            rowStyleCycle: p.Num.Default(1).$positive(),
+	            splitterWidth: p.Num.Default(3).$positive(),
+	            rowClass: p.Str.Default("vtable-row"),
+	            getRowClass: p.Func.Default(utils_1.supplier(() => undefined)),
+	            ctx: p.Any,
+	            getItemKey: p.Func.Required
 	        } })),
 	    __metadata("design:paramtypes", [])
 	], Vtable);
@@ -941,10 +1011,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	const tc = __webpack_require__(4);
-	const utils_1 = __webpack_require__(8);
+	const utils_1 = __webpack_require__(9);
 	const vtablecell_1 = __webpack_require__(13);
 	const vtablesplitter_1 = __webpack_require__(14);
-	const validation_1 = __webpack_require__(9);
+	const p = tc.PropOptions;
 	let VtableRow = class VtableRow extends tc.TypedComponent {
 	    get rowStyle() {
 	        return {
@@ -960,10 +1030,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	VtableRow = __decorate([
 	    tc.component(__assign({}, __webpack_require__(15), { components: { vtablecell: vtablecell_1.default, vtablesplitter: vtablesplitter_1.default }, props: {
-	            item: { required: true },
-	            index: { type: Number, required: true, validator: validation_1.notNegative },
-	            height: { type: Number, required: true, validator: validation_1.positive },
-	            ctx: { type: Object, required: true }
+	            item: p.Any.Required,
+	            index: p.Num.Required.$nonNegative(),
+	            height: p.Num.Required.$positive(),
+	            ctx: p.Obj.Required
 	        } })),
 	    __metadata("design:paramtypes", [])
 	], VtableRow);
@@ -977,15 +1047,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 	const tc = __webpack_require__(4);
-	const utils_1 = __webpack_require__(8);
+	const utils_1 = __webpack_require__(9);
+	const p = tc.PropOptions;
 	;
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = tc.functionalComponent("VtableCell", {
-	    item: { required: true },
-	    index: { type: Number, required: true },
-	    columnIndex: { type: Number, required: true },
-	    height: { type: Number, required: true },
-	    ctx: { type: Object, required: true }
+	    item: p.Any.Required,
+	    index: p.Num.Required,
+	    columnIndex: p.Num.Required,
+	    height: p.Num.Required,
+	    ctx: p.Obj.Required
 	}, (h, { props }) => {
 	    const column = props.ctx.columns[props.columnIndex];
 	    const w = utils_1.px(props.ctx.widths[props.columnIndex]);
@@ -1009,11 +1080,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 	const tc = __webpack_require__(4);
-	const utils_1 = __webpack_require__(8);
+	const utils_1 = __webpack_require__(9);
+	const p = tc.PropOptions;
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = tc.functionalComponent("VtableSplitter", {
-	    index: { type: Number, required: true },
-	    ctx: { type: Object, required: true },
+	    index: p.Num.Required,
+	    ctx: p.Obj.Required
 	}, (h, { props }) => {
 	    const className = (props.ctx.draggingSplitter === props.index
 	        ? "vtable-dragging-splitter" : "vtable-splitter");
