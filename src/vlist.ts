@@ -3,7 +3,8 @@ import { VlistProps, VlistEvents } from "../types";
 import * as resizeSensor from "vue-resizesensor";
 import * as tc from "vue-typed-component";
 import { px } from "./utils";
-import { positive } from "./validation";
+
+const p = tc.PropOptions;
 
 interface VlistData {
     scrollLeft: number;
@@ -14,18 +15,18 @@ interface VlistData {
     hScrollBarHeight: number;
 }
 
-@tc.component<VlistProps<T>, Vlist<T>>({
+@tc.component<VlistProps<T>>({
     ...require("./vlist.pug"),
     components: { resizeSensor },
     props: {
-        rowComponent: { required: true },
-        items: { type: Array, required: true },
-        getItemKey: { type: Function, required: true },
-        contentWidth: { type: [Number, String] },
-        ctx: {},
-        rowHeight: { type: Number, required: true, validator: positive },
-        rowStyleCycle: { type: Number, default: 1 },
-        style: { type: Object }
+        rowComponent: p.Any.Required,
+        items: p.Arr.Required,
+        getItemKey: p.Func.Required,
+        contentWidth: p.ofType([Number, String]),
+        ctx: p.Any,
+        rowHeight: p.Num.Required.$positive(),
+        rowStyleCycle: p.Num.Default(1).$positive(),
+        style: p.Obj
     },
     watch: {
         contentWidth: "onContentWidthChanged",

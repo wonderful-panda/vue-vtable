@@ -7,7 +7,7 @@ import * as tc from "vue-typed-component";
 import vlist from "./vlist";
 import vtablerow from "./vtablerow";
 import vtablesplitter from "./vtablesplitter";
-import { positive } from "./validation";
+const p = tc.PropOptions;
 
 interface VtableData {
     widths: number[];
@@ -16,20 +16,20 @@ interface VtableData {
     draggingSplitter: number;
 }
 
-@tc.component<VtableProps<T>, Vtable<T>>({
+@tc.component<VtableProps<T>>({
     ...require("./vtable.pug"),
     components: { vlist, vtablerow, vtablesplitter },
     props: {
-        rowHeight: { type: Number, required: true, validator: positive },
-        headerHeight: { type: Number, default: 0 },
-        columns: { type: Array, required: true },
-        items: { type: Array, required: true },
-        rowStyleCycle: { type: Number, default: 1, validator: positive },
-        splitterWidth: { type: Number, default: 3, validator: positive },
-        rowClass: { type: String, default: "vtable-row" },
-        getRowClass: { type: Function, default: supplier(() => undefined) },
-        ctx: {},
-        getItemKey: { type: Function, required: true }
+        rowHeight: p.Num.Required.$positive(),
+        headerHeight: p.Num.Default(0).$nonNegative(),
+        columns: p.Arr.Required,
+        items: p.Arr.Required,
+        rowStyleCycle: p.Num.Default(1).$positive(),
+        splitterWidth: p.Num.Default(3).$positive(),
+        rowClass: p.Str.Default("vtable-row"),
+        getRowClass: p.Func.Default(supplier(() => undefined)),
+        ctx: p.Any,
+        getItemKey: p.Func.Required
     },
 })
 export default class Vtable<T> extends tc.StatefulEvTypedComponent<VtableProps<T>, VtableEvents<T>, VtableData> {

@@ -2,6 +2,7 @@ import { CssProperties } from "vue-css-definition";
 import * as tc from "vue-typed-component";
 import { px } from "./utils";
 import { VtableListCtx } from "../types";
+const p = tc.PropOptions;
 
 
 export interface VtableSplitterProps {
@@ -12,8 +13,8 @@ export interface VtableSplitterProps {
 export default tc.functionalComponent<VtableSplitterProps>(
     "VtableSplitter",
     {
-        index: { type: Number, required: true },
-        ctx: { type: Object, required: true },
+        index: p.Num.Required,
+        ctx: p.Obj.Required
     },
     (h, { props }) => {
         const className = (props.ctx.draggingSplitter === props.index

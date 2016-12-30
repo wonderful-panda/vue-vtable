@@ -3,7 +3,7 @@ import { px } from "./utils";
 import vtablecell from "./vtablecell";
 import vtablesplitter from "./vtablesplitter";
 import { VtableListCtx } from "../types";
-import { positive, notNegative } from "./validation";
+const p = tc.PropOptions;
 
 interface VtableRowProps<T> {
     item: T;
@@ -16,10 +16,10 @@ interface VtableRowProps<T> {
     ...require("./vtablerow.pug"),
     components: { vtablecell: vtablecell, vtablesplitter },
     props: {
-        item: { required: true },
-        index: { type: Number, required: true, validator: notNegative },
-        height: { type: Number, required: true, validator: positive },
-        ctx: { type: Object, required: true }
+        item: p.Any.Required,
+        index: p.Num.Required.$nonNegative(),
+        height: p.Num.Required.$positive(),
+        ctx: p.Obj.Required
     }
 })
 export default class VtableRow<T> extends tc.TypedComponent<VtableRowProps<T>> {

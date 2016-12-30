@@ -9,7 +9,7 @@ module.exports = {
     },
     devtool: 'source-map',
     resolve: {
-        extensions: ["", ".ts"],
+        extensions: ["", ".ts", ".js"],
         root: path.join(__dirname, "example/src")
     },
     module: {

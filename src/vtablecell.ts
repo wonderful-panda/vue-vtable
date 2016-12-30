@@ -1,6 +1,7 @@
 import * as tc from "vue-typed-component";
 import { px } from "./utils";
 import { VtableListCtx } from "../types";
+const p = tc.PropOptions;
 
 export interface VtableCellProps {
     item: any;
@@ -13,11 +14,11 @@ export interface VtableCellProps {
 export default tc.functionalComponent<VtableCellProps>(
     "VtableCell",
     {
-        item: { required: true },
-        index: { type: Number, required: true },
-        columnIndex: { type: Number, required: true },
-        height: { type: Number, required: true },
-        ctx: { type: Object, required: true }
+        item: p.Any.Required,
+        index: p.Num.Required,
+        columnIndex: p.Num.Required,
+        height: p.Num.Required,
+        ctx: p.Obj.Required
     },
     (h, { props }) => {
         const column = props.ctx.columns[props.columnIndex];
