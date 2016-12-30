@@ -28,7 +28,7 @@ export default tc.functionalComponent<VtableSplitterProps>(
         };
         const on = {
             mousedown: (ev: MouseEvent) => props.ctx.onSplitterMouseDown(props.index, ev)
-        }
+        };
 
         return h("div", { class: className, style, on });
     }

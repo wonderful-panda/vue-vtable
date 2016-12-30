@@ -6,7 +6,7 @@
   "version": "0.4.2",
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack",
-    "tslint": "tslint --project tsconfig.json",
+    "tslint": "tslint --project tsconfig.json --fix",
     "bundle-example": "webpack --config webpack.config.example.js",
     "build-all": "npm-run-all build bundle-example",
     "dev": "webpack-dev-server --config webpack.config.example.js",
@@ -28,7 +28,7 @@
     "npm-run-all": "^3.1.0",
     "pug": "^2.0.0-beta6",
     "ts-loader": "^0.8.2",
-    "tslint": "^3.15.1",
+    "tslint": "^4.2.0",
     "typescript": "^2.1.4",
     "vue-css-definition": "0.0.1",
     "vue-resizesensor": "0.1.0",
