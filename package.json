@@ -13,28 +13,28 @@
     "test:type": "tsc -p test/type/tsconfig.json"
   },
   "dependencies": {
-    "lodash": "^4.13.1",
-    "vue": "^2.1.7",
+    "lodash": "^4.17.4",
+    "vue": "^2.3.3",
     "vue-template-compiler": "^2.1.7",
-    "vue-typed-component": "^0.3.0"
+    "vue-typed-component": "^0.4.0"
   },
   "devDependencies": {
-    "@types/lodash": "0.0.27",
-    "babel-core": "^6.14.0",
-    "babel-loader": "^6.2.5",
-    "babel-preset-es2015": "^6.14.0",
-    "cross-env": "^2.0.0",
-    "html-loader": "^0.4.3",
-    "npm-run-all": "^3.1.0",
-    "pug": "^2.0.0-beta6",
-    "ts-loader": "^0.8.2",
-    "tslint": "^4.2.0",
-    "typescript": "^2.1.4",
-    "vue-css-definition": "0.0.1",
+    "@types/lodash": "4.14.64",
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "cross-env": "^5.0.0",
+    "html-loader": "^0.4.5",
+    "npm-run-all": "^4.0.2",
+    "pug": "^2.0.0-rc.1",
+    "ts-loader": "^2.1.0",
+    "tslint": "^5.3.2",
+    "typescript": "^2.3.3",
+    "vue-css-definition": "0.1.0",
     "vue-resizesensor": "0.1.0",
-    "vue-template-compiler": "^2.1.6",
-    "vue-template-compiler-loader": "^1.0.3",
-    "webpack": "^1.13.2",
-    "webpack-dev-server": "^1.15.0"
+    "vue-template-compiler": "^2.3.3",
+    "vue-template-compiler-loader": "^1.0.4",
+    "webpack": "^2.6.1",
+    "webpack-dev-server": "^2.4.5"
   }
 }

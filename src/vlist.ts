@@ -2,9 +2,8 @@ import { CssProperties } from "vue-css-definition";
 import { VlistProps, VlistEvents } from "../types";
 import * as resizeSensor from "vue-resizesensor";
 import * as tc from "vue-typed-component";
+import * as p from "vue-typed-component/lib/props";
 import { px } from "./utils";
-
-const p = tc.PropOptions;
 
 interface VlistData {
     scrollLeft: number;
@@ -25,8 +24,7 @@ interface VlistData {
         contentWidth: p.ofType([Number, String]),
         ctx: p.Any,
         rowHeight: p.Num.Required.$positive(),
-        rowStyleCycle: p.Num.Default(1).$positive(),
-        style: p.Obj
+        rowStyleCycle: p.Num.Default(1).$positive()
     },
     watch: {
         contentWidth: "onContentWidthChanged",
@@ -95,7 +93,7 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<VlistProps<T>,
             height: px(this.$props.rowHeight * this.firstIndex),
             flex: "0 0 auto"
         };
-    };
+    }
     get rowStyle(): CssProperties {
         return {
             display: "flex",
@@ -107,8 +105,9 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<VlistProps<T>,
     /* computed */
     get firstIndex() {
         let value = Math.floor(this.$data.scrollTop / this.$props.rowHeight);
-        if (this.$props.rowStyleCycle > 1) {
-            value -= (value % this.$props.rowStyleCycle);
+        const { rowStyleCycle } = this.$props;
+        if (rowStyleCycle && rowStyleCycle > 1) {
+            value -= (value % rowStyleCycle);
         }
         return value;
     }
@@ -142,7 +141,7 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<VlistProps<T>,
             data.vScrollBarWidth = vScrollBarWidth;
             data.hScrollBarHeight = hScrollBarHeight;
         }
-    };
+    }
     onScroll(event: Event) {
         const { scrollLeft, scrollTop } = this.$refs.scrollable;
         this.$data.scrollLeft = scrollLeft;

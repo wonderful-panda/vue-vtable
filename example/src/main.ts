@@ -1,4 +1,5 @@
-import * as Vue from "vue";
+import Vue from "vue";
+import * as _ from "lodash";
 import * as tc from "vue-typed-component";
 import vtable from "../../src/vtable";
 import { VtableColumn } from "../../types";

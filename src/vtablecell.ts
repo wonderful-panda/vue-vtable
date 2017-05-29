@@ -1,7 +1,7 @@
 import * as tc from "vue-typed-component";
+import * as p from "vue-typed-component/lib/props";
 import { px } from "./utils";
 import { VtableListCtx } from "../types";
-const p = tc.PropOptions;
 
 export interface VtableCellProps {
     item: any;
@@ -9,7 +9,7 @@ export interface VtableCellProps {
     columnIndex: number;
     height: number;
     ctx: VtableListCtx<any>;
-};
+}
 
 export default tc.functionalComponent<VtableCellProps>(
     "VtableCell",

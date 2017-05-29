@@ -1,13 +1,13 @@
-import * as Vue from "vue";
+import Vue from "vue";
 import { CssProperties } from "vue-css-definition";
 import { VtableListCtx, VtableProps, VtableEvents, RowClickEventArgs, ScrollEventArgs } from "../types";
 import * as _ from "lodash";
 import { px, supplier } from "./utils";
 import * as tc from "vue-typed-component";
+import * as p from "vue-typed-component/lib/props";
 import vlist from "./vlist";
 import vtablerow from "./vtablerow";
 import vtablesplitter from "./vtablesplitter";
-const p = tc.PropOptions;
 
 interface VtableData {
     widths: number[];

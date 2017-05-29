@@ -9,18 +9,18 @@ module.exports = {
     },
     devtool: 'source-map',
     resolve: {
-        extensions: ["", ".ts", ".js"],
-        root: path.join(__dirname, "example/src")
+        extensions: [".ts", ".js"],
+        modules: [ path.join(__dirname, "example/src"), "node_modules" ]
     },
     module: {
         loaders: [
-          { test: /\.ts$/, loader: "babel?presets[]=es2015!ts", exclude: /node_modules/ },
-          { test: /\.pug$/, loader: "vue-template-compiler!simple-pug", exclude: /node_modules/ }
+          { test: /\.ts$/, loader: "babel-loader?presets[]=es2015!ts-loader", exclude: /node_modules/ },
+          { test: /\.pug$/, loader: "vue-template-compiler-loader!simple-pug-loader", exclude: /node_modules/ }
         ]
     },
     resolveLoader: {
         alias: {
-            "simple-pug": path.join(__dirname, "simple-pug-loader")
+            "simple-pug-loader": "../../simple-pug-loader"
         }
     },
     devServer: {

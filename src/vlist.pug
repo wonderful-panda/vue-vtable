@@ -1,4 +1,4 @@
-div.vlist-container(:style="[containerStyle, style]")
+div.vlist-container(:style="[containerStyle]")
     div.vlist-header-row(:style="headerStyle")
         slot(name="header")
     div.vlist-scrollable(ref="scrollable", :style="scrollableStyle", @scroll="onScroll")

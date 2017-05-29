@@ -1,9 +1,9 @@
 import * as tc from "vue-typed-component";
+import * as p from "vue-typed-component/lib/props";
 import { px } from "./utils";
 import vtablecell from "./vtablecell";
 import vtablesplitter from "./vtablesplitter";
 import { VtableListCtx } from "../types";
-const p = tc.PropOptions;
 
 interface VtableRowProps<T> {
     item: T;

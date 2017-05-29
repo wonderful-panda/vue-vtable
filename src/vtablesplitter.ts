@@ -1,8 +1,8 @@
 import { CssProperties } from "vue-css-definition";
 import * as tc from "vue-typed-component";
+import * as p from "vue-typed-component/lib/props";
 import { px } from "./utils";
 import { VtableListCtx } from "../types";
-const p = tc.PropOptions;
 
 
 export interface VtableSplitterProps {
