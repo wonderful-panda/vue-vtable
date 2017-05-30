@@ -14,9 +14,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.4",
-    "vue": "^2.3.3",
-    "vue-template-compiler": "^2.1.7",
-    "vue-typed-component": "^0.4.0"
+    "vue": "^2.3.3"
   },
   "devDependencies": {
     "@types/lodash": "4.14.64",
@@ -34,6 +32,7 @@
     "vue-resizesensor": "0.1.0",
     "vue-template-compiler": "^2.3.3",
     "vue-template-compiler-loader": "^1.0.4",
+    "vue-typed-component": "^0.4.1",
     "webpack": "^2.6.1",
     "webpack-dev-server": "^2.4.5"
   }
