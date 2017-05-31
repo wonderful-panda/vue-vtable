@@ -121,7 +121,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Vue = __webpack_require__(3);
+var vue_1 = __webpack_require__(3);
 var vue_class_component_1 = __webpack_require__(12);
 // for component which has props
 var TypedComponent = (function (_super) {
@@ -130,7 +130,7 @@ var TypedComponent = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return TypedComponent;
-}(Vue));
+}(vue_1.default));
 TypedComponent = __decorate([
     vue_class_component_1.default({})
 ], TypedComponent);
@@ -142,7 +142,7 @@ var EvTypedComponent = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return EvTypedComponent;
-}(Vue));
+}(vue_1.default));
 EvTypedComponent = __decorate([
     vue_class_component_1.default({
         beforeCreate: function () {
@@ -179,7 +179,7 @@ exports.component = vue_class_component_1.default;
  * Typesafe helper to define functional component
  */
 function functionalComponent(name, props, render) {
-    return Vue.extend({
+    return vue_1.default.extend({
         functional: true,
         name: name,
         props: props,
@@ -187,7 +187,7 @@ function functionalComponent(name, props, render) {
     });
 }
 exports.functionalComponent = functionalComponent;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEseUJBQTJCO0FBQzNCLDJEQUE2QztBQTZDN0MsZ0NBQWdDO0FBRWhDLElBQWEsY0FBYztJQUFnQixrQ0FBRztJQUE5Qzs7SUFFQSxDQUFDO0lBQUQscUJBQUM7QUFBRCxDQUFDLEFBRkQsQ0FBMkMsR0FBRyxHQUU3QztBQUZZLGNBQWM7SUFEMUIsNkJBQVUsQ0FBc0IsRUFBRSxDQUFDO0dBQ3ZCLGNBQWMsQ0FFMUI7QUFGWSx3Q0FBYztBQUkzQiwyQ0FBMkM7QUFXM0MsSUFBYSxnQkFBZ0I7SUFBd0Isb0NBQUc7SUFBeEQ7O0lBR0EsQ0FBQztJQUFELHVCQUFDO0FBQUQsQ0FBQyxBQUhELENBQXFELEdBQUcsR0FHdkQ7QUFIWSxnQkFBZ0I7SUFWNUIsNkJBQVUsQ0FBNkI7UUFDcEMsWUFBWTtZQUNSLElBQUksQ0FBQyxPQUFPLEdBQUc7Z0JBQ1gsSUFBSSxFQUFFLElBQUksQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQztnQkFDM0IsRUFBRSxFQUFFLElBQUksQ0FBQyxHQUFHLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQztnQkFDdkIsSUFBSSxFQUFFLElBQUksQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQztnQkFDM0IsR0FBRyxFQUFFLElBQUksQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQzthQUM1QixDQUFDO1FBQ04sQ0FBQztLQUNKLENBQUM7R0FDVyxnQkFBZ0IsQ0FHNUI7QUFIWSw0Q0FBZ0I7QUFLN0IseUNBQXlDO0FBQ3pDO0lBQWtFLDBDQUFxQjtJQUF2Rjs7SUFHQSxDQUFDO0lBQUQsNkJBQUM7QUFBRCxDQUFDLEFBSEQsQ0FBa0UsY0FBYyxHQUcvRTtBQUhxQix3REFBc0I7QUFLNUMsaURBQWlEO0FBQ2pEO0lBQTRFLDRDQUErQjtJQUEzRzs7SUFHQSxDQUFDO0lBQUQsK0JBQUM7QUFBRCxDQUFDLEFBSEQsQ0FBNEUsZ0JBQWdCLEdBRzNGO0FBSHFCLDREQUF3QjtBQWFqQyxRQUFBLFNBQVMsR0FBdUIsNkJBQVUsQ0FBQztBQUd4RDs7R0FFRztBQUNILDZCQUNvQixJQUFZLEVBQ1osS0FBNkIsRUFDN0IsTUFBd0M7SUFDeEQsTUFBTSxDQUFDLEdBQUcsQ0FBQyxNQUFNLENBQUM7UUFDZCxVQUFVLEVBQUUsSUFBSTtRQUNoQixJQUFJLE1BQUE7UUFDSixLQUFLLEVBQUUsS0FBWTtRQUNuQixNQUFNLFFBQUE7S0FDVCxDQUFDLENBQUM7QUFDUCxDQUFDO0FBVkQsa0RBVUMifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsMkJBQXNCO0FBQ3RCLDJEQUE2QztBQTZDN0MsZ0NBQWdDO0FBRWhDLElBQWEsY0FBYztJQUFnQixrQ0FBRztJQUE5Qzs7SUFFQSxDQUFDO0lBQUQscUJBQUM7QUFBRCxDQUFDLEFBRkQsQ0FBMkMsYUFBRyxHQUU3QztBQUZZLGNBQWM7SUFEMUIsNkJBQVUsQ0FBc0IsRUFBRSxDQUFDO0dBQ3ZCLGNBQWMsQ0FFMUI7QUFGWSx3Q0FBYztBQUkzQiwyQ0FBMkM7QUFXM0MsSUFBYSxnQkFBZ0I7SUFBd0Isb0NBQUc7SUFBeEQ7O0lBR0EsQ0FBQztJQUFELHVCQUFDO0FBQUQsQ0FBQyxBQUhELENBQXFELGFBQUcsR0FHdkQ7QUFIWSxnQkFBZ0I7SUFWNUIsNkJBQVUsQ0FBNkI7UUFDcEMsWUFBWTtZQUNSLElBQUksQ0FBQyxPQUFPLEdBQUc7Z0JBQ1gsSUFBSSxFQUFFLElBQUksQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQztnQkFDM0IsRUFBRSxFQUFFLElBQUksQ0FBQyxHQUFHLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQztnQkFDdkIsSUFBSSxFQUFFLElBQUksQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQztnQkFDM0IsR0FBRyxFQUFFLElBQUksQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQzthQUM1QixDQUFDO1FBQ04sQ0FBQztLQUNKLENBQUM7R0FDVyxnQkFBZ0IsQ0FHNUI7QUFIWSw0Q0FBZ0I7QUFLN0IseUNBQXlDO0FBQ3pDO0lBQWtFLDBDQUFxQjtJQUF2Rjs7SUFHQSxDQUFDO0lBQUQsNkJBQUM7QUFBRCxDQUFDLEFBSEQsQ0FBa0UsY0FBYyxHQUcvRTtBQUhxQix3REFBc0I7QUFLNUMsaURBQWlEO0FBQ2pEO0lBQTRFLDRDQUErQjtJQUEzRzs7SUFHQSxDQUFDO0lBQUQsK0JBQUM7QUFBRCxDQUFDLEFBSEQsQ0FBNEUsZ0JBQWdCLEdBRzNGO0FBSHFCLDREQUF3QjtBQWFqQyxRQUFBLFNBQVMsR0FBdUIsNkJBQVUsQ0FBQztBQUd4RDs7R0FFRztBQUNILDZCQUNvQixJQUFZLEVBQ1osS0FBNkIsRUFDN0IsTUFBd0M7SUFDeEQsTUFBTSxDQUFDLGFBQUcsQ0FBQyxNQUFNLENBQUM7UUFDZCxVQUFVLEVBQUUsSUFBSTtRQUNoQixJQUFJLE1BQUE7UUFDSixLQUFLLEVBQUUsS0FBWTtRQUNuQixNQUFNLFFBQUE7S0FDVCxDQUFDLENBQUM7QUFDUCxDQUFDO0FBVkQsa0RBVUMifQ==
 
 /***/ }),
 /* 2 */
@@ -349,7 +349,6 @@ let Vlist = class Vlist extends tc.StatefulEvTypedComponent {
             flex: "0 0 auto"
         };
     }
-    ;
     get rowStyle() {
         return {
             display: "flex",
@@ -395,7 +394,6 @@ let Vlist = class Vlist extends tc.StatefulEvTypedComponent {
             data.hScrollBarHeight = hScrollBarHeight;
         }
     }
-    ;
     onScroll(event) {
         const { scrollLeft, scrollTop } = this.$refs.scrollable;
         this.$data.scrollLeft = scrollLeft;
@@ -430,8 +428,7 @@ Vlist = __decorate([
             contentWidth: p.ofType([Number, String]),
             ctx: p.Any,
             rowHeight: p.Num.Required.$positive(),
-            rowStyleCycle: p.Num.Default(1).$positive(),
-            style: p.Obj
+            rowStyleCycle: p.Num.Default(1).$positive()
         }, watch: {
             contentWidth: "onContentWidthChanged",
             contentHeight: "onContentHeightChanged"
@@ -489,7 +486,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Vue = __webpack_require__(3);
+const vue_1 = __webpack_require__(3);
 const _ = __webpack_require__(6);
 const utils_1 = __webpack_require__(0);
 const tc = __webpack_require__(1);
@@ -567,7 +564,7 @@ let Vtable = class Vtable extends tc.StatefulEvTypedComponent {
             e.stopPropagation();
             const offset = e.screenX - startX;
             const width = Math.max(startWidth + offset, minWidth);
-            Vue.set(this.$data.widths, index, width);
+            vue_1.default.set(this.$data.widths, index, width);
             this.$data.draggingSplitter = index;
         };
         const onMouseUp = () => {
@@ -813,7 +810,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tc = __webpack_require__(1);
 const p = __webpack_require__(2);
 const utils_1 = __webpack_require__(0);
-;
 exports.default = tc.functionalComponent("VtableCell", {
     item: p.Any.Required,
     index: p.Num.Required,
@@ -1107,7 +1103,7 @@ module.exports = {
 
 
     module.exports = {
-      render: function(){with(this){return _c('div',{staticClass:"vlist-container",style:([containerStyle, style])},[_c('div',{staticClass:"vlist-header-row",style:(headerStyle)},[_t("header")],2),_c('div',{ref:"scrollable",staticClass:"vlist-scrollable",style:(scrollableStyle),on:{"scroll":onScroll}},[_c('resize-sensor',{attrs:{"debounce":50},on:{"resized":updateBodySize}}),_c('div',{ref:"content",staticClass:"vlist-content",style:(contentStyle)},[_c('div',{staticClass:"vlist-spacer",style:(spacerStyle)}),_l((renderedItems),function(item,index){return _c('div',{key:getItemKey(item),staticClass:"vlist-row",style:(rowStyle),on:{"click":function($event){onRowClick(item, index + firstIndex, $event)}}},[_c(rowComponent,{tag:"component",attrs:{"item":item,"index":index + firstIndex,"height":rowHeight,"ctx":ctx}})],1)})],2)],1)])}},
+      render: function(){with(this){return _c('div',{staticClass:"vlist-container",style:([containerStyle])},[_c('div',{staticClass:"vlist-header-row",style:(headerStyle)},[_t("header")],2),_c('div',{ref:"scrollable",staticClass:"vlist-scrollable",style:(scrollableStyle),on:{"scroll":onScroll}},[_c('resize-sensor',{attrs:{"debounce":50},on:{"resized":updateBodySize}}),_c('div',{ref:"content",staticClass:"vlist-content",style:(contentStyle)},[_c('div',{staticClass:"vlist-spacer",style:(spacerStyle)}),_l((renderedItems),function(item,index){return _c('div',{key:getItemKey(item),staticClass:"vlist-row",style:(rowStyle),on:{"click":function($event){onRowClick(item, index + firstIndex, $event)}}},[_c(rowComponent,{tag:"component",attrs:{"item":item,"index":index + firstIndex,"height":rowHeight,"ctx":ctx}})],1)})],2)],1)])}},
       staticRenderFns: []
     };
   
