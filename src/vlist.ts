@@ -148,10 +148,9 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<VlistProps<T>,
         this.$data.scrollTop = scrollTop;
         this.$events.emit("scroll", { scrollLeft, scrollTop, event });
     }
-    onRowClick(item: T, index: number, event: Event) {
-        this.$events.emit("row-click", { item, index, event });
+    onRowEvent(eventName: string, item: T, physicalIndex: number, event: Event) {
+        this.$events.emit("row-" + eventName as any, { item, index: physicalIndex + this.firstIndex, event });
     }
-
     onContentHeightChanged(newValue: number, oldValue: number) {
         const hScrollBarHeight = this.$data.hScrollBarHeight;
         const height = this.$data.bodyHeight + hScrollBarHeight;

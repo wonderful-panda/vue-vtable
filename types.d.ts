@@ -45,11 +45,14 @@ export interface VlistProps<T> {
     style?: CssProperties;
 }
 
-export interface RowClickEventArgs<T> {
+export interface RowEventArgs<T, TEvent> {
     index: number;
     item: T;
-    event: Event;
+    event: TEvent;
 }
+
+export type RowClickEventArgs<T> = RowEventArgs<T, MouseEvent>;
+export type RowDragEventArgs<T> = RowEventArgs<T, DragEvent>;
 
 export interface ScrollEventArgs {
     scrollLeft: number;
@@ -59,9 +62,23 @@ export interface ScrollEventArgs {
 
 export interface VlistEvents<T> {
     "row-click": RowClickEventArgs<T>;
+    "row-dblclick": RowClickEventArgs<T>;
+    "row-dragenter": RowDragEventArgs<T>;
+    "row-dragleave": RowDragEventArgs<T>;
+    "row-dragstart": RowDragEventArgs<T>;
+    "row-dragend": RowDragEventArgs<T>;
+    "row-dragover": RowDragEventArgs<T>;
+    "row-drop": RowDragEventArgs<T>;
     "scroll": ScrollEventArgs;
 }
 
 export interface VtableEvents<T> {
     "row-click": RowClickEventArgs<T>;
+    "row-dblclick": RowClickEventArgs<T>;
+    "row-dragenter": RowDragEventArgs<T>;
+    "row-dragleave": RowDragEventArgs<T>;
+    "row-dragstart": RowDragEventArgs<T>;
+    "row-dragend": RowDragEventArgs<T>;
+    "row-dragover": RowDragEventArgs<T>;
+    "row-drop": RowDragEventArgs<T>;
 }

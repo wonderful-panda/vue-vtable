@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { CssProperties } from "vue-css-definition";
-import { VtableListCtx, VtableProps, VtableEvents, RowClickEventArgs, ScrollEventArgs } from "../types";
+import { VtableListCtx, VtableProps, VtableEvents, RowEventArgs, ScrollEventArgs } from "../types";
 import * as _ from "lodash";
 import { px, supplier } from "./utils";
 import * as tc from "vue-typed-component";
@@ -117,7 +117,7 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<VtableProps<T
         document.addEventListener("mouseup", onMouseUp);
         this.$data.draggingSplitter = index;
     }
-    onRowClick(arg: RowClickEventArgs<T>) {
-        this.$events.emit("row-click", arg);
+    onRowEvent(eventName: string, arg: RowEventArgs<T, Event>) {
+        this.$events.emit("row-" + eventName as any, arg);
     }
 }
