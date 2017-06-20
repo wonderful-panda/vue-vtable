@@ -400,8 +400,8 @@ let Vlist = class Vlist extends tc.StatefulEvTypedComponent {
         this.$data.scrollTop = scrollTop;
         this.$events.emit("scroll", { scrollLeft, scrollTop, event });
     }
-    onRowClick(item, index, event) {
-        this.$events.emit("row-click", { item, index, event });
+    onRowEvent(eventName, item, physicalIndex, event) {
+        this.$events.emit("row-" + eventName, { item, index: physicalIndex + this.firstIndex, event });
     }
     onContentHeightChanged(newValue, oldValue) {
         const hScrollBarHeight = this.$data.hScrollBarHeight;
@@ -576,8 +576,8 @@ let Vtable = class Vtable extends tc.StatefulEvTypedComponent {
         document.addEventListener("mouseup", onMouseUp);
         this.$data.draggingSplitter = index;
     }
-    onRowClick(arg) {
-        this.$events.emit("row-click", arg);
+    onRowEvent(eventName, arg) {
+        this.$events.emit("row-" + eventName, arg);
     }
 };
 Vtable = __decorate([
@@ -1103,7 +1103,7 @@ module.exports = {
 
 
     module.exports = {
-      render: function(){with(this){return _c('div',{staticClass:"vlist-container",style:([containerStyle])},[_c('div',{staticClass:"vlist-header-row",style:(headerStyle)},[_t("header")],2),_c('div',{ref:"scrollable",staticClass:"vlist-scrollable",style:(scrollableStyle),on:{"scroll":onScroll}},[_c('resize-sensor',{attrs:{"debounce":50},on:{"resized":updateBodySize}}),_c('div',{ref:"content",staticClass:"vlist-content",style:(contentStyle)},[_c('div',{staticClass:"vlist-spacer",style:(spacerStyle)}),_l((renderedItems),function(item,index){return _c('div',{key:getItemKey(item),staticClass:"vlist-row",style:(rowStyle),on:{"click":function($event){onRowClick(item, index + firstIndex, $event)}}},[_c(rowComponent,{tag:"component",attrs:{"item":item,"index":index + firstIndex,"height":rowHeight,"ctx":ctx}})],1)})],2)],1)])}},
+      render: function(){with(this){return _c('div',{staticClass:"vlist-container",style:([containerStyle])},[_c('div',{staticClass:"vlist-header-row",style:(headerStyle)},[_t("header")],2),_c('div',{ref:"scrollable",staticClass:"vlist-scrollable",style:(scrollableStyle),on:{"scroll":onScroll}},[_c('resize-sensor',{attrs:{"debounce":50},on:{"resized":updateBodySize}}),_c('div',{ref:"content",staticClass:"vlist-content",style:(contentStyle)},[_c('div',{staticClass:"vlist-spacer",style:(spacerStyle)}),_l((renderedItems),function(item,index){return _c('div',{key:getItemKey(item),staticClass:"vlist-row",style:(rowStyle),on:{"click":function($event){onRowEvent('click', item, index, $event)},"dblclick":function($event){onRowEvent('dblclick', item, index, $event)},"dragenter":function($event){onRowEvent('dragenter', item, index, $event)},"dragleave":function($event){onRowEvent('dragleave', item, index, $event)},"dragstart":function($event){onRowEvent('dragstart', item, index, $event)},"dragend":function($event){onRowEvent('dragend', item, index, $event)},"dragover":function($event){onRowEvent('dragover', item, index, $event)},"drop":function($event){onRowEvent('drop', item, index, $event)}}},[_c(rowComponent,{tag:"component",attrs:{"item":item,"index":index + firstIndex,"height":rowHeight,"ctx":ctx}})],1)})],2)],1)])}},
       staticRenderFns: []
     };
   
@@ -1114,7 +1114,7 @@ module.exports = {
 
 
     module.exports = {
-      render: function(){with(this){return _c('vlist',{style:({ flex: '1 1 auto' }),attrs:{"row-height":rowHeight,"row-component":$options.components.vtablerow,"items":items,"row-style-cycle":rowStyleCycle,"content-width":contentWidth,"ctx":listCtx,"get-item-key":getItemKey},on:{"scroll":updateScrollPosition,"row-click":onRowClick}},[_c('div',{ref:"header",staticClass:"vtable-header",style:(headerStyle),slot:"header"},[_l((columns),function(c,index){return [_c('div',{staticClass:"vtable-header-cell",class:c.className,style:(headerCellStyle(listCtx.widths[index]))},[_v(_s(c.title))]),_c('vtablesplitter',{attrs:{"index":index,"ctx":listCtx}})]})],2)])}},
+      render: function(){with(this){return _c('vlist',{style:({ flex: '1 1 auto' }),attrs:{"row-height":rowHeight,"row-component":$options.components.vtablerow,"items":items,"row-style-cycle":rowStyleCycle,"content-width":contentWidth,"ctx":listCtx,"get-item-key":getItemKey},on:{"scroll":updateScrollPosition,"row-click":function($event){onRowEvent('click', ...arguments)},"row-dblclick":function($event){onRowEvent('dblclick', ...arguments)},"row-dragenter":function($event){onRowEvent('dragenter', ...arguments)},"row-dragleave":function($event){onRowEvent('dragleave', ...arguments)},"row-dragstart":function($event){onRowEvent('dragstart', ...arguments)},"row-dragend":function($event){onRowEvent('dragend', ...arguments)},"row-dragover":function($event){onRowEvent('dragover', ...arguments)},"row-drop":function($event){onRowEvent('drop', ...arguments)}}},[_c('div',{ref:"header",staticClass:"vtable-header",style:(headerStyle),slot:"header"},[_l((columns),function(c,index){return [_c('div',{staticClass:"vtable-header-cell",class:c.className,style:(headerCellStyle(listCtx.widths[index]))},[_v(_s(c.title))]),_c('vtablesplitter',{attrs:{"index":index,"ctx":listCtx}})]})],2)])}},
       staticRenderFns: []
     };
   
