@@ -89,7 +89,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Vue = __webpack_require__(3);
+var vue_1 = __webpack_require__(3);
 var vue_class_component_1 = __webpack_require__(14);
 // for component which has props
 var TypedComponent = (function (_super) {
@@ -98,7 +98,7 @@ var TypedComponent = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return TypedComponent;
-}(Vue));
+}(vue_1.default));
 TypedComponent = __decorate([
     vue_class_component_1.default({})
 ], TypedComponent);
@@ -110,7 +110,7 @@ var EvTypedComponent = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return EvTypedComponent;
-}(Vue));
+}(vue_1.default));
 EvTypedComponent = __decorate([
     vue_class_component_1.default({
         beforeCreate: function () {
@@ -147,7 +147,7 @@ exports.component = vue_class_component_1.default;
  * Typesafe helper to define functional component
  */
 function functionalComponent(name, props, render) {
-    return Vue.extend({
+    return vue_1.default.extend({
         functional: true,
         name: name,
         props: props,
@@ -155,7 +155,7 @@ function functionalComponent(name, props, render) {
     });
 }
 exports.functionalComponent = functionalComponent;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEseUJBQTJCO0FBQzNCLDJEQUE2QztBQTZDN0MsZ0NBQWdDO0FBRWhDLElBQWEsY0FBYztJQUFnQixrQ0FBRztJQUE5Qzs7SUFFQSxDQUFDO0lBQUQscUJBQUM7QUFBRCxDQUFDLEFBRkQsQ0FBMkMsR0FBRyxHQUU3QztBQUZZLGNBQWM7SUFEMUIsNkJBQVUsQ0FBc0IsRUFBRSxDQUFDO0dBQ3ZCLGNBQWMsQ0FFMUI7QUFGWSx3Q0FBYztBQUkzQiwyQ0FBMkM7QUFXM0MsSUFBYSxnQkFBZ0I7SUFBd0Isb0NBQUc7SUFBeEQ7O0lBR0EsQ0FBQztJQUFELHVCQUFDO0FBQUQsQ0FBQyxBQUhELENBQXFELEdBQUcsR0FHdkQ7QUFIWSxnQkFBZ0I7SUFWNUIsNkJBQVUsQ0FBNkI7UUFDcEMsWUFBWTtZQUNSLElBQUksQ0FBQyxPQUFPLEdBQUc7Z0JBQ1gsSUFBSSxFQUFFLElBQUksQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQztnQkFDM0IsRUFBRSxFQUFFLElBQUksQ0FBQyxHQUFHLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQztnQkFDdkIsSUFBSSxFQUFFLElBQUksQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQztnQkFDM0IsR0FBRyxFQUFFLElBQUksQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQzthQUM1QixDQUFDO1FBQ04sQ0FBQztLQUNKLENBQUM7R0FDVyxnQkFBZ0IsQ0FHNUI7QUFIWSw0Q0FBZ0I7QUFLN0IseUNBQXlDO0FBQ3pDO0lBQWtFLDBDQUFxQjtJQUF2Rjs7SUFHQSxDQUFDO0lBQUQsNkJBQUM7QUFBRCxDQUFDLEFBSEQsQ0FBa0UsY0FBYyxHQUcvRTtBQUhxQix3REFBc0I7QUFLNUMsaURBQWlEO0FBQ2pEO0lBQTRFLDRDQUErQjtJQUEzRzs7SUFHQSxDQUFDO0lBQUQsK0JBQUM7QUFBRCxDQUFDLEFBSEQsQ0FBNEUsZ0JBQWdCLEdBRzNGO0FBSHFCLDREQUF3QjtBQWFqQyxRQUFBLFNBQVMsR0FBdUIsNkJBQVUsQ0FBQztBQUd4RDs7R0FFRztBQUNILDZCQUNvQixJQUFZLEVBQ1osS0FBNkIsRUFDN0IsTUFBd0M7SUFDeEQsTUFBTSxDQUFDLEdBQUcsQ0FBQyxNQUFNLENBQUM7UUFDZCxVQUFVLEVBQUUsSUFBSTtRQUNoQixJQUFJLE1BQUE7UUFDSixLQUFLLEVBQUUsS0FBWTtRQUNuQixNQUFNLFFBQUE7S0FDVCxDQUFDLENBQUM7QUFDUCxDQUFDO0FBVkQsa0RBVUMifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsMkJBQXNCO0FBQ3RCLDJEQUE2QztBQTZDN0MsZ0NBQWdDO0FBRWhDLElBQWEsY0FBYztJQUFnQixrQ0FBRztJQUE5Qzs7SUFFQSxDQUFDO0lBQUQscUJBQUM7QUFBRCxDQUFDLEFBRkQsQ0FBMkMsYUFBRyxHQUU3QztBQUZZLGNBQWM7SUFEMUIsNkJBQVUsQ0FBc0IsRUFBRSxDQUFDO0dBQ3ZCLGNBQWMsQ0FFMUI7QUFGWSx3Q0FBYztBQUkzQiwyQ0FBMkM7QUFXM0MsSUFBYSxnQkFBZ0I7SUFBd0Isb0NBQUc7SUFBeEQ7O0lBR0EsQ0FBQztJQUFELHVCQUFDO0FBQUQsQ0FBQyxBQUhELENBQXFELGFBQUcsR0FHdkQ7QUFIWSxnQkFBZ0I7SUFWNUIsNkJBQVUsQ0FBNkI7UUFDcEMsWUFBWTtZQUNSLElBQUksQ0FBQyxPQUFPLEdBQUc7Z0JBQ1gsSUFBSSxFQUFFLElBQUksQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQztnQkFDM0IsRUFBRSxFQUFFLElBQUksQ0FBQyxHQUFHLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQztnQkFDdkIsSUFBSSxFQUFFLElBQUksQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQztnQkFDM0IsR0FBRyxFQUFFLElBQUksQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQzthQUM1QixDQUFDO1FBQ04sQ0FBQztLQUNKLENBQUM7R0FDVyxnQkFBZ0IsQ0FHNUI7QUFIWSw0Q0FBZ0I7QUFLN0IseUNBQXlDO0FBQ3pDO0lBQWtFLDBDQUFxQjtJQUF2Rjs7SUFHQSxDQUFDO0lBQUQsNkJBQUM7QUFBRCxDQUFDLEFBSEQsQ0FBa0UsY0FBYyxHQUcvRTtBQUhxQix3REFBc0I7QUFLNUMsaURBQWlEO0FBQ2pEO0lBQTRFLDRDQUErQjtJQUEzRzs7SUFHQSxDQUFDO0lBQUQsK0JBQUM7QUFBRCxDQUFDLEFBSEQsQ0FBNEUsZ0JBQWdCLEdBRzNGO0FBSHFCLDREQUF3QjtBQWFqQyxRQUFBLFNBQVMsR0FBdUIsNkJBQVUsQ0FBQztBQUd4RDs7R0FFRztBQUNILDZCQUNvQixJQUFZLEVBQ1osS0FBNkIsRUFDN0IsTUFBd0M7SUFDeEQsTUFBTSxDQUFDLGFBQUcsQ0FBQyxNQUFNLENBQUM7UUFDZCxVQUFVLEVBQUUsSUFBSTtRQUNoQixJQUFJLE1BQUE7UUFDSixLQUFLLEVBQUUsS0FBWTtRQUNuQixNQUFNLFFBQUE7S0FDVCxDQUFDLENBQUM7QUFDUCxDQUFDO0FBVkQsa0RBVUMifQ==
 
 /***/ }),
 /* 1 */
@@ -24769,7 +24769,7 @@ var __decorate = undefined && undefined.__decorate || function (decorators, targ
     }return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Vue = __webpack_require__(3);
+var vue_1 = __webpack_require__(3);
 var _ = __webpack_require__(4);
 var utils_1 = __webpack_require__(1);
 var tc = __webpack_require__(0);
@@ -24838,7 +24838,7 @@ var Vtable = function (_tc$StatefulEvTypedCo) {
                 e.stopPropagation();
                 var offset = e.screenX - startX;
                 var width = Math.max(startWidth + offset, minWidth);
-                Vue.set(_this2.$data.widths, index, width);
+                vue_1.default.set(_this2.$data.widths, index, width);
                 _this2.$data.draggingSplitter = index;
             };
             var onMouseUp = function onMouseUp() {
@@ -24851,9 +24851,9 @@ var Vtable = function (_tc$StatefulEvTypedCo) {
             this.$data.draggingSplitter = index;
         }
     }, {
-        key: "onRowClick",
-        value: function onRowClick(arg) {
-            this.$events.emit("row-click", arg);
+        key: "onRowEvent",
+        value: function onRowEvent(eventName, arg) {
+            this.$events.emit("row-" + eventName, arg);
         }
     }, {
         key: "headerStyle",
@@ -24967,7 +24967,7 @@ var __decorate = undefined && undefined.__decorate || function (decorators, targ
     }return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Vue = __webpack_require__(3);
+var vue_1 = __webpack_require__(3);
 var _ = __webpack_require__(4);
 var tc = __webpack_require__(0);
 var vtable_1 = __webpack_require__(8);
@@ -25069,7 +25069,7 @@ var App = function (_tc$TypedComponent) {
     return App;
 }(tc.TypedComponent);
 App = __decorate([tc.component(Object.assign({}, __webpack_require__(9), { components: { vtable: vtable_1.default }, props: {} }))], App);
-new Vue({
+new vue_1.default({
     el: "#app",
     render: function render(createElement) {
         return createElement(App);
@@ -25160,9 +25160,9 @@ var Vlist = function (_tc$StatefulEvTypedCo) {
             this.$events.emit("scroll", { scrollLeft: scrollLeft, scrollTop: scrollTop, event: event });
         }
     }, {
-        key: "onRowClick",
-        value: function onRowClick(item, index, event) {
-            this.$events.emit("row-click", { item: item, index: index, event: event });
+        key: "onRowEvent",
+        value: function onRowEvent(eventName, item, physicalIndex, event) {
+            this.$events.emit("row-" + eventName, { item: item, index: physicalIndex + this.firstIndex, event: event });
         }
     }, {
         key: "onContentHeightChanged",
@@ -25294,8 +25294,7 @@ Vlist = __decorate([tc.component(Object.assign({}, __webpack_require__(16), { co
         contentWidth: p.ofType([Number, String]),
         ctx: p.Any,
         rowHeight: p.Num.Required.$positive(),
-        rowStyleCycle: p.Num.Default(1).$positive(),
-        style: p.Obj
+        rowStyleCycle: p.Num.Default(1).$positive()
     }, watch: {
         contentWidth: "onContentWidthChanged",
         contentHeight: "onContentHeightChanged"
@@ -25313,7 +25312,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var tc = __webpack_require__(0);
 var p = __webpack_require__(2);
 var utils_1 = __webpack_require__(1);
-;
 exports.default = tc.functionalComponent("VtableCell", {
     item: p.Any.Required,
     index: p.Num.Required,
@@ -25629,7 +25627,7 @@ module.exports = {
 
 
     module.exports = {
-      render: function(){with(this){return _c('div',{staticClass:"vlist-container",style:([containerStyle, style])},[_c('div',{staticClass:"vlist-header-row",style:(headerStyle)},[_t("header")],2),_c('div',{ref:"scrollable",staticClass:"vlist-scrollable",style:(scrollableStyle),on:{"scroll":onScroll}},[_c('resize-sensor',{attrs:{"debounce":50},on:{"resized":updateBodySize}}),_c('div',{ref:"content",staticClass:"vlist-content",style:(contentStyle)},[_c('div',{staticClass:"vlist-spacer",style:(spacerStyle)}),_l((renderedItems),function(item,index){return _c('div',{key:getItemKey(item),staticClass:"vlist-row",style:(rowStyle),on:{"click":function($event){onRowClick(item, index + firstIndex, $event)}}},[_c(rowComponent,{tag:"component",attrs:{"item":item,"index":index + firstIndex,"height":rowHeight,"ctx":ctx}})],1)})],2)],1)])}},
+      render: function(){with(this){return _c('div',{staticClass:"vlist-container",style:([containerStyle])},[_c('div',{staticClass:"vlist-header-row",style:(headerStyle)},[_t("header")],2),_c('div',{ref:"scrollable",staticClass:"vlist-scrollable",style:(scrollableStyle),on:{"scroll":onScroll}},[_c('resize-sensor',{attrs:{"debounce":50},on:{"resized":updateBodySize}}),_c('div',{ref:"content",staticClass:"vlist-content",style:(contentStyle)},[_c('div',{staticClass:"vlist-spacer",style:(spacerStyle)}),_l((renderedItems),function(item,index){return _c('div',{key:getItemKey(item),staticClass:"vlist-row",style:(rowStyle),on:{"click":function($event){onRowEvent('click', item, index, $event)},"dblclick":function($event){onRowEvent('dblclick', item, index, $event)},"dragenter":function($event){onRowEvent('dragenter', item, index, $event)},"dragleave":function($event){onRowEvent('dragleave', item, index, $event)},"dragstart":function($event){onRowEvent('dragstart', item, index, $event)},"dragend":function($event){onRowEvent('dragend', item, index, $event)},"dragover":function($event){onRowEvent('dragover', item, index, $event)},"drop":function($event){onRowEvent('drop', item, index, $event)}}},[_c(rowComponent,{tag:"component",attrs:{"item":item,"index":index + firstIndex,"height":rowHeight,"ctx":ctx}})],1)})],2)],1)])}},
       staticRenderFns: []
     };
   
@@ -25640,7 +25638,7 @@ module.exports = {
 
 
     module.exports = {
-      render: function(){with(this){return _c('vlist',{style:({ flex: '1 1 auto' }),attrs:{"row-height":rowHeight,"row-component":$options.components.vtablerow,"items":items,"row-style-cycle":rowStyleCycle,"content-width":contentWidth,"ctx":listCtx,"get-item-key":getItemKey},on:{"scroll":updateScrollPosition,"row-click":onRowClick}},[_c('div',{ref:"header",staticClass:"vtable-header",style:(headerStyle),slot:"header"},[_l((columns),function(c,index){return [_c('div',{staticClass:"vtable-header-cell",class:c.className,style:(headerCellStyle(listCtx.widths[index]))},[_v(_s(c.title))]),_c('vtablesplitter',{attrs:{"index":index,"ctx":listCtx}})]})],2)])}},
+      render: function(){with(this){return _c('vlist',{style:({ flex: '1 1 auto' }),attrs:{"row-height":rowHeight,"row-component":$options.components.vtablerow,"items":items,"row-style-cycle":rowStyleCycle,"content-width":contentWidth,"ctx":listCtx,"get-item-key":getItemKey},on:{"scroll":updateScrollPosition,"row-click":function($event){onRowEvent('click', ...arguments)},"row-dblclick":function($event){onRowEvent('dblclick', ...arguments)},"row-dragenter":function($event){onRowEvent('dragenter', ...arguments)},"row-dragleave":function($event){onRowEvent('dragleave', ...arguments)},"row-dragstart":function($event){onRowEvent('dragstart', ...arguments)},"row-dragend":function($event){onRowEvent('dragend', ...arguments)},"row-dragover":function($event){onRowEvent('dragover', ...arguments)},"row-drop":function($event){onRowEvent('drop', ...arguments)}}},[_c('div',{ref:"header",staticClass:"vtable-header",style:(headerStyle),slot:"header"},[_l((columns),function(c,index){return [_c('div',{staticClass:"vtable-header-cell",class:c.className,style:(headerCellStyle(listCtx.widths[index]))},[_v(_s(c.title))]),_c('vtablesplitter',{attrs:{"index":index,"ctx":listCtx}})]})],2)])}},
       staticRenderFns: []
     };
   
