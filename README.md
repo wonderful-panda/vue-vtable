@@ -7,7 +7,7 @@ Table (grid view) component for Vue
 [DEMO](http://wonderful-panda.github.io/vue-vtable/example/)
 
 ## Requirement
-Vue >= 2.0.1
+Vue >= 2.3.3
 
 ## Component properties
 
