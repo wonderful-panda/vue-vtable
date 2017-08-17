@@ -7,8 +7,10 @@ declare namespace VueVtable {
     export type VtableEvents<T> = types.VtableEvents<T>;
     export type VlistProps<T> = types.VlistProps<T>;
     export type VlistEvents<T> = types.VlistEvents<T>;
-    export var Vlist: <T>() => tc.EvTypedComponent<VlistProps<T>, VlistEvents<T>>;
-    export var Vtable: <T>() => tc.EvTypedComponent<VtableProps<T>, VtableEvents<T>>;
+    export class Vlist<T> extends tc.EvTypedComponent<VlistProps<T>, VlistEvents<T>> {
+    }
+    export class Vtable<T> extends tc.EvTypedComponent<VtableProps<T>, VtableEvents<T>> {
+    }
 }
 
 export = VueVtable;
