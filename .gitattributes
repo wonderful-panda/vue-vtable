@@ -1,2 +1,4 @@
 * text=auto
 *.json eol=lf
+dist/*.js -text
+example/dist/*.js -text
