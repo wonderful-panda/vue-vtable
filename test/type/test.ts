@@ -1,4 +1,4 @@
-import * as Vue from "vue";
+import Vue from "vue";
 import * as _ from "lodash";
 import { Vtable, VtableColumn, VtableProps } from "../..";
 
