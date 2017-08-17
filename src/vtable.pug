@@ -8,14 +8,14 @@ vlist(
     :ctx="listCtx",
     :get-item-key="getItemKey",
     @scroll="updateScrollPosition",
-    @row-click="onRowEvent('click', ...arguments)",
-    @row-dblclick="onRowEvent('dblclick', ...arguments)",
-    @row-dragenter="onRowEvent('dragenter', ...arguments)",
-    @row-dragleave="onRowEvent('dragleave', ...arguments)",
-    @row-dragstart="onRowEvent('dragstart', ...arguments)",
-    @row-dragend="onRowEvent('dragend', ...arguments)",
-    @row-dragover="onRowEvent('dragover', ...arguments)",
-    @row-drop="onRowEvent('drop', ...arguments)")
+    @rowclick="onRowEvent('click', ...arguments)",
+    @rowdblclick="onRowEvent('dblclick', ...arguments)",
+    @rowdragenter="onRowEvent('dragenter', ...arguments)",
+    @rowdragleave="onRowEvent('dragleave', ...arguments)",
+    @rowdragstart="onRowEvent('dragstart', ...arguments)",
+    @rowdragend="onRowEvent('dragend', ...arguments)",
+    @rowdragover="onRowEvent('dragover', ...arguments)",
+    @rowdrop="onRowEvent('drop', ...arguments)")
 
         div.vtable-header(slot="header", ref="header", :style="headerStyle")
             template(v-for="(c, index) in columns")

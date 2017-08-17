@@ -21,12 +21,12 @@ interface VtableData {
     components: { vlist, vtablerow, vtablesplitter },
     props: {
         rowHeight: p.Num.Required.$positive(),
-        headerHeight: p.Num.Default(0).$nonNegative(),
+        headerHeight: p.Num.$nonNegative(),
         columns: p.Arr.Required,
         items: p.Arr.Required,
-        rowStyleCycle: p.Num.Default(1).$positive(),
-        splitterWidth: p.Num.Default(3).$positive(),
-        rowClass: p.Str.Default("vtable-row"),
+        rowStyleCycle: p.Num.$positive(),
+        splitterWidth: p.Num.$positive(),
+        rowClass: p.Str,
         getRowClass: p.Func.Default(supplier(() => undefined)),
         ctx: p.Any,
         getItemKey: p.Func.Required
@@ -73,8 +73,8 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<VtableProps<T
         return {
             ctx,
             columns,
-            getRowClass: (item, index) => (getRowClass(item, index) || rowClass),
-            splitterWidth,
+            getRowClass: getRowClass || ((item, index) => rowClass || "vtable-row"),
+            splitterWidth: splitterWidth || 3,
             widths: this.$data.widths,
             draggingSplitter: this.$data.draggingSplitter,
             onSplitterMouseDown: this.onSplitterMouseDown
@@ -82,10 +82,11 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<VtableProps<T
     }
     get actualHeaderHeight(): number {
         const { headerHeight, rowHeight } = this.$props;
-        return (headerHeight > 0) ? headerHeight : rowHeight;
+        return (headerHeight && headerHeight > 0) ? headerHeight : rowHeight;
     }
     get contentWidth() {
-        return _.sumBy(this.$data.widths, w => w + this.$props.splitterWidth);
+        const splitterWidth = this.$props.splitterWidth || 3;
+        return _.sumBy(this.$data.widths, w => w + splitterWidth);
     }
 
     /* methods */
@@ -118,6 +119,6 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<VtableProps<T
         this.$data.draggingSplitter = index;
     }
     onRowEvent(eventName: string, arg: RowEventArgs<T, Event>) {
-        this.$events.emit("row-" + eventName as any, arg);
+        this.$events.emit("row" + eventName as any, arg);
     }
 }

@@ -12,7 +12,7 @@ export interface VtableColumn<T> {
 }
 
 export interface VtableListCtx<T> {
-    ctx: any;
+    ctx?: any;
     columns: VtableColumn<T>[],
     getRowClass: (item: T, index: number) => string;
     widths: number[];
@@ -23,14 +23,14 @@ export interface VtableListCtx<T> {
 
 export interface VtableProps<T> {
     rowHeight: number;
-    headerHeight: number;
+    headerHeight?: number;
     columns: VtableColumn<T>[];
     items: T[];
-    rowStyleCycle: number;
-    splitterWidth: number;
-    rowClass: string;
-    getRowClass: (item: T, index: number) => string;
-    ctx: any;
+    rowStyleCycle?: number;
+    splitterWidth?: number;
+    rowClass?: string;
+    getRowClass?: (item: T, index: number) => string;
+    ctx?: any;
     getItemKey: (item: T) => number | string;
 }
 
@@ -42,7 +42,6 @@ export interface VlistProps<T> {
     ctx?: any;
     rowHeight: number;
     rowStyleCycle?: number;
-    style?: CssProperties;
 }
 
 export interface RowEventArgs<T, TEvent> {
@@ -61,24 +60,24 @@ export interface ScrollEventArgs {
 }
 
 export interface VlistEvents<T> {
-    "row-click": RowClickEventArgs<T>;
-    "row-dblclick": RowClickEventArgs<T>;
-    "row-dragenter": RowDragEventArgs<T>;
-    "row-dragleave": RowDragEventArgs<T>;
-    "row-dragstart": RowDragEventArgs<T>;
-    "row-dragend": RowDragEventArgs<T>;
-    "row-dragover": RowDragEventArgs<T>;
-    "row-drop": RowDragEventArgs<T>;
-    "scroll": ScrollEventArgs;
+    rowclick: RowClickEventArgs<T>;
+    rowdblclick: RowClickEventArgs<T>;
+    rowdragenter: RowDragEventArgs<T>;
+    rowdragleave: RowDragEventArgs<T>;
+    rowdragstart: RowDragEventArgs<T>;
+    rowdragend: RowDragEventArgs<T>;
+    rowdragover: RowDragEventArgs<T>;
+    rowdrop: RowDragEventArgs<T>;
+    scroll: ScrollEventArgs;
 }
 
 export interface VtableEvents<T> {
-    "row-click": RowClickEventArgs<T>;
-    "row-dblclick": RowClickEventArgs<T>;
-    "row-dragenter": RowDragEventArgs<T>;
-    "row-dragleave": RowDragEventArgs<T>;
-    "row-dragstart": RowDragEventArgs<T>;
-    "row-dragend": RowDragEventArgs<T>;
-    "row-dragover": RowDragEventArgs<T>;
-    "row-drop": RowDragEventArgs<T>;
+    rowclick: RowClickEventArgs<T>;
+    rowdblclick: RowClickEventArgs<T>;
+    rowdragenter: RowDragEventArgs<T>;
+    rowdragleave: RowDragEventArgs<T>;
+    rowdragstart: RowDragEventArgs<T>;
+    rowdragend: RowDragEventArgs<T>;
+    rowdragover: RowDragEventArgs<T>;
+    rowdrop: RowDragEventArgs<T>;
 }
