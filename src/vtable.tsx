@@ -143,14 +143,14 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<VtableProps<T
               ctx={ this.listCtx }
               getItemKey={ getItemKey }
               onScroll={ this.updateScrollPosition }
-              onRowclick={ e => emit('rowclick', e) }
-              onRowdblclick={ e => emit('rowdblclick', e) }
-              onRowdragenter={ e => emit('rowdragenter', e) }
-              onRowdragleave={ e => emit('rowdragleave', e) }
-              onRowdragstart={ e => emit('rowdragstart', e) }
-              onRowdragend={ e => emit('rowdragend', e) }
-              onRowdragover={ e => emit('rowdragover', e) }
-              onRowdrop={ e => emit('rowdrop', e) }
+              onRowclick={ e => emit("rowclick", e) }
+              onRowdblclick={ e => emit("rowdblclick", e) }
+              onRowdragenter={ e => emit("rowdragenter", e) }
+              onRowdragleave={ e => emit("rowdragleave", e) }
+              onRowdragstart={ e => emit("rowdragstart", e) }
+              onRowdragend={ e => emit("rowdragend", e) }
+              onRowdragover={ e => emit("rowdragover", e) }
+              onRowdrop={ e => emit("rowdrop", e) }
             >
               <div staticClass="vtable-header" slot="header" ref="header" style={ this.headerStyle }>
                 { this.headerCells }
