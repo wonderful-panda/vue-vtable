@@ -8,13 +8,13 @@ vlist(
     :ctx="listCtx",
     :get-item-key="getItemKey",
     @scroll="updateScrollPosition",
-    @rowclick="onRowEvent('click', ...arguments)",
-    @rowdblclick="onRowEvent('dblclick', ...arguments)",
-    @rowdragenter="onRowEvent('dragenter', ...arguments)",
-    @rowdragleave="onRowEvent('dragleave', ...arguments)",
-    @rowdragstart="onRowEvent('dragstart', ...arguments)",
-    @rowdragend="onRowEvent('dragend', ...arguments)",
-    @rowdragover="onRowEvent('dragover', ...arguments)",
+    @rowclick="onRowEvent('click', $event)",
+    @rowdblclick="onRowEvent('dblclick', $event)",
+    @rowdragenter="onRowEvent('dragenter', $event)",
+    @rowdragleave="onRowEvent('dragleave', $event)",
+    @rowdragstart="onRowEvent('dragstart', $event)",
+    @rowdragend="onRowEvent('dragend', $event)",
+    @rowdragover="onRowEvent('dragover', $event)",
     @rowdrop="onRowEvent('drop', ...arguments)")
 
         div.vtable-header(slot="header", ref="header", :style="headerStyle")

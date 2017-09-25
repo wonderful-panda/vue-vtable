@@ -2,7 +2,7 @@ var path = require("path");
 
 module.exports = {
     context: path.join(__dirname, "example/src"),
-    entry: "./main.ts",
+    entry: ["babel-polyfill", "./main.ts"],
     output: {
         path: path.join(__dirname, "example/dist"),
         filename: "build.js"
