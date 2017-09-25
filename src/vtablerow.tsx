@@ -1,8 +1,7 @@
 import * as tc from "vue-typed-component";
 import * as p from "vue-typed-component/lib/props";
 import { px } from "./utils";
-import vtablecell from "./vtablecell";
-import vtablesplitter from "./vtablesplitter";
+import VtableSplitter from "./vtablesplitter";
 import { VtableListCtx } from "../types";
 
 interface VtableRowProps<T> {
@@ -13,8 +12,6 @@ interface VtableRowProps<T> {
 }
 
 @tc.component<VtableRowProps<T>, VtableRow<T>>({
-    ...require("./vtablerow.pug"),
-    components: { vtablecell: vtablecell, vtablesplitter },
     props: {
         item: p.Any.Required,
         index: p.Num.Required.$nonNegative(),
@@ -33,5 +30,36 @@ export default class VtableRow<T> extends tc.TypedComponent<VtableRowProps<T>> {
             boxSizing: "border-box",
             margin: 0
         };
+    }
+
+    cellStyle(width: number) {
+        const w = px(width);
+        return {
+            minWidth: w,
+            width: w,
+            lineHeight: px(this.$props.height),
+            margin: 0,
+            boxSizing: "border-box",
+            overflow: "hidden"
+        };
+    }
+
+    get cells() {
+        const { ctx, item, index } = this.$props;
+        return ctx.columns.map((c, columnIndex) => [
+            <div staticClass="vtable-cell" class={ c.className } style={ this.cellStyle(ctx.widths[columnIndex]) }>
+                { c.render(this.$createElement, item, index, ctx.ctx) }
+            </div>,
+            <VtableSplitter index={ columnIndex } ctx={ ctx } />
+        ]);
+    }
+
+    render() {
+        const { ctx, item, index } = this.$props;
+        return (
+            <div class={ ctx.getRowClass(item, index) } style={ this.rowStyle }>
+              { this.cells }
+            </div>
+        );
     }
 }

@@ -5,9 +5,10 @@ import * as _ from "lodash";
 import { px, supplier } from "./utils";
 import * as tc from "vue-typed-component";
 import * as p from "vue-typed-component/lib/props";
-import vlist from "./vlist";
-import vtablerow from "./vtablerow";
-import vtablesplitter from "./vtablesplitter";
+import Vlist from "./vlist";
+import VtableRow from "./vtablerow";
+import VtableSplitter from "./vtablesplitter";
+
 
 interface VtableData {
     widths: number[];
@@ -17,8 +18,6 @@ interface VtableData {
 }
 
 @tc.component<VtableProps<T>>({
-    ...require("./vtable.pug"),
-    components: { vlist, vtablerow, vtablesplitter },
     props: {
         rowHeight: p.Num.Required.$positive(),
         headerHeight: p.Num.$nonNegative(),
@@ -120,5 +119,43 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<VtableProps<T
     }
     onRowEvent(eventName: string, arg: RowEventArgs<T, Event>) {
         this.$events.emit("row" + eventName as any, arg);
+    }
+    get headerCells() {
+        return this.$props.columns.map((c, index) => [
+            <div staticClass="vtable-header-cell" class={ c.className } style={ this.headerCellStyle(this.listCtx.widths[index]) }>
+              { c.title }
+            </div>,
+            <VtableSplitter index={ index } ctx={ this.listCtx } />
+        ]);
+    }
+    render() {
+        const VlistT = Vlist as (new () => Vlist<T>);
+        const { rowHeight, items, rowStyleCycle, getItemKey } = this.$props;
+        const emit = this.$events.emit;
+        return (
+            <VlistT
+              style="flex: 1 1 auto"
+              rowHeight={ rowHeight }
+              rowComponent={ VtableRow }
+              items={ items }
+              rowStyleCycle={ rowStyleCycle }
+              contentWidth={ this.contentWidth }
+              ctx={ this.listCtx }
+              getItemKey={ getItemKey }
+              onScroll={ this.updateScrollPosition }
+              onRowclick={ e => emit('rowclick', e) }
+              onRowdblclick={ e => emit('rowdblclick', e) }
+              onRowdragenter={ e => emit('rowdragenter', e) }
+              onRowdragleave={ e => emit('rowdragleave', e) }
+              onRowdragstart={ e => emit('rowdragstart', e) }
+              onRowdragend={ e => emit('rowdragend', e) }
+              onRowdragover={ e => emit('rowdragover', e) }
+              onRowdrop={ e => emit('rowdrop', e) }
+            >
+              <div staticClass="vtable-header" slot="header" ref="header" style={ this.headerStyle }>
+                { this.headerCells }
+              </div>
+            </VlistT>
+        );
     }
 }

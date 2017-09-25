@@ -1,14 +1,12 @@
 import * as Vue from "vue"
 import { CssProperties } from "vue-css-definition";
 
-type $createElement = typeof Vue.prototype.$createElement;
-
 export interface VtableColumn<T> {
     title: string;
     defaultWidth: number;
     minWidth?: number;
     className?: string;
-    render: (h: $createElement, item: T, index: number, ctx: any) => Vue.VNode|string;
+    render: (h: Vue.CreateElement, item: T, index: number, ctx: any) => Vue.VNode|string;
 }
 
 export interface VtableListCtx<T> {
@@ -35,7 +33,7 @@ export interface VtableProps<T> {
 }
 
 export interface VlistProps<T> {
-    rowComponent: string | Vue;
+    rowComponent: string | Vue.Component;
     items: T[];
     getItemKey: (item: T) => number | string;
     contentWidth?: number | string;
@@ -71,6 +69,18 @@ export interface VlistEvents<T> {
     scroll: ScrollEventArgs;
 }
 
+export interface VlistEventsOn<T> {
+    onRowclick: RowClickEventArgs<T>;
+    onRowdblclick: RowClickEventArgs<T>;
+    onRowdragenter: RowDragEventArgs<T>;
+    onRowdragleave: RowDragEventArgs<T>;
+    onRowdragstart: RowDragEventArgs<T>;
+    onRowdragend: RowDragEventArgs<T>;
+    onRowdragover: RowDragEventArgs<T>;
+    onRowdrop: RowDragEventArgs<T>;
+    onScroll: ScrollEventArgs;
+}
+
 export interface VtableEvents<T> {
     rowclick: RowClickEventArgs<T>;
     rowdblclick: RowClickEventArgs<T>;
@@ -80,4 +90,15 @@ export interface VtableEvents<T> {
     rowdragend: RowDragEventArgs<T>;
     rowdragover: RowDragEventArgs<T>;
     rowdrop: RowDragEventArgs<T>;
+}
+
+export interface VtableEventsOn<T> {
+    onRowclick: RowClickEventArgs<T>;
+    onRowdblclick: RowClickEventArgs<T>;
+    onRowdragenter: RowDragEventArgs<T>;
+    onRowdragleave: RowDragEventArgs<T>;
+    onRowdragstart: RowDragEventArgs<T>;
+    onRowdragend: RowDragEventArgs<T>;
+    onRowdragover: RowDragEventArgs<T>;
+    onRowdrop: RowDragEventArgs<T>;
 }

@@ -17,20 +17,18 @@ export default tc.functionalComponent<VtableSplitterProps>(
         ctx: p.Obj.Required
     },
     (h, { props }) => {
-        const className = (props.ctx.draggingSplitter === props.index
+        const { ctx, index } = props;
+        const className = (ctx.draggingSplitter === props.index
                            ? "vtable-dragging-splitter" : "vtable-splitter");
         const style: CssProperties = {
-            minWidth: px(props.ctx.splitterWidth),
-            maxWidth: px(props.ctx.splitterWidth),
+            minWidth: px(ctx.splitterWidth),
+            maxWidth: px(ctx.splitterWidth),
             height: "100%",
             boxSizing: "border-box",
             cursor: "col-resize"
         };
-        const on = {
-            mousedown: (ev: MouseEvent) => props.ctx.onSplitterMouseDown(props.index, ev)
-        };
 
-        return h("div", { class: className, style, on });
+        return <div class={ className } style={ style } onMousedown={ ev => ctx.onSplitterMouseDown(index, ev) } />;
     }
 );
 

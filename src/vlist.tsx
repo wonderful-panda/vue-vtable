@@ -1,9 +1,12 @@
 import { CssProperties } from "vue-css-definition";
-import { VlistProps, VlistEvents } from "../types";
+import { VlistProps, VlistEvents, VlistEventsOn } from "../types";
 import * as resizeSensor from "vue-resizesensor";
 import * as tc from "vue-typed-component";
 import * as p from "vue-typed-component/lib/props";
+import * as tsx from "vue-tsx-support";
 import { px } from "./utils";
+
+const ResizeSensor = tsx.ofType<{ debounce?: number }, { onResized: void }>().convert(resizeSensor);
 
 interface VlistData {
     scrollLeft: number;
@@ -15,8 +18,6 @@ interface VlistData {
 }
 
 @tc.component<VlistProps<T>>({
-    ...require("./vlist.pug"),
-    components: { resizeSensor },
     props: {
         rowComponent: p.Any.Required,
         items: p.Arr.Required,
@@ -31,7 +32,7 @@ interface VlistData {
         contentHeight: "onContentHeightChanged"
     }
 })
-export default class Vlist<T> extends tc.StatefulEvTypedComponent<VlistProps<T>, VlistEvents<T>, VlistData> {
+export default class Vlist<T> extends tc.StatefulEvTypedComponent<VlistProps<T>, VlistEvents<T>, VlistData, VlistEventsOn<T>> {
     $refs: { scrollable: Element, content: Element };
 
     data(): VlistData {
@@ -167,6 +168,49 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<VlistProps<T>,
             // must re-check scrollbar visibilities
             this.updateBodySize();
         }
+    }
+
+    get rows() {
+        const p = this.$props;
+        const RowComponent = p.rowComponent as any;
+        return this.renderedItems.map((item, index) => (
+            <div
+              staticClass="vlist-row"
+              key={ p.getItemKey(item) }
+              style={ this.rowStyle }
+              onClick={ e => this.onRowEvent("click", item, index, e) }
+              onDblclick={ e => this.onRowEvent("dblclick", item, index, e) }
+              onDragenter={ e => this.onRowEvent("dragenter", item, index, e) }
+              onDragleave={ e => this.onRowEvent("dragleave", item, index, e) }
+              onDragstart={ e => this.onRowEvent("dragstart", item, index, e) }
+              onDragend={ e => this.onRowEvent("dragend", item, index, e) }
+              onDragover={ e => this.onRowEvent("dragover", item, index, e) }
+              onDrop={ e => this.onRowEvent("drop", item, index, e) }
+            >
+                <RowComponent item={ item } index={ index + this.firstIndex } height={ p.rowHeight } ctx={ p.ctx } />
+            </div>
+        ));
+    }
+
+    render() {
+        return (
+            <div staticClass="vlist-container" style={ this.containerStyle }>
+              <div staticClass="vlist-header-row" style={ this.headerStyle }>
+                { this.$slots.header }
+              </div>
+              <div
+                staticClass="vlist-scrollable"
+                ref="scrollable"
+                style={ this.scrollableStyle }
+                onScroll={ this.onScroll }>
+                <ResizeSensor debounce={ 50 } onResized={ this.updateBodySize } />
+                <div staticClass="vlist-content" ref="content" style={ this.contentStyle }>
+                  <div staticClass="vlist-spacer" style={ this.spacerStyle } />
+                  { this.rows }
+                </div>
+              </div>
+            </div>
+        );
     }
 
 }

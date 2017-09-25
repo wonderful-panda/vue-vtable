@@ -16,17 +16,13 @@ module.exports = {
     },
     module: {
         loaders: [
-          { test: /\.tsx?$/, loader: "babel-loader!ts-loader", exclude: /node_modules/ },
-          { test: /\.pug$/, loader: "vue-template-compiler-loader!simple-pug-loader", exclude: /node_modules/ }
+          { test: /\.tsx?$/, loader: "babel-loader!ts-loader", exclude: /node_modules/ }
         ]
-    },
-    resolveLoader: {
-        alias: {
-            "simple-pug-loader": "../simple-pug-loader"
-        }
     },
     externals: [
         "vue",
+        "vue-tsx-support",
+        "vue-typed-component",
         "lodash"
     ]
 };
