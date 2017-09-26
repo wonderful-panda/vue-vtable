@@ -3,6 +3,7 @@ import * as tc from "vue-typed-component";
 import * as p from "vue-typed-component/lib/props";
 import { px } from "./utils";
 import { VtableListCtx } from "../types";
+import * as m from "vue-tsx-support/lib/modifiers";
 
 
 export interface VtableSplitterProps {
@@ -28,7 +29,14 @@ export default tc.functionalComponent<VtableSplitterProps>(
             cursor: "col-resize"
         };
 
-        return <div class={ className } style={ style } onMousedown={ ev => ctx.onSplitterMouseDown(index, ev) } />;
+        return (
+            <div
+              class={ className }
+              style={ style }
+              onMousedown={ m.stop(ev => ctx.onSplitterMouseDown(index, ev)) }
+              onClick={ m.stop }
+            />
+        );
     }
 );
 
