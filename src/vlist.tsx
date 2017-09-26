@@ -66,7 +66,7 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<VlistProps<T>,
             padding: `0 ${px(this.$data.vScrollBarWidth)} 0 0`
         };
     }
-    get scrollableStyle() {
+    get scrollableStyle(): CssProperties {
         return {
             overflow: "auto",
             position: "relative",

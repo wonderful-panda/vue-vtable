@@ -1,5 +1,6 @@
 import * as tc from "vue-typed-component";
 import * as p from "vue-typed-component/lib/props";
+import { CssProperties } from "vue-css-definition";
 import { px } from "./utils";
 import VtableSplitter from "./vtablesplitter";
 import { VtableListCtx } from "../types";
@@ -20,7 +21,7 @@ interface VtableRowProps<T> {
     }
 })
 export default class VtableRow<T> extends tc.TypedComponent<VtableRowProps<T>> {
-    get rowStyle() {
+    get rowStyle(): CssProperties {
         return {
             display: "flex",
             flex: "1 1 auto",
@@ -32,7 +33,7 @@ export default class VtableRow<T> extends tc.TypedComponent<VtableRowProps<T>> {
         };
     }
 
-    cellStyle(width: number) {
+    cellStyle(width: number): CssProperties {
         const w = px(width);
         return {
             minWidth: w,
