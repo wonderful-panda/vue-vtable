@@ -56,7 +56,7 @@ const columns: VtableColumn<Item>[] = [
 ];
 
 interface AppData {
-    columns: VtableColumn<Item>[];
+    columns: ReadonlyArray<VtableColumn<Item>>;
     ctx: AppCtx;
     rowHeight: number;
     items: ReadonlyArray<Item>;
@@ -82,7 +82,7 @@ class App extends tc.TypedComponent<{}> {
     $data: AppData;
     data(): AppData {
         return {
-            columns,
+            columns: Object.freeze(columns),
             ctx: { selectedIndex: -1 },
             rowHeight: 20,
             items: createItems(100),

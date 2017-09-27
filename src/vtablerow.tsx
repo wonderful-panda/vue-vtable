@@ -1,6 +1,7 @@
 import * as tc from "vue-typed-component";
 import * as p from "vue-typed-component/lib/props";
 import { CssProperties } from "vue-css-definition";
+import * as _ from "lodash";
 import { px } from "./utils";
 import VtableSplitter from "./vtablesplitter";
 import { VtableListCtx } from "../types";
@@ -47,7 +48,7 @@ export default class VtableRow<T> extends tc.TypedComponent<VtableRowProps<T>> {
 
     get cells() {
         const { ctx, item, index } = this.$props;
-        return ctx.columns.map((c, columnIndex) => [
+        return _.map(ctx.columns, (c, columnIndex) => [
             <div staticClass="vtable-cell" class={ c.className } style={ this.cellStyle(ctx.widths[columnIndex]) }>
                 { c.render(this.$createElement, item, index, ctx.ctx) }
             </div>,

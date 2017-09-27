@@ -9,7 +9,6 @@ import Vlist from "./vlist";
 import VtableRow from "./vtablerow";
 import VtableSplitter from "./vtablesplitter";
 
-
 interface VtableData {
     widths: number[];
     scrollLeft: number;
@@ -35,7 +34,7 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<VtableProps<T
     $refs: { header: Element };
     data(): VtableData {
         return {
-            widths: this.$props.columns.map(c => c.defaultWidth),
+            widths: _.map(this.$props.columns, c => c.defaultWidth),
             scrollLeft: 0,
             splitterPositions: [],
             draggingSplitter: -1
@@ -121,7 +120,7 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<VtableProps<T
         this.$events.emit("row" + eventName as any, arg);
     }
     get headerCells() {
-        return this.$props.columns.map((c, index) => [
+        return _.map(this.$props.columns, (c, index) => [
             <div staticClass="vtable-header-cell" class={ c.className } style={ this.headerCellStyle(this.listCtx.widths[index]) }>
               { c.title }
             </div>,

@@ -11,7 +11,7 @@ export interface VtableColumn<T> {
 
 export interface VtableListCtx<T> {
     ctx?: any;
-    columns: VtableColumn<T>[],
+    columns: VtableColumn<T>[] | ReadonlyArray<VtableColumn<T>>,
     getRowClass: (item: T, index: number) => string;
     widths: number[];
     splitterWidth: number;
@@ -22,7 +22,7 @@ export interface VtableListCtx<T> {
 export interface VtableProps<T> {
     rowHeight: number;
     headerHeight?: number;
-    columns: VtableColumn<T>[];
+    columns: VtableColumn<T>[] | ReadonlyArray<VtableColumn<T>>;
     items: T[] | ReadonlyArray<T>;
     rowStyleCycle?: number;
     splitterWidth?: number;
