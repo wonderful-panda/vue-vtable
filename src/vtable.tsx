@@ -9,7 +9,7 @@ import Vlist from "./vlist";
 import VtableRow from "./vtablerow";
 import VtableSplitter from "./vtablesplitter";
 
-interface VtableData {
+export interface VtableData {
     widths: number[];
     scrollLeft: number;
     splitterPositions: number[];

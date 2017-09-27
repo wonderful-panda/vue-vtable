@@ -8,7 +8,7 @@ import { px } from "./utils";
 
 const ResizeSensor = tsx.ofType<{ debounce?: number }, { onResized: void }>().convert(resizeSensor);
 
-interface VlistData {
+export interface VlistData {
     scrollLeft: number;
     scrollTop: number;
     bodyWidth: number;

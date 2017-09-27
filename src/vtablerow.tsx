@@ -6,7 +6,7 @@ import { px } from "./utils";
 import VtableSplitter from "./vtablesplitter";
 import { VtableListCtx } from "../types";
 
-interface VtableRowProps<T> {
+export interface VtableRowProps<T> {
     item: T;
     index: number;
     height: number;

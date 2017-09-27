@@ -1,3 +1,5 @@
+import Vue from "vue";
+import * as tsx from "vue-tsx-support/lib/api";
 import { CssProperties } from "vue-css-definition";
 import * as tc from "vue-typed-component";
 import * as p from "vue-typed-component/lib/props";
@@ -38,5 +40,5 @@ export default tc.functionalComponent<VtableSplitterProps>(
             />
         );
     }
-);
+) as tsx.TsxComponent<Vue, VtableSplitterProps, {}>;
 

@@ -1,6 +1,6 @@
-import Vlist from "./vlist";
-import Vtable from "./vtable";
+import vlist from "./vlist";
+import vtable from "./vtable";
 
-export = {
-    Vlist, Vtable
-};
+export const Vlist = vlist;
+export const Vtable = vtable;
+export * from "../types";
