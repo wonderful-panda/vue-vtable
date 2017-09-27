@@ -11,12 +11,15 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
-    "rootDir": "src"
+    "rootDir": "."
   },
   "filesGlob": [
-    "**/*.ts"
+    "**/*.ts",
+    "**/*.tsx"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "example",
+    "test"
   ]
 }
