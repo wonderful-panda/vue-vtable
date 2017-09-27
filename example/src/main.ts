@@ -59,14 +59,14 @@ interface AppData {
     columns: VtableColumn<Item>[];
     ctx: AppCtx;
     rowHeight: number;
-    items: Item[];
+    items: ReadonlyArray<Item>;
     message: string;
 }
 
-function createItems(num: number): Item[] {
-    return _.range(1, num + 1).map(i => {
+function createItems(num: number): ReadonlyArray<Item> {
+    return Object.freeze(_.range(1, num + 1).map(i => {
         return { id: i.toString(), name: `name of ${ i }`, checked: false };
-    });
+    }));
 }
 
 @tc.component<{}, App>({
@@ -95,7 +95,7 @@ class App extends tc.TypedComponent<{}> {
         this.$data.items = this.createItems(parseInt(this.$refs.rowCount.value));
     }
 
-    createItems(num: number): Item[] {
+    createItems(num: number): ReadonlyArray<Item> {
         return createItems(num);
     }
 

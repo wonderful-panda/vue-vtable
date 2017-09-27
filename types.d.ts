@@ -23,7 +23,7 @@ export interface VtableProps<T> {
     rowHeight: number;
     headerHeight?: number;
     columns: VtableColumn<T>[];
-    items: T[];
+    items: T[] | ReadonlyArray<T>;
     rowStyleCycle?: number;
     splitterWidth?: number;
     rowClass?: string;
@@ -34,7 +34,7 @@ export interface VtableProps<T> {
 
 export interface VlistProps<T> {
     rowComponent: string | Vue.Component;
-    items: T[];
+    items: T[] | ReadonlyArray<T>;
     getItemKey: (item: T) => number | string;
     contentWidth?: number | string;
     ctx?: any;
