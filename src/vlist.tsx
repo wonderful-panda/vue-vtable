@@ -32,8 +32,13 @@ export interface VlistData {
         contentHeight: "onContentHeightChanged"
     }
 })
-export default class Vlist<T> extends tc.StatefulEvTypedComponent<VlistProps<T>, VlistEvents<T>, VlistData, VlistEventsOn<T>> {
-    $refs: { scrollable: Element, content: Element };
+export default class Vlist<T> extends tc.StatefulEvTypedComponent<
+    VlistProps<T>,
+    VlistEvents<T>,
+    VlistData,
+    VlistEventsOn<T>
+> {
+    $refs: { scrollable: Element; content: Element };
 
     data(): VlistData {
         return {
@@ -108,12 +113,12 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<VlistProps<T>,
         let value = Math.floor(this.$data.scrollTop / this.$props.rowHeight);
         const { rowStyleCycle } = this.$props;
         if (rowStyleCycle && rowStyleCycle > 1) {
-            value -= (value % rowStyleCycle);
+            value -= value % rowStyleCycle;
         }
         return value;
     }
     get lastIndex() {
-        const {scrollTop, bodyHeight} = this.$data;
+        const { scrollTop, bodyHeight } = this.$data;
         return Math.ceil((scrollTop + bodyHeight) / this.$props.rowHeight);
     }
     get renderedItems() {
@@ -132,11 +137,12 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<VlistProps<T>,
         const vScrollBarWidth = Math.floor(bound.width - bodyWidth);
         const hScrollBarHeight = Math.floor(bound.height - bodyHeight);
         const data = this.$data;
-        if (data.bodyWidth !== bodyWidth ||
+        if (
+            data.bodyWidth !== bodyWidth ||
             data.bodyHeight !== bodyHeight ||
             data.vScrollBarWidth !== vScrollBarWidth ||
-            data.hScrollBarHeight !== hScrollBarHeight) {
-
+            data.hScrollBarHeight !== hScrollBarHeight
+        ) {
             data.bodyWidth = bodyWidth;
             data.bodyHeight = bodyHeight;
             data.vScrollBarWidth = vScrollBarWidth;
@@ -150,12 +156,16 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<VlistProps<T>,
         this.$events.emit("scroll", { scrollLeft, scrollTop, event });
     }
     onRowEvent(eventName: string, item: T, physicalIndex: number, event: Event) {
-        this.$events.emit("row" + eventName as any, { item, index: physicalIndex + this.firstIndex, event });
+        this.$events.emit(("row" + eventName) as any, {
+            item,
+            index: physicalIndex + this.firstIndex,
+            event
+        });
     }
     onContentHeightChanged(newValue: number, oldValue: number) {
         const hScrollBarHeight = this.$data.hScrollBarHeight;
         const height = this.$data.bodyHeight + hScrollBarHeight;
-        if ((0 < hScrollBarHeight) === (newValue < height)) {
+        if (0 < hScrollBarHeight === newValue < height) {
             // must re-check scrollbar visibilities
             this.updateBodySize();
         }
@@ -164,7 +174,7 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<VlistProps<T>,
     onContentWidthChanged(newValue: number, oldValue: number) {
         const vScrollBarWidth = this.$data.vScrollBarWidth;
         const width = this.$data.bodyWidth + vScrollBarWidth;
-        if ((0 < vScrollBarWidth) === (newValue < width)) {
+        if (0 < vScrollBarWidth === newValue < width) {
             // must re-check scrollbar visibilities
             this.updateBodySize();
         }
@@ -175,42 +185,47 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<VlistProps<T>,
         const RowComponent = p.rowComponent as any;
         return this.renderedItems.map((item, index) => (
             <div
-              staticClass="vlist-row"
-              key={ p.getItemKey(item) }
-              style={ this.rowStyle }
-              onClick={ e => this.onRowEvent("click", item, index, e) }
-              onDblclick={ e => this.onRowEvent("dblclick", item, index, e) }
-              onDragenter={ e => this.onRowEvent("dragenter", item, index, e) }
-              onDragleave={ e => this.onRowEvent("dragleave", item, index, e) }
-              onDragstart={ e => this.onRowEvent("dragstart", item, index, e) }
-              onDragend={ e => this.onRowEvent("dragend", item, index, e) }
-              onDragover={ e => this.onRowEvent("dragover", item, index, e) }
-              onDrop={ e => this.onRowEvent("drop", item, index, e) }
+                staticClass="vlist-row"
+                key={p.getItemKey(item)}
+                style={this.rowStyle}
+                onClick={e => this.onRowEvent("click", item, index, e)}
+                onDblclick={e => this.onRowEvent("dblclick", item, index, e)}
+                onDragenter={e => this.onRowEvent("dragenter", item, index, e)}
+                onDragleave={e => this.onRowEvent("dragleave", item, index, e)}
+                onDragstart={e => this.onRowEvent("dragstart", item, index, e)}
+                onDragend={e => this.onRowEvent("dragend", item, index, e)}
+                onDragover={e => this.onRowEvent("dragover", item, index, e)}
+                onDrop={e => this.onRowEvent("drop", item, index, e)}
             >
-                <RowComponent item={ item } index={ index + this.firstIndex } height={ p.rowHeight } ctx={ p.ctx } />
+                <RowComponent
+                    item={item}
+                    index={index + this.firstIndex}
+                    height={p.rowHeight}
+                    ctx={p.ctx}
+                />
             </div>
         ));
     }
 
     render() {
         return (
-            <div staticClass="vlist-container" style={ this.containerStyle }>
-              <div staticClass="vlist-header-row" style={ this.headerStyle }>
-                { this.$slots.header }
-              </div>
-              <div
-                staticClass="vlist-scrollable"
-                ref="scrollable"
-                style={ this.scrollableStyle }
-                onScroll={ this.onScroll }>
-                <ResizeSensor debounce={ 50 } onResized={ this.updateBodySize } />
-                <div staticClass="vlist-content" ref="content" style={ this.contentStyle }>
-                  <div staticClass="vlist-spacer" style={ this.spacerStyle } />
-                  { this.rows }
+            <div staticClass="vlist-container" style={this.containerStyle}>
+                <div staticClass="vlist-header-row" style={this.headerStyle}>
+                    {this.$slots.header}
                 </div>
-              </div>
+                <div
+                    staticClass="vlist-scrollable"
+                    ref="scrollable"
+                    style={this.scrollableStyle}
+                    onScroll={this.onScroll}
+                >
+                    <ResizeSensor debounce={50} onResized={this.updateBodySize} />
+                    <div staticClass="vlist-content" ref="content" style={this.contentStyle}>
+                        <div staticClass="vlist-spacer" style={this.spacerStyle} />
+                        {this.rows}
+                    </div>
+                </div>
             </div>
         );
     }
-
 }

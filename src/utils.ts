@@ -1,8 +1,7 @@
 export function px(value: number | string | undefined): string | undefined {
     if (typeof value === "string" || value === undefined) {
         return value;
-    }
-    else {
+    } else {
         return `${value}px`;
     }
 }

@@ -7,7 +7,6 @@ import { px } from "./utils";
 import { VtableListCtx } from "../types";
 import * as m from "vue-tsx-support/lib/modifiers";
 
-
 export interface VtableSplitterProps {
     index: number;
     ctx: VtableListCtx<any>;
@@ -21,8 +20,8 @@ export default tc.functionalComponent<VtableSplitterProps>(
     },
     (h, { props }) => {
         const { ctx, index } = props;
-        const className = (ctx.draggingSplitter === props.index
-                           ? "vtable-dragging-splitter" : "vtable-splitter");
+        const className =
+            ctx.draggingSplitter === props.index ? "vtable-dragging-splitter" : "vtable-splitter";
         const style: CssProperties = {
             minWidth: px(ctx.splitterWidth),
             maxWidth: px(ctx.splitterWidth),
@@ -33,12 +32,11 @@ export default tc.functionalComponent<VtableSplitterProps>(
 
         return (
             <div
-              class={ className }
-              style={ style }
-              onMousedown={ m.stop(ev => ctx.onSplitterMouseDown(index, ev)) }
-              onClick={ m.stop }
+                class={className}
+                style={style}
+                onMousedown={m.stop(ev => ctx.onSplitterMouseDown(index, ev))}
+                onClick={m.stop}
             />
         );
     }
 ) as tsx.TsxComponent<Vue, VtableSplitterProps, {}>;
-

@@ -22,9 +22,11 @@ const columns: VtableColumn<Item>[] = [
         render: (h, item, index, ctx) => {
             const label = item.id + (ctx.selectedIndex === index ? " (selected)" : "");
             return h("div", [
-                h("input", { attrs: { type: "checkbox" },
-                             domProps: { "checked": item.checked },
-                             on: { "change": (ev: Event) => item.checked = (ev.target as any).checked } }),
+                h("input", {
+                    attrs: { type: "checkbox" },
+                    domProps: { checked: item.checked },
+                    on: { change: (ev: Event) => (item.checked = (ev.target as any).checked) }
+                }),
                 label
             ]);
         }
@@ -64,9 +66,11 @@ interface AppData {
 }
 
 function createItems(num: number): ReadonlyArray<Item> {
-    return Object.freeze(_.range(1, num + 1).map(i => {
-        return { id: i.toString(), name: `name of ${ i }`, checked: false };
-    }));
+    return Object.freeze(
+        _.range(1, num + 1).map(i => {
+            return { id: i.toString(), name: `name of ${i}`, checked: false };
+        })
+    );
 }
 
 @tc.component<{}, App>({
@@ -99,7 +103,7 @@ class App extends tc.TypedComponent<{}> {
         return createItems(num);
     }
 
-    onRowClick(args: { item: Item, index: number }) {
+    onRowClick(args: { item: Item; index: number }) {
         args.item.checked = !args.item.checked;
         this.$data.ctx.selectedIndex = args.index;
     }
@@ -119,4 +123,3 @@ new Vue({
         return createElement(App);
     }
 });
-

@@ -28,9 +28,13 @@ export interface VtableData {
         getRowClass: p.Func.Default(supplier(() => undefined)),
         ctx: p.Any,
         getItemKey: p.Func.Required
-    },
+    }
 })
-export default class Vtable<T> extends tc.StatefulEvTypedComponent<VtableProps<T>, VtableEvents<T>, VtableData> {
+export default class Vtable<T> extends tc.StatefulEvTypedComponent<
+    VtableProps<T>,
+    VtableEvents<T>,
+    VtableData
+> {
     $refs: { header: Element };
     data(): VtableData {
         return {
@@ -80,7 +84,7 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<VtableProps<T
     }
     get actualHeaderHeight(): number {
         const { headerHeight, rowHeight } = this.$props;
-        return (headerHeight && headerHeight > 0) ? headerHeight : rowHeight;
+        return headerHeight && headerHeight > 0 ? headerHeight : rowHeight;
     }
     get contentWidth() {
         const splitterWidth = this.$props.splitterWidth || 3;
@@ -117,43 +121,52 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<VtableProps<T
         this.$data.draggingSplitter = index;
     }
     onRowEvent(eventName: string, arg: RowEventArgs<T, Event>) {
-        this.$events.emit("row" + eventName as any, arg);
+        this.$events.emit(("row" + eventName) as any, arg);
     }
     get headerCells() {
         return _.map(this.$props.columns, (c, index) => [
-            <div staticClass="vtable-header-cell" class={ c.className } style={ this.headerCellStyle(this.listCtx.widths[index]) }>
-              { c.title }
+            <div
+                staticClass="vtable-header-cell"
+                class={c.className}
+                style={this.headerCellStyle(this.listCtx.widths[index])}
+            >
+                {c.title}
             </div>,
-            <VtableSplitter index={ index } ctx={ this.listCtx } />
+            <VtableSplitter index={index} ctx={this.listCtx} />
         ]);
     }
     render() {
-        const VlistT = Vlist as (new () => Vlist<T>);
+        const VlistT = Vlist as new () => Vlist<T>;
         const { rowHeight, items, rowStyleCycle, getItemKey } = this.$props;
         const emit = this.$events.emit;
         return (
             <VlistT
-              style="flex: 1 1 auto"
-              rowHeight={ rowHeight }
-              rowComponent={ VtableRow }
-              items={ items }
-              rowStyleCycle={ rowStyleCycle }
-              contentWidth={ this.contentWidth }
-              ctx={ this.listCtx }
-              getItemKey={ getItemKey }
-              onScroll={ this.updateScrollPosition }
-              onRowclick={ e => emit("rowclick", e) }
-              onRowdblclick={ e => emit("rowdblclick", e) }
-              onRowdragenter={ e => emit("rowdragenter", e) }
-              onRowdragleave={ e => emit("rowdragleave", e) }
-              onRowdragstart={ e => emit("rowdragstart", e) }
-              onRowdragend={ e => emit("rowdragend", e) }
-              onRowdragover={ e => emit("rowdragover", e) }
-              onRowdrop={ e => emit("rowdrop", e) }
+                style="flex: 1 1 auto"
+                rowHeight={rowHeight}
+                rowComponent={VtableRow}
+                items={items}
+                rowStyleCycle={rowStyleCycle}
+                contentWidth={this.contentWidth}
+                ctx={this.listCtx}
+                getItemKey={getItemKey}
+                onScroll={this.updateScrollPosition}
+                onRowclick={e => emit("rowclick", e)}
+                onRowdblclick={e => emit("rowdblclick", e)}
+                onRowdragenter={e => emit("rowdragenter", e)}
+                onRowdragleave={e => emit("rowdragleave", e)}
+                onRowdragstart={e => emit("rowdragstart", e)}
+                onRowdragend={e => emit("rowdragend", e)}
+                onRowdragover={e => emit("rowdragover", e)}
+                onRowdrop={e => emit("rowdrop", e)}
             >
-              <div staticClass="vtable-header" slot="header" ref="header" style={ this.headerStyle }>
-                { this.headerCells }
-              </div>
+                <div
+                    staticClass="vtable-header"
+                    slot="header"
+                    ref="header"
+                    style={this.headerStyle}
+                >
+                    {this.headerCells}
+                </div>
             </VlistT>
         );
     }

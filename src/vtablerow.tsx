@@ -49,18 +49,22 @@ export default class VtableRow<T> extends tc.TypedComponent<VtableRowProps<T>> {
     get cells() {
         const { ctx, item, index } = this.$props;
         return _.map(ctx.columns, (c, columnIndex) => [
-            <div staticClass="vtable-cell" class={ c.className } style={ this.cellStyle(ctx.widths[columnIndex]) }>
-                { c.render(this.$createElement, item, index, ctx.ctx) }
+            <div
+                staticClass="vtable-cell"
+                class={c.className}
+                style={this.cellStyle(ctx.widths[columnIndex])}
+            >
+                {c.render(this.$createElement, item, index, ctx.ctx)}
             </div>,
-            <VtableSplitter index={ columnIndex } ctx={ ctx } />
+            <VtableSplitter index={columnIndex} ctx={ctx} />
         ]);
     }
 
     render() {
         const { ctx, item, index } = this.$props;
         return (
-            <div class={ ctx.getRowClass(item, index) } style={ this.rowStyle }>
-              { this.cells }
+            <div class={ctx.getRowClass(item, index)} style={this.rowStyle}>
+                {this.cells}
             </div>
         );
     }
