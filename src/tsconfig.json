@@ -12,7 +12,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
-    "rootDir": "."
+    "rootDir": ".",
+    "newLine": "lf"
   },
   "filesGlob": [
     "**/*.ts",
