@@ -143,11 +143,9 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<
             <VlistT
                 style="flex: 1 1 auto"
                 rowHeight={rowHeight}
-                rowComponent={VtableRow}
                 items={items}
                 rowStyleCycle={rowStyleCycle}
                 contentWidth={this.contentWidth}
-                ctx={this.listCtx}
                 getItemKey={getItemKey}
                 onScroll={this.updateScrollPosition}
                 onRowclick={e => emit("rowclick", e)}
@@ -158,6 +156,16 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<
                 onRowdragend={e => emit("rowdragend", e)}
                 onRowdragover={e => emit("rowdragover", e)}
                 onRowdrop={e => emit("rowdrop", e)}
+                scopedSlots={{
+                    row: p => [
+                        <VtableRow
+                            item={p.item}
+                            index={p.index}
+                            height={rowHeight}
+                            ctx={this.listCtx}
+                        />
+                    ]
+                }}
             >
                 <div
                     staticClass="vtable-header"

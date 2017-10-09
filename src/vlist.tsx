@@ -1,5 +1,5 @@
 import { CssProperties } from "vue-css-definition";
-import { VlistProps, VlistEvents, VlistEventsOn } from "../types";
+import * as t from "../types";
 import * as resizeSensor from "vue-resizesensor";
 import * as tc from "vue-typed-component";
 import * as p from "vue-typed-component/lib/props";
@@ -17,13 +17,11 @@ export interface VlistData {
     hScrollBarHeight: number;
 }
 
-@tc.component<VlistProps<T>>({
+@tc.component<t.VlistProps<T>>({
     props: {
-        rowComponent: p.Any.Required,
         items: p.Arr.Required,
         getItemKey: p.Func.Required,
         contentWidth: p.ofType([Number, String]),
-        ctx: p.Any,
         rowHeight: p.Num.Required.$positive(),
         rowStyleCycle: p.Num.Default(1).$positive()
     },
@@ -33,10 +31,11 @@ export interface VlistData {
     }
 })
 export default class Vlist<T> extends tc.StatefulEvTypedComponent<
-    VlistProps<T>,
-    VlistEvents<T>,
+    t.VlistProps<T>,
+    t.VlistEvents<T>,
     VlistData,
-    VlistEventsOn<T>
+    t.VlistEventsOn<T>,
+    { row: t.VlistSlotRowProps<T> }
 > {
     $refs: { scrollable: Element; content: Element };
 
@@ -182,7 +181,7 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<
 
     get rows() {
         const p = this.$props;
-        const RowComponent = p.rowComponent as any;
+        const row = this.$scopedSlots.row;
         return this.renderedItems.map((item, index) => (
             <div
                 staticClass="vlist-row"
@@ -197,12 +196,7 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<
                 onDragover={e => this.onRowEvent("dragover", item, index, e)}
                 onDrop={e => this.onRowEvent("drop", item, index, e)}
             >
-                <RowComponent
-                    item={item}
-                    index={index + this.firstIndex}
-                    height={p.rowHeight}
-                    ctx={p.ctx}
-                />
+                {row({ item, index: index + this.firstIndex })}
             </div>
         ));
     }

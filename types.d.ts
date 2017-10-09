@@ -1,6 +1,8 @@
 import * as Vue from "vue"
 import { CssProperties } from "vue-css-definition";
 
+export type ArrayLike<T> = T[] | ReadonlyArray<T>;
+
 export interface VtableColumn<T> {
     title: string;
     defaultWidth: number;
@@ -11,7 +13,7 @@ export interface VtableColumn<T> {
 
 export interface VtableListCtx<T> {
     ctx?: any;
-    columns: VtableColumn<T>[] | ReadonlyArray<VtableColumn<T>>,
+    columns: ArrayLike<VtableColumn<T>>,
     getRowClass: (item: T, index: number) => string;
     widths: number[];
     splitterWidth: number;
@@ -22,8 +24,8 @@ export interface VtableListCtx<T> {
 export interface VtableProps<T> {
     rowHeight: number;
     headerHeight?: number;
-    columns: VtableColumn<T>[] | ReadonlyArray<VtableColumn<T>>;
-    items: T[] | ReadonlyArray<T>;
+    columns: ArrayLike<VtableColumn<T>>,
+    items: ArrayLike<T>,
     rowStyleCycle?: number;
     splitterWidth?: number;
     rowClass?: string;
@@ -33,13 +35,16 @@ export interface VtableProps<T> {
 }
 
 export interface VlistProps<T> {
-    rowComponent: string | Vue.Component;
-    items: T[] | ReadonlyArray<T>;
+    items: ArrayLike<T>,
     getItemKey: (item: T) => number | string;
     contentWidth?: number | string;
-    ctx?: any;
     rowHeight: number;
     rowStyleCycle?: number;
+}
+
+export interface VlistSlotRowProps<T> {
+    item: T;
+    index: number;
 }
 
 export interface RowEventArgs<T, TEvent> {
