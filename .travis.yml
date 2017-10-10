@@ -2,8 +2,16 @@ sudo: false
 language: node_js
 node_js:
 - stable
+branches:
+  only:
+    - master
 script:
 - npm run build-all
+after_success:
+- git add dist -f
+- git add example/dist -f
+- 'git commit -m "Travis CI: update gh-pages"'
+- 'git push --quiet "https://${GH_TOKEN}@github.com/wonderful-panda/vue-vtable" master:gh-pages --force'
 deploy:
   provider: npm
   email: iwata0303@gmail.com
@@ -12,3 +20,6 @@ deploy:
   skip_cleanup: true
   api_key:
     secure: T+PRHaJQVtoyJpBVCDJ/F2ejEd0o3B5oKU0CDVtBKhL2yqr3DVD8YyPEM8ogLuR+El8n9cyvbH09Trapn0d6lCBGFOKJH/r5HWn1KhjH09sUATdB7jCS/3R2bBdTyKAHp2PZ2j8lFWxov3BI0YoK6J2um2hxxcO0K1kuntC/9EAnYBUsa8JOs9g7pDqyHPJ0kvlrL3SpY9dluLs2y62CD53q+LH0kwW89dhsYeMlyVOIesUz0OiEH4fyyKB7baIg6F2kLFkkR5peW+eoLc/XmT8r3Zt0nVlumnlgie2gWfMRjrAyd4mreGjuS3wjWWaK9EAIhUA4SYMj/YHEOL/JBppKW97yh4cUi1/urHcq+Kdv7/n4NqOyGQ8qXrWCG2dAvkz5z3iCm5gaKvDd0wlKJHwmJtcTprUlyY/X849XsUM5fhdZnsmFlO6U1wB01HCDAFy2SGdV3tC/dUxWfUzv7jRxsJKraSoSft4R8Zrx/+aOK38EoOoXWdVsQVU970l4nTMa5XIgXme4Si7Z0FnVAnZP2EO4fysaiEPCn0tZ2bEqTSnZ7IY7iHc7iBvJgI+U1axJ5GWmEQoOG66riQfkvHy3OPvNs2xzQzC78n1ZyvHczZArWqiBVqtLY7KbHFVzirRnKPwBSG5j4VovPLgRjQg89HjhBhTFSJHdW9tQh90=
+env:
+  global:
+    secure: QEFctF2iCnY1nszuLxMnzzHlu5P2Ujfv2Zk/YnkSqpXWCxC2U+aHwz7TNdQR/7Hhr2T8+aBz/nkxmrmCPEl1i4rTFztQ8s8Uj7NV2WD5s3PhQI6iMRAGjZL+ybwhbyvVuMN6oZSbH3M/TAw3yUGFalR7Wx/9fCSNzSvIRjbXt2Ky87gSm6BAfdZerfPv7oQWNUER+rDqBa6/GOMtzOm2OCkR7zlmqfAdNei9cS94ZMVRxw5ZDgVNwdBNqywDrSdbLrIAwr3NDBkrl232VIWbmSy2Eni4Fc53daNXhOZ6zZqf2mxNMzV2Xkg6sGMmACoqx92KyN2veRPOI4McBi1Vmp8aD8zYmzKbYLYSKWG/y35fDZVDlX5a3jahXt7kEfZIjgCzkmNEo5WqxMhOMbawYTDh5gJLUlC2pRpKCllycFYSTiuynOGR/yzS4+m61x4hzf9nTUbyMAXmOvzToTkQv+Pq1HcjDuTFiI84VY5XIK6cjEnXzAVElID+35vIfgPar3u3Hbme82x6Pi088AQ/afCnCogM8nNWgtmc8pt4J6few/jU63/WEmwybuWH9fRJu3qc1QVgs/1Dt9+PgnI9b9/BeXBzytc3V3k5MtK0cmXg0oNG5UFVfjn1oivPFTBMjuhx1zi4t0ugZGE3WSGrjl41Lv4z7hrkAybjCDF6cFg=
