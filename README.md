@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/wonderful-panda/vue-vtable.svg?branch=master)](https://travis-ci.org/wonderful-panda/vue-vtable)
+
 # vue-vtable
 
 Table (grid view) component for Vue
@@ -9,33 +11,8 @@ Table (grid view) component for Vue
 ## Requirement
 Vue >= 2.3.3
 
-## Component properties
-
-### vtable
-Culumn-resizable, light weight table component
-
-#### rowHeight
-#### headerHeight
-#### columns
-#### items
-#### rowStyleCycle
-#### splitterWidth
-#### rowClass
-#### getRowClass
-#### getItemKey
-#### ctx
-
-### vlist
-Light weight vertical list component
-
-#### rowComponent
-#### items
-#### contentWidth
-#### rowHeight
-#### rowStyleCycle
-#### style
-#### getItemKey
-#### ctx
+## Usage
+Not documented yet.
 
 ## License
 MIT
