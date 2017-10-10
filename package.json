@@ -11,8 +11,7 @@
     "lint:fix": "prettier \"{src,example/src}/**/*.{ts,tsx}\" --write",
     "bundle-example": "webpack --config webpack.config.example.js",
     "build-all": "npm-run-all build bundle-example",
-    "dev": "webpack-dev-server --config webpack.config.example.js",
-    "test:type": "tsc -p test/type/tsconfig.json"
+    "dev": "webpack-dev-server --config webpack.config.example.js"
   },
   "dependencies": {
     "lodash": "^4.17.4"
