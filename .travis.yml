@@ -11,7 +11,7 @@ after_success:
 - git add dist -f
 - git add example/dist -f
 - 'git commit -m "Travis CI: update gh-pages"'
-- 'git push --quiet "https://${GH_TOKEN}@github.com/wonderful-panda/vue-vtable" master:gh-pages --force'
+- 'git push --quiet "https://${GH_TOKEN}@github.com/wonderful-panda/vue-vtable" HEAD:gh-pages --force'
 deploy:
   provider: npm
   email: iwata0303@gmail.com
