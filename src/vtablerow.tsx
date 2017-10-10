@@ -1,3 +1,4 @@
+import Vue from "vue";
 import * as tc from "vue-typed-component";
 import * as p from "vue-typed-component/lib/props";
 import { CssProperties } from "vue-css-definition";
@@ -34,7 +35,7 @@ export default class VtableRow<T> extends tc.TypedComponent<VtableRowProps<T>> {
         };
     }
 
-    cellStyle(width: number): CssProperties {
+    private cellStyle(width: number): CssProperties {
         const w = px(width);
         return {
             minWidth: w,
@@ -46,7 +47,7 @@ export default class VtableRow<T> extends tc.TypedComponent<VtableRowProps<T>> {
         };
     }
 
-    get cells() {
+    private get cells() {
         const { ctx, item, index } = this.$props;
         return _.map(ctx.columns, (c, columnIndex) => [
             <div
@@ -60,7 +61,7 @@ export default class VtableRow<T> extends tc.TypedComponent<VtableRowProps<T>> {
         ]);
     }
 
-    render() {
+    render(): Vue.VNode {
         const { ctx, item, index } = this.$props;
         return (
             <div class={ctx.getRowClass(item, index)} style={this.rowStyle}>

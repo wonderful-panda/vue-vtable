@@ -1,3 +1,4 @@
+import Vue from "vue";
 import { CssProperties } from "vue-css-definition";
 import * as t from "../types";
 import * as resizeSensor from "vue-resizesensor";
@@ -51,14 +52,14 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<
     }
 
     /* styles */
-    get containerStyle(): CssProperties {
+    private get containerStyle(): CssProperties {
         return {
             display: "flex",
             flexFlow: "column nowrap",
             overflow: "hidden"
         };
     }
-    get headerStyle(): CssProperties {
+    private get headerStyle(): CssProperties {
         return {
             display: "flex",
             flex: "0 0 auto",
@@ -70,7 +71,7 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<
             padding: `0 ${px(this.$data.vScrollBarWidth)} 0 0`
         };
     }
-    get scrollableStyle(): CssProperties {
+    private get scrollableStyle(): CssProperties {
         return {
             overflow: "auto",
             position: "relative",
@@ -81,7 +82,7 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<
             border: 0
         };
     }
-    get contentStyle(): CssProperties {
+    private get contentStyle(): CssProperties {
         return {
             display: "flex",
             flexFlow: "column nowrap",
@@ -93,13 +94,13 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<
             minWidth: px(this.$props.contentWidth)
         };
     }
-    get spacerStyle(): CssProperties {
+    private get spacerStyle(): CssProperties {
         return {
             height: px(this.$props.rowHeight * this.firstIndex),
             flex: "0 0 auto"
         };
     }
-    get rowStyle(): CssProperties {
+    private get rowStyle(): CssProperties {
         return {
             display: "flex",
             width: "100%",
@@ -108,7 +109,7 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<
     }
 
     /* computed */
-    get firstIndex() {
+    private get firstIndex() {
         let value = Math.floor(this.$data.scrollTop / this.$props.rowHeight);
         const { rowStyleCycle } = this.$props;
         if (rowStyleCycle && rowStyleCycle > 1) {
@@ -116,14 +117,14 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<
         }
         return value;
     }
-    get lastIndex() {
+    private get lastIndex() {
         const { scrollTop, bodyHeight } = this.$data;
         return Math.ceil((scrollTop + bodyHeight) / this.$props.rowHeight);
     }
-    get renderedItems() {
+    private get renderedItems() {
         return this.$props.items.slice(this.firstIndex, this.lastIndex + 1);
     }
-    get contentHeight() {
+    private get contentHeight() {
         return this.$props.rowHeight * this.$props.items.length;
     }
 
@@ -179,7 +180,8 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<
         }
     }
 
-    get rows() {
+    /* render */
+    private get rows() {
         const p = this.$props;
         const row = this.$scopedSlots.row;
         return this.renderedItems.map((item, index) => (
@@ -201,7 +203,7 @@ export default class Vlist<T> extends tc.StatefulEvTypedComponent<
         ));
     }
 
-    render() {
+    render(): Vue.VNode {
         return (
             <div staticClass="vlist-container" style={this.containerStyle}>
                 <div staticClass="vlist-header-row" style={this.headerStyle}>

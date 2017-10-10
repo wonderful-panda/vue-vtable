@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { CssProperties } from "vue-css-definition";
-import { VtableListCtx, VtableProps, VtableEvents, RowEventArgs, ScrollEventArgs } from "../types";
+import { VtableListCtx, VtableProps, VtableEvents, ScrollEventArgs } from "../types";
 import * as _ from "lodash";
 import { px, supplier } from "./utils";
 import * as tc from "vue-typed-component";
@@ -46,7 +46,7 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<
     }
 
     /* style */
-    get headerStyle(): CssProperties {
+    private get headerStyle(): CssProperties {
         return {
             display: "flex",
             position: "relative",
@@ -59,7 +59,7 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<
             whiteSpace: "none"
         };
     }
-    headerCellStyle(width: number): CssProperties {
+    private headerCellStyle(width: number): CssProperties {
         return {
             minWidth: px(width),
             width: px(width),
@@ -70,7 +70,7 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<
         };
     }
     /** ctx object will be passed to vlist */
-    get listCtx(): VtableListCtx<T> {
+    private get listCtx(): VtableListCtx<T> {
         const { ctx, rowClass, columns, getRowClass, splitterWidth } = this.$props;
         return {
             ctx,
@@ -120,10 +120,8 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<
         document.addEventListener("mouseup", onMouseUp);
         this.$data.draggingSplitter = index;
     }
-    onRowEvent(eventName: string, arg: RowEventArgs<T, Event>) {
-        this.$events.emit(("row" + eventName) as any, arg);
-    }
-    get headerCells() {
+    /* render */
+    private get headerCells() {
         return _.map(this.$props.columns, (c, index) => [
             <div
                 staticClass="vtable-header-cell"
@@ -135,7 +133,7 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<
             <VtableSplitter index={index} ctx={this.listCtx} />
         ]);
     }
-    render() {
+    render(): Vue.VNode {
         const VlistT = Vlist as new () => Vlist<T>;
         const { rowHeight, items, rowStyleCycle, getItemKey } = this.$props;
         const emit = this.$events.emit;
