@@ -4,25 +4,31 @@ import * as p from "vue-typed-component/lib/props";
 import { CssProperties } from "vue-css-definition";
 import * as _ from "lodash";
 import { px } from "./utils";
-import VtableSplitter from "./vtablesplitter";
-import { VtableListCtx } from "../types";
+import * as t from "../types";
 
 export interface VtableRowProps<T> {
     item: T;
+    columns: t.ArrayLike<t.VtableColumn<T>>;
+    columnWidths: number[];
     index: number;
     height: number;
-    ctx: VtableListCtx<T>;
+    ctx: any;
 }
 
-@tc.component<VtableRowProps<T>, VtableRow<T>>({
+@tc.component<VtableRowProps<T>>({
     props: {
         item: p.Any.Required,
+        columns: p.Arr.Required,
+        columnWidths: p.Arr.Required,
         index: p.Num.Required.$nonNegative(),
         height: p.Num.Required.$positive(),
-        ctx: p.Obj.Required
+        ctx: p.Any.Required
     }
 })
-export default class VtableRow<T> extends tc.TypedComponent<VtableRowProps<T>> {
+export default class VtableRow<T> extends tc.TypedComponent<
+    VtableRowProps<T>,
+    { splitter: { index: number } }
+> {
     get rowStyle(): CssProperties {
         return {
             display: "flex",
@@ -48,25 +54,20 @@ export default class VtableRow<T> extends tc.TypedComponent<VtableRowProps<T>> {
     }
 
     private get cells() {
-        const { ctx, item, index } = this.$props;
-        return _.map(ctx.columns, (c, columnIndex) => [
+        const { item, columns, columnWidths, index, ctx } = this.$props;
+        return _.map(columns, (c, columnIndex) => [
             <div
                 staticClass="vtable-cell"
                 class={c.className}
-                style={this.cellStyle(ctx.widths[columnIndex])}
+                style={this.cellStyle(columnWidths[columnIndex])}
             >
-                {c.render(this.$createElement, item, index, ctx.ctx)}
+                {c.render(this.$createElement, item, index, ctx)}
             </div>,
-            <VtableSplitter index={columnIndex} ctx={ctx} />
+            this.$scopedSlots.splitter({ index: columnIndex })
         ]);
     }
 
     render(): Vue.VNode {
-        const { ctx, item, index } = this.$props;
-        return (
-            <div class={ctx.getRowClass(item, index)} style={this.rowStyle}>
-                {this.cells}
-            </div>
-        );
+        return <div style={this.rowStyle}>{this.cells}</div>;
     }
 }

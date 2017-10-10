@@ -11,16 +11,6 @@ export interface VtableColumn<T> {
     render: (h: Vue.CreateElement, item: T, index: number, ctx: any) => Vue.VNode|string;
 }
 
-export interface VtableListCtx<T> {
-    ctx?: any;
-    columns: ArrayLike<VtableColumn<T>>,
-    getRowClass: (item: T, index: number) => string;
-    widths: number[];
-    splitterWidth: number;
-    draggingSplitter: number;
-    onSplitterMouseDown: (index: number, event: MouseEvent) => void;
-}
-
 export interface VtableProps<T> {
     rowHeight: number;
     headerHeight?: number;

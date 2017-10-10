@@ -1,8 +1,8 @@
 import Vue from "vue";
 import * as _ from "lodash";
 import * as tc from "vue-typed-component";
-import vtable from "../../src/vtable";
-import { VtableColumn } from "../../types";
+import { Vtable } from "../..";
+import { VtableColumn } from "../..";
 
 interface Item {
     id: string;
@@ -75,7 +75,7 @@ function createItems(num: number): ReadonlyArray<Item> {
 
 @tc.component<{}, App>({
     ...require("./app.pug"),
-    components: { vtable },
+    components: { Vtable },
     props: {}
 })
 class App extends tc.TypedComponent<{}> {

@@ -1,8 +1,8 @@
 import Vue from "vue";
 import { CssProperties } from "vue-css-definition";
-import { VtableListCtx, VtableProps, VtableEvents, ScrollEventArgs } from "../types";
+import { VtableProps, VtableEvents, ScrollEventArgs } from "../types";
 import * as _ from "lodash";
-import { px, supplier } from "./utils";
+import { px, supplier, ensureNotUndefined } from "./utils";
 import * as tc from "vue-typed-component";
 import * as p from "vue-typed-component/lib/props";
 import Vlist from "./vlist";
@@ -22,8 +22,8 @@ export interface VtableData {
         headerHeight: p.Num.$nonNegative(),
         columns: p.Arr.Required,
         items: p.Arr.Required,
-        rowStyleCycle: p.Num.$positive(),
-        splitterWidth: p.Num.$positive(),
+        rowStyleCycle: p.Num.Default(1).$positive(),
+        splitterWidth: p.Num.Default(3).$positive(),
         rowClass: p.Str,
         getRowClass: p.Func.Default(supplier(() => undefined)),
         ctx: p.Any,
@@ -69,39 +69,34 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<
             overflow: "hidden"
         };
     }
-    /** ctx object will be passed to vlist */
-    private get listCtx(): VtableListCtx<T> {
-        const { ctx, rowClass, columns, getRowClass, splitterWidth } = this.$props;
-        return {
-            ctx,
-            columns,
-            getRowClass: getRowClass || ((item, index) => rowClass || "vtable-row"),
-            splitterWidth: splitterWidth || 3,
-            widths: this.$data.widths,
-            draggingSplitter: this.$data.draggingSplitter,
-            onSplitterMouseDown: this.onSplitterMouseDown
-        };
+    private actualRowClass(item: T, index: number) {
+        const { getRowClass, rowClass } = this.$props;
+        if (getRowClass) {
+            return getRowClass(item, index);
+        } else {
+            return rowClass || "vtable-row";
+        }
+    }
+    private get actualSplitterWidth() {
+        return ensureNotUndefined(this.$props.splitterWidth);
     }
     get actualHeaderHeight(): number {
         const { headerHeight, rowHeight } = this.$props;
         return headerHeight && headerHeight > 0 ? headerHeight : rowHeight;
     }
     get contentWidth() {
-        const splitterWidth = this.$props.splitterWidth || 3;
-        return _.sumBy(this.$data.widths, w => w + splitterWidth);
+        return _.sumBy(this.$data.widths, w => w + this.actualSplitterWidth);
     }
 
     /* methods */
     updateScrollPosition(args: ScrollEventArgs) {
         this.$data.scrollLeft = args.scrollLeft;
     }
-    onSplitterMouseDown(index: number, event: MouseEvent) {
-        event.preventDefault();
-        event.stopPropagation();
+    onSplitterMouseDown(index: number, screenX: number) {
         const headerCell = this.$refs.header.querySelectorAll("div.vtable-header-cell")[index];
         const column = this.$props.columns[index];
         const startWidth = headerCell.clientWidth;
-        const startX = event.screenX;
+        const startX = screenX;
         const minWidth = column.minWidth || 5;
         const onMouseMove = (e: MouseEvent) => {
             e.preventDefault();
@@ -121,21 +116,31 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<
         this.$data.draggingSplitter = index;
     }
     /* render */
+    private splitter(index: number) {
+        return (
+            <VtableSplitter
+                dragging={index === this.$data.draggingSplitter}
+                width={this.actualSplitterWidth}
+                mousedownCallback={screenX => this.onSplitterMouseDown(index, screenX)}
+            />
+        );
+    }
     private get headerCells() {
+        const widths = this.$data.widths;
         return _.map(this.$props.columns, (c, index) => [
             <div
                 staticClass="vtable-header-cell"
                 class={c.className}
-                style={this.headerCellStyle(this.listCtx.widths[index])}
+                style={this.headerCellStyle(widths[index])}
             >
                 {c.title}
             </div>,
-            <VtableSplitter index={index} ctx={this.listCtx} />
+            this.splitter(index)
         ]);
     }
     render(): Vue.VNode {
         const VlistT = Vlist as new () => Vlist<T>;
-        const { rowHeight, items, rowStyleCycle, getItemKey } = this.$props;
+        const { rowHeight, items, columns, rowStyleCycle, getItemKey, ctx } = this.$props;
         const emit = this.$events.emit;
         return (
             <VlistT
@@ -157,10 +162,16 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<
                 scopedSlots={{
                     row: p => [
                         <VtableRow
+                            class={this.actualRowClass(p.item, p.index)}
                             item={p.item}
+                            columns={columns}
+                            columnWidths={this.$data.widths}
                             index={p.index}
                             height={rowHeight}
-                            ctx={this.listCtx}
+                            ctx={ctx}
+                            scopedSlots={{
+                                splitter: p => [this.splitter(p.index)]
+                            }}
                         />
                     ]
                 }}
