@@ -1,9 +1,9 @@
 import Vue from "vue";
 import { CssProperties } from "vue-css-definition";
 import * as tc from "vue-typed-component";
-import * as p from "vue-typed-component/lib/props";
+import { props as p } from "vue-typed-component";
 import { px } from "./utils";
-import * as m from "vue-tsx-support/lib/modifiers";
+import { modifiers as m } from "vue-tsx-support";
 
 export interface VtableSplitterProps {
     dragging: boolean;

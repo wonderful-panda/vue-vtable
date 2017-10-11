@@ -3,7 +3,7 @@ import { CssProperties } from "vue-css-definition";
 import * as t from "../types";
 import * as resizeSensor from "vue-resizesensor";
 import * as tc from "vue-typed-component";
-import * as p from "vue-typed-component/lib/props";
+import { props as p } from "vue-typed-component";
 import * as tsx from "vue-tsx-support";
 import { px } from "./utils";
 

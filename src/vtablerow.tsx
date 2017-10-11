@@ -1,6 +1,6 @@
 import Vue from "vue";
 import * as tc from "vue-typed-component";
-import * as p from "vue-typed-component/lib/props";
+import { props as p } from "vue-typed-component";
 import { CssProperties } from "vue-css-definition";
 import * as _ from "lodash";
 import { px } from "./utils";

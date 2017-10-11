@@ -1,1 +1,1 @@
-///<reference types="vue-tsx-support" />
+import "vue-tsx-support/enable-check";

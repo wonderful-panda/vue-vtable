@@ -4,7 +4,7 @@ import { VtableProps, VtableEvents, ScrollEventArgs } from "../types";
 import * as _ from "lodash";
 import { px, supplier, ensureNotUndefined } from "./utils";
 import * as tc from "vue-typed-component";
-import * as p from "vue-typed-component/lib/props";
+import { props as p } from "vue-typed-component";
 import Vlist from "./vlist";
 import VtableRow from "./vtablerow";
 import VtableSplitter from "./vtablesplitter";
