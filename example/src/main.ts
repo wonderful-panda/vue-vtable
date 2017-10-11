@@ -10,56 +10,37 @@ interface Item {
     checked: boolean;
 }
 
-interface AppCtx {
-    selectedIndex: number;
-}
-
-const columns: VtableColumn<Item>[] = [
+const columns: VtableColumn[] = [
     {
         title: "id",
         className: "cell-id",
-        defaultWidth: 150,
-        render: (h, item, index, ctx) => {
-            const label = item.id + (ctx.selectedIndex === index ? " (selected)" : "");
-            return h("div", [
-                h("input", {
-                    attrs: { type: "checkbox" },
-                    domProps: { checked: item.checked },
-                    on: { change: (ev: Event) => (item.checked = (ev.target as any).checked) }
-                }),
-                label
-            ]);
-        }
+        defaultWidth: 150
     },
     {
         title: "name",
         className: "cell-name",
-        defaultWidth: 200,
-        render: (h, item) => item.name
+        defaultWidth: 200
     },
     {
         title: "extra1",
         className: "cell-extra",
-        defaultWidth: 200,
-        render: (h, item) => "extra1 of " + item.id
+        defaultWidth: 200
     },
     {
         title: "extra2",
         className: "cell-extra",
-        defaultWidth: 200,
-        render: (h, item) => "extra2 of " + item.id
+        defaultWidth: 200
     },
     {
         title: "description",
         className: "cell-desc",
-        defaultWidth: 600,
-        render: (h, item) => "description of " + item.id
+        defaultWidth: 600
     }
 ];
 
 interface AppData {
-    columns: ReadonlyArray<VtableColumn<Item>>;
-    ctx: AppCtx;
+    columns: ReadonlyArray<VtableColumn>;
+    selectedIndex: number;
     rowHeight: number;
     items: ReadonlyArray<Item>;
     message: string;
@@ -87,7 +68,7 @@ class App extends tc.TypedComponent<{}> {
     data(): AppData {
         return {
             columns: Object.freeze(columns),
-            ctx: { selectedIndex: -1 },
+            selectedIndex: -1,
             rowHeight: 20,
             items: createItems(100),
             message: "vtable demo"
@@ -105,15 +86,23 @@ class App extends tc.TypedComponent<{}> {
 
     onRowClick(args: { item: Item; index: number }) {
         args.item.checked = !args.item.checked;
-        this.$data.ctx.selectedIndex = args.index;
+        this.$data.selectedIndex = args.index;
     }
 
     getRowClass(item: Item, index: number) {
-        return index === this.$data.ctx.selectedIndex ? "vtable-row-selected" : "vtable-row";
+        return index === this.$data.selectedIndex ? "vtable-row-selected" : "vtable-row";
     }
 
     getItemKey(item: Item, index: number) {
         return item.id;
+    }
+
+    getLabel(item: Item, index: number) {
+        return item.id + (this.$data.selectedIndex === index ? " (selected)" : "");
+    }
+
+    setChecked(item: Item, checked: boolean) {
+        item.checked = checked;
     }
 }
 

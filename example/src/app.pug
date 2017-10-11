@@ -8,5 +8,15 @@ div.app-container
       input(type="button", value="update", @click="updateParams", style="margin-left: 1em;")
 
     vtable(id="main-list", :items="items", :row-height="rowHeight", :header-height="20", :columns="columns",
-           :get-row-class="getRowClass", :row-style-cycle="2", :get-item-key="getItemKey", :ctx="ctx",
+           :get-row-class="getRowClass", :row-style-cycle="2", :get-item-key="getItemKey",
            @rowclick="onRowClick")
+                template(slot="cell", scope="p")
+                    template(v-if="p.columnId === 'id'")
+                        input(type="checkbox", :checked="p.item.checked",
+                              @change="setChecked(p.item, $event.target.checked)")
+                        | {{ getLabel(p.item, p.index) }}
+                    template(v-else-if="p.columnId === 'name'")
+                        | {{ p.item.name }}
+                    template(v-else)
+                        | {{ p.columnId }}({{ p.item.id }})
+

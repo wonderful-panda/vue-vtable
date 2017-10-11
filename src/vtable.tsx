@@ -1,6 +1,12 @@
 import Vue from "vue";
 import { CssProperties } from "vue-css-definition";
-import { VtableProps, VtableEvents, ScrollEventArgs } from "../types";
+import {
+    VtableProps,
+    VtableEvents,
+    VtableEventsOn,
+    VtableSlotCellProps,
+    ScrollEventArgs
+} from "../types";
 import * as _ from "lodash";
 import { px, supplier, ensureNotUndefined } from "./utils";
 import * as tc from "vue-typed-component";
@@ -26,14 +32,15 @@ export interface VtableData {
         splitterWidth: p.Num.Default(3).$positive(),
         rowClass: p.Str,
         getRowClass: p.Func.Default(supplier(() => undefined)),
-        ctx: p.Any,
         getItemKey: p.Func.Required
     }
 })
 export default class Vtable<T> extends tc.StatefulEvTypedComponent<
     VtableProps<T>,
     VtableEvents<T>,
-    VtableData
+    VtableData,
+    VtableEventsOn<T>,
+    { cell: VtableSlotCellProps<T> }
 > {
     $refs: { header: Element };
     data(): VtableData {
@@ -140,7 +147,7 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<
     }
     render(): Vue.VNode {
         const VlistT = Vlist as new () => Vlist<T>;
-        const { rowHeight, items, columns, rowStyleCycle, getItemKey, ctx } = this.$props;
+        const { rowHeight, items, columns, rowStyleCycle, getItemKey } = this.$props;
         const emit = this.$events.emit;
         return (
             <VlistT
@@ -168,9 +175,9 @@ export default class Vtable<T> extends tc.StatefulEvTypedComponent<
                             columnWidths={this.$data.widths}
                             index={p.index}
                             height={rowHeight}
-                            ctx={ctx}
                             scopedSlots={{
-                                splitter: p => [this.splitter(p.index)]
+                                splitter: p => [this.splitter(p.index)],
+                                cell: this.$scopedSlots.cell
                             }}
                         />
                     ]

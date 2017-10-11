@@ -8,11 +8,10 @@ import * as t from "../types";
 
 export interface VtableRowProps<T> {
     item: T;
-    columns: t.ArrayLike<t.VtableColumn<T>>;
+    columns: t.ArrayLike<t.VtableColumn>;
     columnWidths: number[];
     index: number;
     height: number;
-    ctx: any;
 }
 
 @tc.component<VtableRowProps<T>>({
@@ -21,13 +20,15 @@ export interface VtableRowProps<T> {
         columns: p.Arr.Required,
         columnWidths: p.Arr.Required,
         index: p.Num.Required.$nonNegative(),
-        height: p.Num.Required.$positive(),
-        ctx: p.Any.Required
+        height: p.Num.Required.$positive()
     }
 })
 export default class VtableRow<T> extends tc.TypedComponent<
     VtableRowProps<T>,
-    { splitter: { index: number } }
+    {
+        splitter: { index: number };
+        cell: t.VtableSlotCellProps<T>;
+    }
 > {
     get rowStyle(): CssProperties {
         return {
@@ -54,14 +55,14 @@ export default class VtableRow<T> extends tc.TypedComponent<
     }
 
     private get cells() {
-        const { item, columns, columnWidths, index, ctx } = this.$props;
+        const { item, columns, columnWidths, index } = this.$props;
         return _.map(columns, (c, columnIndex) => [
             <div
                 staticClass="vtable-cell"
                 class={c.className}
                 style={this.cellStyle(columnWidths[columnIndex])}
             >
-                {c.render(this.$createElement, item, index, ctx)}
+                {this.$scopedSlots.cell({ index, item, columnId: c.title })}
             </div>,
             this.$scopedSlots.splitter({ index: columnIndex })
         ]);

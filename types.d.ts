@@ -3,24 +3,22 @@ import { CssProperties } from "vue-css-definition";
 
 export type ArrayLike<T> = T[] | ReadonlyArray<T>;
 
-export interface VtableColumn<T> {
+export interface VtableColumn {
     title: string;
     defaultWidth: number;
     minWidth?: number;
     className?: string;
-    render: (h: Vue.CreateElement, item: T, index: number, ctx: any) => Vue.VNode|string;
 }
 
 export interface VtableProps<T> {
     rowHeight: number;
     headerHeight?: number;
-    columns: ArrayLike<VtableColumn<T>>,
+    columns: ArrayLike<VtableColumn>,
     items: ArrayLike<T>,
     rowStyleCycle?: number;
     splitterWidth?: number;
     rowClass?: string;
     getRowClass?: (item: T, index: number) => string;
-    ctx?: any;
     getItemKey: (item: T) => number | string;
 }
 
@@ -35,6 +33,12 @@ export interface VlistProps<T> {
 export interface VlistSlotRowProps<T> {
     item: T;
     index: number;
+}
+
+export interface VtableSlotCellProps<T> {
+    item: T;
+    index: number;
+    columnId: string;
 }
 
 export interface RowEventArgs<T, TEvent> {
