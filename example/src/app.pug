@@ -1,3 +1,4 @@
+doctype html
 div.app-container
     h1 {{ message }}
     div(style="margin-bottom: 1em;")
@@ -13,6 +14,7 @@ div.app-container
                 template(slot="cell", scope="p")
                     template(v-if="p.columnId === 'id'")
                         input(type="checkbox", :checked="p.item.checked",
+                              @click.stop
                               @change="setChecked(p.item, $event.target.checked)")
                         | {{ getLabel(p.item, p.index) }}
                     template(v-else-if="p.columnId === 'name'")
