@@ -23,7 +23,7 @@ export interface VtableRowProps<T> {
         height: p.Num.Required.$positive()
     }
 })
-export default class VtableRow<T> extends tc.TypedComponent<
+export class VtableRow<T> extends tc.TypedComponent<
     VtableRowProps<T>,
     {
         splitter: { index: number };

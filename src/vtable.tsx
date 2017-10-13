@@ -11,9 +11,9 @@ import * as _ from "lodash";
 import { px, supplier, ensureNotUndefined } from "./utils";
 import * as tc from "vue-typed-component";
 import { props as p } from "vue-typed-component";
-import Vlist from "./vlist";
-import VtableRow from "./vtablerow";
-import VtableSplitter from "./vtablesplitter";
+import { Vlist } from "./vlist";
+import { VtableRow } from "./vtablerow";
+import { VtableSplitter } from "./vtablesplitter";
 
 export interface VtableData {
     widths: number[];
@@ -35,7 +35,7 @@ export interface VtableData {
         getItemKey: p.Func.Required
     }
 })
-export default class Vtable<T> extends tc.StatefulEvTypedComponent<
+export class Vtable<T> extends tc.StatefulEvTypedComponent<
     VtableProps<T>,
     VtableEvents<T>,
     VtableData,

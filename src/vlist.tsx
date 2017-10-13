@@ -31,7 +31,7 @@ export interface VlistData {
         contentHeight: "onContentHeightChanged"
     }
 })
-export default class Vlist<T> extends tc.StatefulEvTypedComponent<
+export class Vlist<T> extends tc.StatefulEvTypedComponent<
     t.VlistProps<T>,
     t.VlistEvents<T>,
     VlistData,

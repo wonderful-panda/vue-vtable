@@ -11,7 +11,7 @@ export interface VtableSplitterProps {
     mousedownCallback: (screenX: number) => void;
 }
 
-export default tc.functionalComponent<VtableSplitterProps>(
+export const VtableSplitter = tc.functionalComponent<VtableSplitterProps>(
     "VtableSplitter",
     {
         dragging: p.Bool.Required,
