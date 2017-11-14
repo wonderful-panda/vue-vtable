@@ -1,9 +1,11 @@
-import Vue from "vue";
 import { CssProperties } from "vue-css-definition";
 import * as tc from "vue-typed-component";
-import { props as p } from "vue-typed-component";
+import p from "vue-strict-prop";
 import { px } from "./utils";
 import { modifiers as m } from "vue-tsx-support";
+import { ComponentAdditionalAttrs } from "vue-tsx-support";
+import Vue, { VNode, VNodeChildrenArrayContents, VNodeData } from "vue";
+import { VueConstructor } from "vue/types/vue";
 
 export interface VtableSplitterProps {
     dragging: boolean;
@@ -14,11 +16,11 @@ export interface VtableSplitterProps {
 export const VtableSplitter = tc.functionalComponent<VtableSplitterProps>(
     "VtableSplitter",
     {
-        dragging: p.Bool.Required,
-        width: p.Num.Required,
-        mousedownCallback: p.Func.Required
+        dragging: p(Boolean).required,
+        width: p(Number).required,
+        mousedownCallback: p.ofFunction<() => void>().required
     },
-    (h: Vue.CreateElement, { props }) => {
+    (h, { props }) => {
         const { dragging, width, mousedownCallback } = props;
         const className = dragging ? "vtable-dragging-splitter" : "vtable-splitter";
         const style: CssProperties = {

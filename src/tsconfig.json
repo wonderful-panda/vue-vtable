@@ -1,28 +1,26 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "declaration": true,
-    "jsx": "preserve",
-    "module": "es2015",
-    "moduleResolution": "node",
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "noEmitOnError": true,
-    "noUnusedLocals": true,
-    "sourceMap": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "allowSyntheticDefaultImports": true,
-    "rootDir": ".",
-    "newLine": "lf"
-  },
-  "filesGlob": [
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules",
-    "example",
-    "test"
-  ]
+    "compilerOptions": {
+        "target": "es6",
+        "declaration": true,
+        "jsx": "preserve",
+        "module": "es2015",
+        "moduleResolution": "node",
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "noEmitOnError": true,
+        "sourceMap": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "rootDir": ".",
+        "newLine": "lf"
+    },
+    "filesGlob": [
+        "**/*.ts",
+        "**/*.tsx"
+    ],
+    "exclude": [
+        "node_modules",
+        "example",
+        "test"
+    ]
 }

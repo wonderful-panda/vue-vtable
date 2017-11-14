@@ -1,4 +1,4 @@
-import Vue from "vue";
+import Vue, { VNode } from "vue";
 import { CssProperties } from "vue-css-definition";
 import {
     VtableProps,
@@ -10,7 +10,7 @@ import {
 import * as _ from "lodash";
 import { px, supplier, ensureNotUndefined } from "./utils";
 import * as tc from "vue-typed-component";
-import { props as p } from "vue-typed-component";
+import p from "vue-strict-prop";
 import { Vlist } from "./vlist";
 import { VtableRow } from "./vtablerow";
 import { VtableSplitter } from "./vtablesplitter";
@@ -22,17 +22,17 @@ export interface VtableData {
     draggingSplitter: number;
 }
 
-@tc.component<VtableProps<T>>({
+@tc.component({
     props: {
-        rowHeight: p.Num.Required.$positive(),
-        headerHeight: p.Num.$nonNegative(),
-        columns: p.Arr.Required,
-        items: p.Arr.Required,
-        rowStyleCycle: p.Num.Default(1).$positive(),
-        splitterWidth: p.Num.Default(3).$positive(),
-        rowClass: p.Str,
-        getRowClass: p.Func.Default(supplier(() => undefined)),
-        getItemKey: p.Func.Required
+        rowHeight: p(Number).validator(v => v > 0).required,
+        headerHeight: p(Number).validator(v => v >= 0).optional,
+        columns: p.ofArray<string>().required,
+        items: p.ofArray<string>().required,
+        rowStyleCycle: p(Number).validator(v => v > 0).default(1),
+        splitterWidth: p(Number).validator(v => v > 0).default(3),
+        rowClass: p(String).optional,
+        getRowClass: p.ofFunction<() => void>().default(supplier(() => undefined)),
+        getItemKey: p.ofFunction<() => void>().required
     }
 })
 export class Vtable<T> extends tc.StatefulEvTypedComponent<
@@ -145,7 +145,7 @@ export class Vtable<T> extends tc.StatefulEvTypedComponent<
             this.splitter(index)
         ]);
     }
-    render(): Vue.VNode {
+    render(): VNode {
         const VlistT = Vlist as new () => Vlist<T>;
         const { rowHeight, items, columns, rowStyleCycle, getItemKey } = this.$props;
         const emit = this.$events.emit;

@@ -1,9 +1,14 @@
-import Vue from "vue";
+import { VNode } from "vue";
 import { CssProperties } from "vue-css-definition";
-import * as t from "../types";
+import {
+    VlistProps,
+    VlistEvents,
+    VlistEventsOn,
+    VlistSlotRowProps
+} from "../types";
 import * as resizeSensor from "vue-resizesensor";
 import * as tc from "vue-typed-component";
-import { props as p } from "vue-typed-component";
+import p from "vue-strict-prop";
 import * as tsx from "vue-tsx-support";
 import { px } from "./utils";
 
@@ -18,13 +23,13 @@ export interface VlistData {
     hScrollBarHeight: number;
 }
 
-@tc.component<t.VlistProps<T>>({
+@tc.component({
     props: {
-        items: p.Arr.Required,
-        getItemKey: p.Func.Required,
-        contentWidth: p.ofType([Number, String]),
-        rowHeight: p.Num.Required.$positive(),
-        rowStyleCycle: p.Num.Default(1).$positive()
+        items: p.ofArray<string>().required,
+        getItemKey: p.ofFunction<() => void>().required,
+        contentWidth: p(String, Number).optional,
+        rowHeight: p(Number).validator(v => v > 0).required,
+        rowStyleCycle: p(Number).validator(v => v > 0).default(1)
     },
     watch: {
         contentWidth: "onContentWidthChanged",
@@ -32,11 +37,11 @@ export interface VlistData {
     }
 })
 export class Vlist<T> extends tc.StatefulEvTypedComponent<
-    t.VlistProps<T>,
-    t.VlistEvents<T>,
+    VlistProps<T>,
+    VlistEvents<T>,
     VlistData,
-    t.VlistEventsOn<T>,
-    { row: t.VlistSlotRowProps<T> }
+    VlistEventsOn<T>,
+    { row: VlistSlotRowProps<T> }
 > {
     $refs: { scrollable: Element; content: Element };
 
@@ -203,7 +208,7 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
         ));
     }
 
-    render(): Vue.VNode {
+    render(): VNode {
         return (
             <div staticClass="vlist-container" style={this.containerStyle}>
                 <div staticClass="vlist-header-row" style={this.headerStyle}>
