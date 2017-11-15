@@ -1,6 +1,6 @@
-import Vue from "vue";
+import { VNode } from "vue";
 import * as tc from "vue-typed-component";
-import { props as p } from "vue-typed-component";
+import p from "vue-strict-prop";
 import { CssProperties } from "vue-css-definition";
 import * as _ from "lodash";
 import { px } from "./utils";
@@ -14,13 +14,13 @@ export interface VtableRowProps<T> {
     height: number;
 }
 
-@tc.component<VtableRowProps<T>>({
+@tc.component({
     props: {
-        item: p.Any.Required,
-        columns: p.Arr.Required,
-        columnWidths: p.Arr.Required,
-        index: p.Num.Required.$nonNegative(),
-        height: p.Num.Required.$positive()
+        item: p.ofAny().required,
+        columns: p.ofArray<string>().required,
+        columnWidths: p.ofArray<string>().required,
+        index: p(Number).validator(v => v >= 0).required,
+        height: p(Number).validator(v => v > 0).required
     }
 })
 export class VtableRow<T> extends tc.TypedComponent<
@@ -68,7 +68,7 @@ export class VtableRow<T> extends tc.TypedComponent<
         ]);
     }
 
-    render(): Vue.VNode {
+    render(): VNode {
         return <div style={this.rowStyle}>{this.cells}</div>;
     }
 }
