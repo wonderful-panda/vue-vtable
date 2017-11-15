@@ -4,7 +4,7 @@
     "author": "Iwata Hidetaka <iwata0303@gmail.com>",
     "main": "dist/index.js",
     "typings": "dist/index.d.ts",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "scripts": {
         "build": "cross-env NODE_ENV=production webpack",
         "lint": "prettier \"{src,example/src}/**/*.{ts,tsx}\" --list-different",
@@ -18,7 +18,7 @@
     },
     "devDependencies": {
         "@types/lodash": "4.14.85",
-        "@types/node": "^8.0.51",
+        "@types/node": "^8.0.52",
         "babel-core": "^6.26.0",
         "babel-helper-vue-jsx-merge-props": "^2.0.2",
         "babel-loader": "^7.1.2",
@@ -40,7 +40,7 @@
         "vue-strict-prop": "^0.1.0",
         "vue-template-compiler": "^2.5",
         "vue-template-compiler-loader": "^1.0.4",
-        "vue-tsx-support": "^1.1.1",
+        "vue-tsx-support": "^1.1.2",
         "vue-typed-component": "^0.10.0",
         "webpack": "^3.8.1",
         "webpack-dev-server": "^2.9.4"
@@ -48,7 +48,7 @@
     "peerDependencies": {
         "vue": "^2.5",
         "vue-class-component": "^6.1.0",
-        "vue-tsx-support": "^1.1.1",
+        "vue-tsx-support": "^1.1.2",
         "vue-typed-component": "^0.10.0"
     },
     "prettier": {

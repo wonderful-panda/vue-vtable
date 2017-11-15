@@ -3,7 +3,7 @@ import * as tc from "vue-typed-component";
 import p from "vue-strict-prop";
 import { px } from "./utils";
 import { modifiers as m } from "vue-tsx-support";
-import { ComponentAdditionalAttrs } from "vue-tsx-support";
+import { TsxComponentAttrs } from "vue-tsx-support";
 import Vue, { VNode, VNodeChildrenArrayContents, VNodeData } from "vue";
 import { VueConstructor } from "vue/types/vue";
 
