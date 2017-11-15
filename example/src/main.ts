@@ -54,7 +54,7 @@ function createItems(num: number): ReadonlyArray<Item> {
     );
 }
 
-@tc.component<{}, App>({
+@tc.component(App, {
     ...require("./app.pug"),
     components: { Vtable },
     props: {}

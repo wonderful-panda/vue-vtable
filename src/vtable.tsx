@@ -1,16 +1,17 @@
-import Vue from "vue";
+import Vue, { VNode } from "vue";
+import * as _ from "lodash";
 import { CssProperties } from "vue-css-definition";
 import {
+    VtableColumn,
     VtableProps,
     VtableEvents,
     VtableEventsOn,
     VtableSlotCellProps,
     ScrollEventArgs
 } from "../types";
-import * as _ from "lodash";
 import { px, supplier, ensureNotUndefined } from "./utils";
 import * as tc from "vue-typed-component";
-import { props as p } from "vue-typed-component";
+import p from "vue-strict-prop";
 import { Vlist } from "./vlist";
 import { VtableRow } from "./vtablerow";
 import { VtableSplitter } from "./vtablesplitter";
@@ -22,17 +23,19 @@ export interface VtableData {
     draggingSplitter: number;
 }
 
-@tc.component<VtableProps<T>>({
+@tc.component(Vtable, {
+    // prettier-ignore
     props: {
-        rowHeight: p.Num.Required.$positive(),
-        headerHeight: p.Num.$nonNegative(),
-        columns: p.Arr.Required,
-        items: p.Arr.Required,
-        rowStyleCycle: p.Num.Default(1).$positive(),
-        splitterWidth: p.Num.Default(3).$positive(),
-        rowClass: p.Str,
-        getRowClass: p.Func.Default(supplier(() => undefined)),
-        getItemKey: p.Func.Required
+        rowHeight: p(Number).validator(v => v > 0).required,
+        headerHeight: p(Number).validator(v => v >= 0).optional,
+        columns: p.ofRoArray<VtableColumn>().required,
+        items: p.ofRoArray<T>().required,
+        rowStyleCycle: p(Number).validator(v => v > 0).default(1),
+        splitterWidth: p(Number).validator(v => v > 0).default(3),
+        rowClass: p(String).optional,
+        getRowClass: p.ofFunction<(item: T, index: number) => (string | undefined)>()
+                      .default(supplier(() => undefined)),
+        getItemKey: p.ofFunction<(item: T) => (number | string)>().required
     }
 })
 export class Vtable<T> extends tc.StatefulEvTypedComponent<
@@ -45,7 +48,7 @@ export class Vtable<T> extends tc.StatefulEvTypedComponent<
     $refs: { header: Element };
     data(): VtableData {
         return {
-            widths: _.map(this.$props.columns, c => c.defaultWidth),
+            widths: this.$props.columns.map(c => c.defaultWidth),
             scrollLeft: 0,
             splitterPositions: [],
             draggingSplitter: -1
@@ -145,7 +148,7 @@ export class Vtable<T> extends tc.StatefulEvTypedComponent<
             this.splitter(index)
         ]);
     }
-    render(): Vue.VNode {
+    render(): VNode {
         const VlistT = Vlist as new () => Vlist<T>;
         const { rowHeight, items, columns, rowStyleCycle, getItemKey } = this.$props;
         const emit = this.$events.emit;

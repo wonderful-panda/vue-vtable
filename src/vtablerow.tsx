@@ -1,6 +1,6 @@
-import Vue from "vue";
+import Vue, { VNode } from "vue";
 import * as tc from "vue-typed-component";
-import { props as p } from "vue-typed-component";
+import p from "vue-strict-prop";
 import { CssProperties } from "vue-css-definition";
 import * as _ from "lodash";
 import { px } from "./utils";
@@ -8,19 +8,19 @@ import * as t from "../types";
 
 export interface VtableRowProps<T> {
     item: T;
-    columns: t.ArrayLike<t.VtableColumn>;
-    columnWidths: number[];
+    columns: ReadonlyArray<t.VtableColumn>;
+    columnWidths: ReadonlyArray<number>;
     index: number;
     height: number;
 }
 
-@tc.component<VtableRowProps<T>>({
+@tc.component(VtableRow, {
     props: {
-        item: p.Any.Required,
-        columns: p.Arr.Required,
-        columnWidths: p.Arr.Required,
-        index: p.Num.Required.$nonNegative(),
-        height: p.Num.Required.$positive()
+        item: p.ofAny().required,
+        columns: p.ofRoArray<t.VtableColumn>().required,
+        columnWidths: p.ofRoArray<number>().required,
+        index: p(Number).validator(v => v >= 0).required,
+        height: p(Number).validator(v => v > 0).required
     }
 })
 export class VtableRow<T> extends tc.TypedComponent<
@@ -56,7 +56,7 @@ export class VtableRow<T> extends tc.TypedComponent<
 
     private get cells() {
         const { item, columns, columnWidths, index } = this.$props;
-        return _.map(columns, (c, columnIndex) => [
+        return columns.map((c, columnIndex) => [
             <div
                 staticClass="vtable-cell"
                 class={c.className}
@@ -68,7 +68,7 @@ export class VtableRow<T> extends tc.TypedComponent<
         ]);
     }
 
-    render(): Vue.VNode {
+    render(): VNode {
         return <div style={this.rowStyle}>{this.cells}</div>;
     }
 }

@@ -1,8 +1,6 @@
 import * as Vue from "vue"
 import { CssProperties } from "vue-css-definition";
 
-export type ArrayLike<T> = T[] | ReadonlyArray<T>;
-
 export interface VtableColumn {
     title: string;
     defaultWidth: number;
@@ -13,17 +11,17 @@ export interface VtableColumn {
 export interface VtableProps<T> {
     rowHeight: number;
     headerHeight?: number;
-    columns: ArrayLike<VtableColumn>,
-    items: ArrayLike<T>,
+    columns: ReadonlyArray<VtableColumn>,
+    items: ReadonlyArray<T>,
     rowStyleCycle?: number;
     splitterWidth?: number;
     rowClass?: string;
-    getRowClass?: (item: T, index: number) => string;
+    getRowClass?: (item: T, index: number) => string | undefined;
     getItemKey: (item: T) => number | string;
 }
 
 export interface VlistProps<T> {
-    items: ArrayLike<T>,
+    items: ReadonlyArray<T>,
     getItemKey: (item: T) => number | string;
     contentWidth?: number | string;
     rowHeight: number;

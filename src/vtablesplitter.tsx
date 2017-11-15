@@ -1,24 +1,20 @@
-import Vue from "vue";
+import Vue, { VNode, VNodeChildrenArrayContents, VNodeData } from "vue";
+import { VueConstructor } from "vue/types/vue";
 import { CssProperties } from "vue-css-definition";
-import * as tc from "vue-typed-component";
-import { props as p } from "vue-typed-component";
+import * as tsx from "vue-tsx-support";
+import p from "vue-strict-prop";
 import { px } from "./utils";
 import { modifiers as m } from "vue-tsx-support";
 
-export interface VtableSplitterProps {
-    dragging: boolean;
-    width: number;
-    mousedownCallback: (screenX: number) => void;
-}
-
-export const VtableSplitter = tc.functionalComponent<VtableSplitterProps>(
-    "VtableSplitter",
-    {
-        dragging: p.Bool.Required,
-        width: p.Num.Required,
-        mousedownCallback: p.Func.Required
+export const VtableSplitter = tsx.component({
+    functional: true,
+    name: "VtableSplitter",
+    props: {
+        dragging: p(Boolean).required,
+        width: p(Number).required,
+        mousedownCallback: p.ofFunction<(x: number) => void>().required
     },
-    (h: Vue.CreateElement, { props }) => {
+    render(h, { props }): VNode {
         const { dragging, width, mousedownCallback } = props;
         const className = dragging ? "vtable-dragging-splitter" : "vtable-splitter";
         const style: CssProperties = {
@@ -37,4 +33,4 @@ export const VtableSplitter = tc.functionalComponent<VtableSplitterProps>(
             />
         );
     }
-);
+});

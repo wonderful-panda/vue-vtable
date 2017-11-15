@@ -1,13 +1,17 @@
-import Vue from "vue";
+import Vue, { VNode } from "vue";
 import { CssProperties } from "vue-css-definition";
 import * as t from "../types";
 import * as resizeSensor from "vue-resizesensor";
 import * as tc from "vue-typed-component";
-import { props as p } from "vue-typed-component";
+import p from "vue-strict-prop";
 import * as tsx from "vue-tsx-support";
 import { px } from "./utils";
 
-const ResizeSensor = tsx.ofType<{ debounce?: number }, { onResized: void }>().convert(resizeSensor);
+const ResizeSensor = resizeSensor as tsx.TsxComponent<
+    Vue,
+    { debounce?: number },
+    { onResized: void }
+>;
 
 export interface VlistData {
     scrollLeft: number;
@@ -18,13 +22,14 @@ export interface VlistData {
     hScrollBarHeight: number;
 }
 
-@tc.component<t.VlistProps<T>>({
+@tc.component(Vlist, {
+    // prettier-ignore
     props: {
-        items: p.Arr.Required,
-        getItemKey: p.Func.Required,
-        contentWidth: p.ofType([Number, String]),
-        rowHeight: p.Num.Required.$positive(),
-        rowStyleCycle: p.Num.Default(1).$positive()
+        items: p.ofRoArray<T>().required,
+        getItemKey: p.ofFunction<(item: T) => (string | number)>().required,
+        contentWidth: p(Number, String).optional,
+        rowHeight: p(Number).validator(v => v > 0).required,
+        rowStyleCycle: p(Number).validator(v => v > 0).default(1)
     },
     watch: {
         contentWidth: "onContentWidthChanged",
@@ -203,7 +208,7 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
         ));
     }
 
-    render(): Vue.VNode {
+    render(): VNode {
         return (
             <div staticClass="vlist-container" style={this.containerStyle}>
                 <div staticClass="vlist-header-row" style={this.headerStyle}>

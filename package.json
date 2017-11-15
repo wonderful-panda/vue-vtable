@@ -14,7 +14,8 @@
     "dev": "webpack-dev-server --config webpack.config.example.js"
   },
   "dependencies": {
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "vue-strict-prop": "^0.1.1"
   },
   "devDependencies": {
     "@types/lodash": "4.14.64",
@@ -33,22 +34,22 @@
     "pug": "^2.0.0-rc.1",
     "ts-loader": "^2.1.0",
     "typescript": "^2.3.3",
-    "vue": ">=2.3.3 <2.5",
-    "vue-class-component": "^5.0.1",
+    "vue": "^2.5.2",
+    "vue-class-component": "^6.0.0",
     "vue-css-definition": "0.1.0",
     "vue-resizesensor": "0.2.0",
-    "vue-template-compiler": ">= 2.3.3 <2.5",
+    "vue-template-compiler": "^2.5.2",
     "vue-template-compiler-loader": "^1.0.4",
-    "vue-tsx-support": "^0.4.0",
-    "vue-typed-component": "^0.7.0",
+    "vue-tsx-support": "^1.1.0",
+    "vue-typed-component": "^0.10.0",
     "webpack": "^2.6.1",
     "webpack-dev-server": "^2.4.5"
   },
   "peerDependencies": {
-    "vue": ">=2.3.3 <2.5",
-    "vue-class-component": "^5.0.1",
-    "vue-tsx-support": "^0.4.0",
-    "vue-typed-component": "^0.7.0"
+    "vue": "^2.5.2",
+    "vue-class-component": "^6.0.0",
+    "vue-tsx-support": "^1.1.0",
+    "vue-typed-component": "^0.10.0"
   },
   "prettier": {
     "printWidth": 100,

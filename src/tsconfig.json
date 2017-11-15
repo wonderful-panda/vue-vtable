@@ -8,7 +8,6 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "noEmitOnError": true,
-    "noUnusedLocals": true,
     "sourceMap": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
