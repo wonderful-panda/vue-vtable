@@ -1,10 +1,10 @@
-import Vue, { VNode } from "vue";
-import * as tc from "vue-typed-component";
-import p from "vue-strict-prop";
-import { CssProperties } from "vue-css-definition";
 import * as _ from "lodash";
-import { px } from "./utils";
+import Vue, { VNode } from "vue";
+import { CssProperties } from "vue-css-definition";
+import p from "vue-strict-prop";
+import * as tc from "vue-typed-component";
 import * as t from "../types";
+import { px } from "./utils";
 
 export interface VtableRowProps<T> {
     item: T;

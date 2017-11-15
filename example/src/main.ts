@@ -1,8 +1,7 @@
-import Vue from "vue";
 import * as _ from "lodash";
+import Vue from "vue";
 import * as tc from "vue-typed-component";
-import { Vtable } from "../..";
-import { VtableColumn } from "../..";
+import { Vtable, VtableColumn } from "../..";
 
 interface Item {
     id: string;
@@ -76,8 +75,8 @@ class App extends tc.TypedComponent<{}> {
     }
 
     updateParams() {
-        this.$data.rowHeight = parseInt(this.$refs.rowHeight.value);
-        this.$data.items = this.createItems(parseInt(this.$refs.rowCount.value));
+        this.$data.rowHeight = parseInt(this.$refs.rowHeight.value, 10);
+        this.$data.items = this.createItems(parseInt(this.$refs.rowCount.value, 10));
     }
 
     createItems(num: number): ReadonlyArray<Item> {
@@ -106,9 +105,10 @@ class App extends tc.TypedComponent<{}> {
     }
 }
 
+// tslint:disable-next-line: no-unused-expression
 new Vue({
     el: "#app",
-    render: function(createElement) {
+    render(createElement) {
         return createElement(App);
     }
 });

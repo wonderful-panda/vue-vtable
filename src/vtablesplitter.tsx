@@ -1,10 +1,11 @@
 import Vue, { VNode, VNodeChildrenArrayContents, VNodeData } from "vue";
-import { VueConstructor } from "vue/types/vue";
 import { CssProperties } from "vue-css-definition";
-import * as tsx from "vue-tsx-support";
 import p from "vue-strict-prop";
+import * as tsx from "vue-tsx-support";
+import { VueConstructor } from "vue/types/vue";
 import { px } from "./utils";
-import { modifiers as m } from "vue-tsx-support";
+
+const m = tsx.modifiers;
 
 export const VtableSplitter = tsx.component({
     functional: true,

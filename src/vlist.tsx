@@ -1,10 +1,10 @@
 import Vue, { VNode } from "vue";
 import { CssProperties } from "vue-css-definition";
-import * as t from "../types";
 import * as resizeSensor from "vue-resizesensor";
-import * as tc from "vue-typed-component";
 import p from "vue-strict-prop";
 import * as tsx from "vue-tsx-support";
+import * as tc from "vue-typed-component";
+import * as t from "../types";
 import { px } from "./utils";
 
 const ResizeSensor = resizeSensor as tsx.TsxComponent<
@@ -187,12 +187,12 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
 
     /* render */
     private get rows() {
-        const p = this.$props;
+        const props = this.$props;
         const row = this.$scopedSlots.row;
         return this.renderedItems.map((item, index) => (
             <div
                 staticClass="vlist-row"
-                key={p.getItemKey(item)}
+                key={props.getItemKey(item)}
                 style={this.rowStyle}
                 onClick={e => this.onRowEvent("click", item, index, e)}
                 onDblclick={e => this.onRowEvent("dblclick", item, index, e)}

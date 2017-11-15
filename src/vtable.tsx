@@ -1,17 +1,17 @@
-import Vue, { VNode } from "vue";
 import * as _ from "lodash";
+import Vue, { VNode } from "vue";
 import { CssProperties } from "vue-css-definition";
+import p from "vue-strict-prop";
+import * as tc from "vue-typed-component";
 import {
+    ScrollEventArgs,
     VtableColumn,
-    VtableProps,
     VtableEvents,
     VtableEventsOn,
-    VtableSlotCellProps,
-    ScrollEventArgs
+    VtableProps,
+    VtableSlotCellProps
 } from "../types";
-import { px, supplier, ensureNotUndefined } from "./utils";
-import * as tc from "vue-typed-component";
-import p from "vue-strict-prop";
+import { ensureNotUndefined, px, supplier } from "./utils";
 import { Vlist } from "./vlist";
 import { VtableRow } from "./vtablerow";
 import { VtableSplitter } from "./vtablesplitter";
@@ -170,16 +170,16 @@ export class Vtable<T> extends tc.StatefulEvTypedComponent<
                 onRowdragover={e => emit("rowdragover", e)}
                 onRowdrop={e => emit("rowdrop", e)}
                 scopedSlots={{
-                    row: p => [
+                    row: props => [
                         <VtableRow
-                            class={this.actualRowClass(p.item, p.index)}
-                            item={p.item}
+                            class={this.actualRowClass(props.item, props.index)}
+                            item={props.item}
                             columns={columns}
                             columnWidths={this.$data.widths}
-                            index={p.index}
+                            index={props.index}
                             height={rowHeight}
                             scopedSlots={{
-                                splitter: p => [this.splitter(p.index)],
+                                splitter: ({ index }) => [this.splitter(index)],
                                 cell: this.$scopedSlots.cell
                             }}
                         />
