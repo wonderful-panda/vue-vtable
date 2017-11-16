@@ -9,10 +9,11 @@ Table (grid view) component for Vue
 [DEMO](http://wonderful-panda.github.io/vue-vtable/example/)
 
 ## Requirement
-Vue >= 2.3.3
+Vue >= 2.5.2
 
 ## Usage
 Not documented yet.
+See [example](/example/src)
 
 ## License
 MIT
