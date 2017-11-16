@@ -10,12 +10,15 @@ module.exports = {
     devtool: 'source-map',
     resolve: {
         extensions: [".ts", ".tsx",".js"],
-        modules: [ path.join(__dirname, "example/src"), "node_modules" ]
+        modules: [ path.join(__dirname, "example/src"), "node_modules" ],
+        alias: {
+            "vue$": "vue/dist/vue.js"
+        }
     },
     module: {
         loaders: [
           { test: /\.tsx?$/, loader: "babel-loader!ts-loader", exclude: /node_modules/ },
-          { test: /\.pug$/, loader: "vue-template-compiler-loader!../simple-pug-loader", exclude: /node_modules/ }
+          { test: /\.html$/, loader: "html-loader", exclude: /node_modules/ }
         ]
     },
     devServer: {
