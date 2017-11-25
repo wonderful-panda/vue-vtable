@@ -57,6 +57,7 @@ export interface ScrollEventArgs {
 export interface VlistEvents<T> {
     rowclick: RowClickEventArgs<T>;
     rowdblclick: RowClickEventArgs<T>;
+    rowcontextmenu: RowClickEventArgs<T>;
     rowdragenter: RowDragEventArgs<T>;
     rowdragleave: RowDragEventArgs<T>;
     rowdragstart: RowDragEventArgs<T>;
@@ -69,6 +70,7 @@ export interface VlistEvents<T> {
 export interface VlistEventsOn<T> {
     onRowclick: RowClickEventArgs<T>;
     onRowdblclick: RowClickEventArgs<T>;
+    onRowcontextmenu: RowClickEventArgs<T>;
     onRowdragenter: RowDragEventArgs<T>;
     onRowdragleave: RowDragEventArgs<T>;
     onRowdragstart: RowDragEventArgs<T>;
@@ -78,24 +80,7 @@ export interface VlistEventsOn<T> {
     onScroll: ScrollEventArgs;
 }
 
-export interface VtableEvents<T> {
-    rowclick: RowClickEventArgs<T>;
-    rowdblclick: RowClickEventArgs<T>;
-    rowdragenter: RowDragEventArgs<T>;
-    rowdragleave: RowDragEventArgs<T>;
-    rowdragstart: RowDragEventArgs<T>;
-    rowdragend: RowDragEventArgs<T>;
-    rowdragover: RowDragEventArgs<T>;
-    rowdrop: RowDragEventArgs<T>;
-}
+export interface VtableEvents<T> extends VlistEvents<T> {}
 
-export interface VtableEventsOn<T> {
-    onRowclick: RowClickEventArgs<T>;
-    onRowdblclick: RowClickEventArgs<T>;
-    onRowdragenter: RowDragEventArgs<T>;
-    onRowdragleave: RowDragEventArgs<T>;
-    onRowdragstart: RowDragEventArgs<T>;
-    onRowdragend: RowDragEventArgs<T>;
-    onRowdragover: RowDragEventArgs<T>;
-    onRowdrop: RowDragEventArgs<T>;
-}
+
+export interface VtableEventsOn<T> extends VlistEventsOn<T> {}

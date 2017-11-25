@@ -196,6 +196,7 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
                 style={this.rowStyle}
                 onClick={e => this.onRowEvent("click", item, index, e)}
                 onDblclick={e => this.onRowEvent("dblclick", item, index, e)}
+                onContextmenu={e => this.onRowEvent("contextmenu", item, index, e)}
                 onDragenter={e => this.onRowEvent("dragenter", item, index, e)}
                 onDragleave={e => this.onRowEvent("dragleave", item, index, e)}
                 onDragstart={e => this.onRowEvent("dragstart", item, index, e)}

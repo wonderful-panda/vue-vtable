@@ -99,6 +99,10 @@ export class Vtable<T> extends tc.StatefulEvTypedComponent<
     }
 
     /* methods */
+    onScroll(args: ScrollEventArgs) {
+        this.updateScrollPosition(args);
+        this.$events.emit("scroll", args);
+    }
     updateScrollPosition(args: ScrollEventArgs) {
         this.$data.scrollLeft = args.scrollLeft;
     }
@@ -160,9 +164,10 @@ export class Vtable<T> extends tc.StatefulEvTypedComponent<
                 rowStyleCycle={rowStyleCycle}
                 contentWidth={this.contentWidth}
                 getItemKey={getItemKey}
-                onScroll={this.updateScrollPosition}
+                onScroll={this.onScroll}
                 onRowclick={e => emit("rowclick", e)}
                 onRowdblclick={e => emit("rowdblclick", e)}
+                onRowcontextmenu={e => emit("rowcontextmenu", e)}
                 onRowdragenter={e => emit("rowdragenter", e)}
                 onRowdragleave={e => emit("rowdragleave", e)}
                 onRowdragstart={e => emit("rowdragstart", e)}
