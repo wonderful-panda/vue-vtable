@@ -2,5 +2,6 @@
 *.json eol=lf
 *.ts eol=lf
 *.tsx eol=lf
+.travis.yml eol=lf
 dist/* -text
 example/dist/* -text
