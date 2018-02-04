@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "lodash": "^4.17.4",
-    "vue-css-definition": "0.1.0",
-    "vue-resizesensor": "0.2.0",
+    "vue-css-definition": "^0.1.0",
+    "vue-resizesensor": "^0.2.1",
     "vue-strict-prop": "^0.1.1"
   },
   "devDependencies": {
