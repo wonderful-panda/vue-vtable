@@ -17,6 +17,7 @@ export interface VtableProps<T> {
     splitterWidth?: number;
     rowClass?: string;
     getRowClass?: (item: T, index: number) => string | undefined;
+    initialWidths?: ReadonlyArray<number>;
     getItemKey: (item: T) => number | string;
 }
 
@@ -54,6 +55,11 @@ export interface ScrollEventArgs {
     event: Event;
 }
 
+export interface ColumnResizeEventArgs {
+    widths: ReadonlyArray<number>;
+    event?: Event;
+}
+
 export interface VlistEvents<T> {
     rowclick: RowClickEventArgs<T>;
     rowdblclick: RowClickEventArgs<T>;
@@ -80,7 +86,11 @@ export interface VlistEventsOn<T> {
     onScroll: ScrollEventArgs;
 }
 
-export interface VtableEvents<T> extends VlistEvents<T> {}
+export interface VtableEvents<T> extends VlistEvents<T> {
+    columnresize: ColumnResizeEventArgs;
+}
 
 
-export interface VtableEventsOn<T> extends VlistEventsOn<T> {}
+export interface VtableEventsOn<T> extends VlistEventsOn<T> {
+    onColumnresize: ColumnResizeEventArgs;
+}

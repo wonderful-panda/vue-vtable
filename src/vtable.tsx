@@ -35,7 +35,8 @@ export interface VtableData {
         rowClass: p(String).optional,
         getRowClass: p.ofFunction<(item: T, index: number) => (string | undefined)>()
                       .default(supplier(() => undefined)),
-        getItemKey: p.ofFunction<(item: T) => (number | string)>().required
+        getItemKey: p.ofFunction<(item: T) => (number | string)>().required,
+        initialWidths: p.ofRoArray<number>().optional
     }
 })
 export class Vtable<T> extends tc.StatefulEvTypedComponent<
@@ -47,8 +48,9 @@ export class Vtable<T> extends tc.StatefulEvTypedComponent<
 > {
     $refs: { header: Element };
     data(): VtableData {
+        const { columns, initialWidths } = this.$props;
         return {
-            widths: this.$props.columns.map(c => c.defaultWidth),
+            widths: initialWidths ? [...initialWidths] : columns.map(c => c.defaultWidth),
             scrollLeft: 0,
             splitterPositions: [],
             draggingSplitter: -1
@@ -119,6 +121,7 @@ export class Vtable<T> extends tc.StatefulEvTypedComponent<
             const width = Math.max(startWidth + offset, minWidth);
             Vue.set(this.$data.widths, index, width);
             this.$data.draggingSplitter = index;
+            this.$events.emit("columnresize", { widths: this.$data.widths, event: e });
         };
         const onMouseUp = () => {
             document.removeEventListener("mousemove", onMouseMove);
