@@ -133,6 +133,14 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
         return this.$props.rowHeight * this.$props.items.length;
     }
 
+    /* hook */
+    activated() {
+        this.updateBodySize();
+        const { scrollLeft, scrollTop } = this.$refs.scrollable;
+        this.$data.scrollLeft = scrollLeft;
+        this.$data.scrollTop = scrollTop;
+    }
+
     /* methods */
     updateBodySize() {
         const sc = this.$refs.scrollable;
