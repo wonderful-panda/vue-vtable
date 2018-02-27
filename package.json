@@ -4,7 +4,7 @@
   "author": "Iwata Hidetaka <iwata0303@gmail.com>",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack",
     "tslint": "tslint -c tslint.json src/**/*.{ts,tsx} example/**/*.{ts,tsx}",
