@@ -142,6 +142,22 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
     }
 
     /* methods */
+    ensureVisible(index: number) {
+        const { rowHeight } = this.$props;
+        const { bodyHeight } = this.$data;
+        let { scrollTop } = this.$data;
+        const scrollTopMax = rowHeight * index;
+        const scrollTopMin = Math.max(rowHeight * index - bodyHeight + rowHeight, 0);
+        if (scrollTopMax < scrollTop) {
+            scrollTop = scrollTopMax;
+        } else if (scrollTop < scrollTopMin) {
+            scrollTop = scrollTopMin;
+        } else {
+            return;
+        }
+        const sc = this.$refs.scrollable;
+        sc.scrollTop = scrollTop;
+    }
     updateBodySize() {
         const sc = this.$refs.scrollable;
         const bound = sc.getBoundingClientRect();

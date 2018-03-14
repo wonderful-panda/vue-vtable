@@ -65,6 +65,10 @@ const App = Vue.extend({
             this.rowHeight = parseInt(rowHeight.value, 10);
             this.itemCount = parseInt(rowCount.value, 10);
         },
+        ensureVisible() {
+            const index = (this.$refs.index as HTMLInputElement).valueAsNumber;
+            (this.$refs.vtable as Vtable<any>).ensureVisible(index);
+        },
         onRowClick(args: { item: Item; index: number }) {
             args.item.checked = !args.item.checked;
             this.selectedIndex = args.index;

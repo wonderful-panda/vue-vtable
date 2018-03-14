@@ -46,7 +46,7 @@ export class Vtable<T> extends tc.StatefulEvTypedComponent<
     VtableEventsOn<T>,
     { cell: VtableSlotCellProps<T> }
 > {
-    $refs: { header: Element };
+    $refs: { header: Element; vlist: Vlist<T> };
     data(): VtableData {
         const { columns, initialWidths } = this.$props;
         return {
@@ -101,6 +101,9 @@ export class Vtable<T> extends tc.StatefulEvTypedComponent<
     }
 
     /* methods */
+    ensureVisible(index: number) {
+        this.$refs.vlist.ensureVisible(index);
+    }
     onScroll(args: ScrollEventArgs) {
         this.updateScrollPosition(args);
         this.$events.emit("scroll", args);
@@ -161,6 +164,7 @@ export class Vtable<T> extends tc.StatefulEvTypedComponent<
         const emit = this.$events.emit;
         return (
             <VlistT
+                ref="vlist"
                 style="flex: 1 1 auto"
                 rowHeight={rowHeight}
                 items={items}
