@@ -1,5 +1,9 @@
-import * as Vue from "vue"
+import * as Vue from "vue";
 import { CssProperties } from "vue-css-definition";
+
+export type SliceFunction<T> = (begin: number, end: number) => ReadonlyArray<T>;
+export type GetKeyFunction<T> = (item: T) => number | string;
+export type GetClassFunction<T> = (item: T, index: number) => string | undefined;
 
 export interface VtableColumn {
     title: string;
@@ -11,19 +15,20 @@ export interface VtableColumn {
 export interface VtableProps<T> {
     rowHeight: number;
     headerHeight?: number;
-    columns: ReadonlyArray<VtableColumn>,
-    items: ReadonlyArray<T>,
+    columns: ReadonlyArray<VtableColumn>;
+    items: ReadonlyArray<T>;
     rowStyleCycle?: number;
     splitterWidth?: number;
     rowClass?: string;
-    getRowClass?: (item: T, index: number) => string | undefined;
+    getRowClass?: GetClassFunction<T>;
     initialWidths?: ReadonlyArray<number>;
-    getItemKey: (item: T) => number | string;
+    getItemKey: GetKeyFunction<T>;
 }
 
 export interface VlistProps<T> {
-    items: ReadonlyArray<T>,
-    getItemKey: (item: T) => number | string;
+    itemCount: number;
+    sliceItems: SliceFunction<T>;
+    getItemKey: GetKeyFunction<T>;
     contentWidth?: number | string;
     rowHeight: number;
     rowStyleCycle?: number;
@@ -89,7 +94,6 @@ export interface VlistEventsOn<T> {
 export interface VtableEvents<T> extends VlistEvents<T> {
     columnresize: ColumnResizeEventArgs;
 }
-
 
 export interface VtableEventsOn<T> extends VlistEventsOn<T> {
     onColumnresize: ColumnResizeEventArgs;

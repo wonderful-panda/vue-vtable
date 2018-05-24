@@ -1,11 +1,11 @@
 import Vue, { VNode } from "vue";
 import { CssProperties } from "vue-css-definition";
 import * as resizeSensor from "vue-resizesensor";
-import p from "vue-strict-prop";
 import * as tsx from "vue-tsx-support";
 import * as tc from "vue-typed-component";
 import * as t from "../types";
-import { px } from "./utils";
+import { getPropOptions } from "./propopts";
+import { pick, px } from "./utils";
 
 const ResizeSensor = resizeSensor as tsx.TsxComponent<
     Vue,
@@ -23,14 +23,14 @@ export interface VlistData {
 }
 
 @tc.component(Vlist, {
-    // prettier-ignore
-    props: {
-        items: p.ofRoArray<T>().required,
-        getItemKey: p.ofFunction<(item: T) => (string | number)>().required,
-        contentWidth: p(Number, String).optional,
-        rowHeight: p(Number).validator(v => v > 0).required,
-        rowStyleCycle: p(Number).validator(v => v > 0).default(1)
-    },
+    props: pick(getPropOptions<T>(), [
+        "getItemKey",
+        "contentWidth",
+        "rowHeight",
+        "rowStyleCycle",
+        "itemCount",
+        "sliceItems"
+    ]),
     watch: {
         contentWidth: "onContentWidthChanged",
         contentHeight: "onContentHeightChanged"
@@ -127,10 +127,10 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
         return Math.ceil((scrollTop + bodyHeight) / this.$props.rowHeight);
     }
     private get renderedItems() {
-        return this.$props.items.slice(this.firstIndex, this.lastIndex + 1);
+        return this.$props.sliceItems(this.firstIndex, this.lastIndex + 1);
     }
     private get contentHeight() {
-        return this.$props.rowHeight * this.$props.items.length;
+        return this.$props.rowHeight * this.$props.itemCount;
     }
 
     /* hook */

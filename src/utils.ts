@@ -16,3 +16,13 @@ export function ensureNotUndefined<T>(value: T | undefined): T {
     }
     return value;
 }
+
+export function pick<T, K extends keyof T>(obj: T, keys: K[]): { [K2 in K]: T[K2] } {
+    return keys.reduce(
+        (ret, key) => {
+            ret[key] = obj[key];
+            return ret;
+        },
+        {} as any
+    );
+}
