@@ -5,6 +5,16 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "version": "0.10.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wonderful-panda/vue-vtable.git"
+  },
+  "keywords": [
+    "Vue",
+    "component",
+    "table"
+  ],
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack",
     "tslint": "tslint -c tslint.json src/**/*.{ts,tsx} example/**/*.{ts,tsx}",
