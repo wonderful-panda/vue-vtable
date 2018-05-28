@@ -1,6 +1,7 @@
 import * as _ from "lodash";
 import Vue, { VNode } from "vue";
 import { CssProperties } from "vue-css-definition";
+import p from "vue-strict-prop";
 import * as tc from "vue-typed-component";
 import {
     GetClassFunction,
@@ -13,8 +14,7 @@ import {
     VtableProps,
     VtableSlotCellProps
 } from "../types";
-import { getPropOptions } from "./propopts";
-import { ensureNotUndefined, pick, px } from "./utils";
+import { ensureNotUndefined, px } from "./utils";
 import { Vlist } from "./vlist";
 import { VtableRow } from "./vtablerow";
 import { VtableSplitter } from "./vtablesplitter";
@@ -41,19 +41,19 @@ export interface VtableData {
 }
 
 @tc.component(VtableBase, {
-    props: pick(getPropOptions<T>(), [
-        "rowHeight",
-        "headerHeight",
-        "columns",
-        "itemCount",
-        "sliceItems",
-        "rowStyleCycle",
-        "splitterWidth",
-        "rowClass",
-        "getRowClass",
-        "getItemKey",
-        "initialWidths"
-    ])
+    props: {
+        rowHeight: p(Number).required,
+        headerHeight: p(Number).optional,
+        columns: p.ofRoArray<VtableColumn>().required,
+        itemCount: p(Number).required,
+        sliceItems: p.ofFunction<SliceFunction<T>>().required,
+        rowStyleCycle: p(Number).default(1),
+        splitterWidth: p(Number).default(3),
+        rowClass: p(String).optional,
+        getRowClass: p.ofFunction<GetClassFunction<T>>().optional,
+        getItemKey: p.ofFunction<GetKeyFunction<T>>().required,
+        initialWidths: p.ofRoArray<number>().optional
+    }
 })
 export class VtableBase<T> extends tc.StatefulEvTypedComponent<
     VtableBaseProps<T>,
@@ -176,28 +176,35 @@ export class VtableBase<T> extends tc.StatefulEvTypedComponent<
     }
     render(): VNode {
         const VlistT = Vlist as new () => Vlist<T>;
-        const p = this.$props;
+        const {
+            rowHeight,
+            itemCount,
+            sliceItems,
+            rowStyleCycle,
+            getItemKey,
+            columns
+        } = this.$props;
         const emit = this.$events.emit;
         const on = { ...this.$listeners, scroll: this.onScroll };
         return (
             <VlistT
                 ref="vlist"
                 style="flex: 1 1 auto"
-                rowHeight={p.rowHeight}
-                itemCount={p.itemCount}
-                sliceItems={p.sliceItems}
-                rowStyleCycle={p.rowStyleCycle}
+                rowHeight={rowHeight}
+                itemCount={itemCount}
+                sliceItems={sliceItems}
+                rowStyleCycle={rowStyleCycle}
                 contentWidth={this.contentWidth}
-                getItemKey={p.getItemKey}
+                getItemKey={getItemKey}
                 scopedSlots={{
                     row: ({ item, index }) => [
                         <VtableRow
                             class={this.actualRowClass(item, index)}
-                            columns={p.columns}
+                            columns={columns}
                             columnWidths={this.$data.widths}
                             item={item}
                             index={index}
-                            height={p.rowHeight}
+                            height={rowHeight}
                             scopedSlots={{
                                 splitter: ({ index: i }) => [this.splitter(i)],
                                 cell: this.$scopedSlots.cell

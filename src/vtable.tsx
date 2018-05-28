@@ -1,8 +1,11 @@
 import * as _ from "lodash";
 import Vue, { VNode } from "vue";
 import { CssProperties } from "vue-css-definition";
+import p from "vue-strict-prop";
 import * as tc from "vue-typed-component";
 import {
+    GetClassFunction,
+    GetKeyFunction,
     ScrollEventArgs,
     VtableColumn,
     VtableEvents,
@@ -10,23 +13,21 @@ import {
     VtableProps,
     VtableSlotCellProps
 } from "../types";
-import { getPropOptions } from "./propopts";
-import { pick } from "./utils";
 import { VtableBase, VtableBaseProps } from "./vtablebase";
 
 @tc.component(Vtable, {
-    props: pick(getPropOptions<T>(), [
-        "rowHeight",
-        "headerHeight",
-        "columns",
-        "items",
-        "rowStyleCycle",
-        "splitterWidth",
-        "rowClass",
-        "getRowClass",
-        "getItemKey",
-        "initialWidths"
-    ])
+    props: {
+        rowHeight: p(Number).required,
+        headerHeight: p(Number).optional,
+        columns: p.ofRoArray<VtableColumn>().required,
+        items: p.ofRoArray<T>().required,
+        rowStyleCycle: p(Number).default(1),
+        splitterWidth: p(Number).default(3),
+        rowClass: p(String).optional,
+        getRowClass: p.ofFunction<GetClassFunction<T>>().optional,
+        getItemKey: p.ofFunction<GetKeyFunction<T>>().required,
+        initialWidths: p.ofRoArray<number>().optional
+    }
 })
 export class Vtable<T> extends tc.EvTypedComponent<
     VtableProps<T>,

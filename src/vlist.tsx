@@ -1,11 +1,11 @@
 import Vue, { VNode } from "vue";
 import { CssProperties } from "vue-css-definition";
 import * as resizeSensor from "vue-resizesensor";
+import p from "vue-strict-prop";
 import * as tsx from "vue-tsx-support";
 import * as tc from "vue-typed-component";
 import * as t from "../types";
-import { getPropOptions } from "./propopts";
-import { pick, px } from "./utils";
+import { px } from "./utils";
 
 const ResizeSensor = resizeSensor as tsx.TsxComponent<
     Vue,
@@ -23,14 +23,14 @@ export interface VlistData {
 }
 
 @tc.component(Vlist, {
-    props: pick(getPropOptions<T>(), [
-        "getItemKey",
-        "contentWidth",
-        "rowHeight",
-        "rowStyleCycle",
-        "itemCount",
-        "sliceItems"
-    ]),
+    props: {
+        getItemKey: p.ofFunction<t.GetKeyFunction<T>>().required,
+        contentWidth: p(Number).optional,
+        rowStyleCycle: p(Number).default(1),
+        rowHeight: p(Number).required,
+        itemCount: p(Number).required,
+        sliceItems: p.ofFunction<t.SliceFunction<T>>().required
+    },
     watch: {
         contentWidth: "onContentWidthChanged",
         contentHeight: "onContentHeightChanged"
