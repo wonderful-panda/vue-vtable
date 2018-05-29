@@ -10,27 +10,27 @@ interface Item {
 
 const columns: VtableColumn[] = [
     {
-        title: "id",
+        id: "id",
         className: "cell-id",
         defaultWidth: 150
     },
     {
-        title: "name",
+        id: "name",
         className: "cell-name",
         defaultWidth: 200
     },
     {
-        title: "extra1",
+        id: "extra1",
         className: "cell-extra",
         defaultWidth: 200
     },
     {
-        title: "extra2",
+        id: "extra2",
         className: "cell-extra",
         defaultWidth: 200
     },
     {
-        title: "description",
+        id: "description",
         className: "cell-desc",
         defaultWidth: 600
     }

@@ -62,7 +62,7 @@ export class VtableRow<T> extends tc.TypedComponent<
                 class={c.className}
                 style={this.cellStyle(columnWidths[columnIndex])}
             >
-                {this.$scopedSlots.cell({ index, item, columnId: c.title })}
+                {this.$scopedSlots.cell({ index, item, columnId: c.id })}
             </div>,
             this.$scopedSlots.splitter({ index: columnIndex })
         ]);

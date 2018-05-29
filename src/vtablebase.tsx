@@ -169,7 +169,7 @@ export class VtableBase<T> extends tc.StatefulEvTypedComponent<
                 class={c.className}
                 style={this.headerCellStyle(widths[index])}
             >
-                {c.title}
+                {c.id || c.title}
             </div>,
             this.splitter(index)
         ]);

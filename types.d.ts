@@ -6,7 +6,8 @@ export type GetKeyFunction<T> = (item: T) => number | string;
 export type GetClassFunction<T> = (item: T, index: number) => string | undefined;
 
 export interface VtableColumn {
-    title: string;
+    id: string;
+    title?: string;
     defaultWidth: number;
     minWidth?: number;
     className?: string;
