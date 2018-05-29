@@ -43,7 +43,7 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
     t.VlistEventsOn<T>,
     { row: t.VlistSlotRowProps<T> }
 > {
-    $refs: { scrollable: Element; content: Element };
+    $refs!: { scrollable: Element; content: Element };
 
     data(): VlistData {
         return {
@@ -191,7 +191,7 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
             event
         });
     }
-    onContentHeightChanged(newValue: number, oldValue: number) {
+    onContentHeightChanged(newValue: number, _oldValue: number) {
         const hScrollBarHeight = this.$data.hScrollBarHeight;
         const height = this.$data.bodyHeight + hScrollBarHeight;
         if (0 < hScrollBarHeight === newValue < height) {
@@ -200,7 +200,7 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
         }
     }
 
-    onContentWidthChanged(newValue: number, oldValue: number) {
+    onContentWidthChanged(newValue: number, _oldValue: number) {
         const vScrollBarWidth = this.$data.vScrollBarWidth;
         const width = this.$data.bodyWidth + vScrollBarWidth;
         if (0 < vScrollBarWidth === newValue < width) {

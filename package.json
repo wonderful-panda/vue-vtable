@@ -26,13 +26,13 @@
     "dev": "webpack-dev-server --config webpack.config.example.js"
   },
   "dependencies": {
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.10",
     "vue-css-definition": "^0.1.0",
     "vue-resizesensor": "^0.2.1",
     "vue-strict-prop": "^0.1.1"
   },
   "devDependencies": {
-    "@types/lodash": "4.14.64",
+    "@types/lodash": "4.14.109",
     "@types/node": "^8.0.34",
     "babel-core": "^6.24.1",
     "babel-helper-vue-jsx-merge-props": "^2.0.2",
@@ -46,9 +46,9 @@
     "npm-run-all": "^4.0.2",
     "prettier": "1.13.0",
     "ts-loader": "^2.1.0",
-    "tslint": "^5.8.0",
-    "tslint-config-prettier": "^1.6.0",
-    "typescript": "^2.3.3",
+    "tslint": "^5.10.0",
+    "tslint-config-prettier": "^1.13.0",
+    "typescript": "^2.8.3",
     "vue": "^2.5.2",
     "vue-class-component": "^6.0.0",
     "vue-template-compiler": "^2.5.2",

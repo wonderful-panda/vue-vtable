@@ -62,7 +62,7 @@ export class VtableBase<T> extends tc.StatefulEvTypedComponent<
     VtableEventsOn<T>,
     { cell: VtableSlotCellProps<T> }
 > {
-    $refs: { header: Element; vlist: Vlist<T> };
+    $refs!: { header: Element; vlist: Vlist<T> };
     data(): VtableData {
         const { widths } = this.$props;
         return {
@@ -191,6 +191,7 @@ export class VtableBase<T> extends tc.StatefulEvTypedComponent<
     }
     render(): VNode {
         const VlistT = Vlist as new () => Vlist<T>;
+        const VtableRowT = VtableRow as new () => VtableRow<T>;
         const {
             rowHeight,
             itemCount,
@@ -213,7 +214,7 @@ export class VtableBase<T> extends tc.StatefulEvTypedComponent<
                 getItemKey={getItemKey}
                 scopedSlots={{
                     row: ({ item, index }) => [
-                        <VtableRow
+                        <VtableRowT
                             class={this.actualRowClass(item, index)}
                             columns={columns}
                             columnWidths={this.$props.widths || this.$data.widths_}

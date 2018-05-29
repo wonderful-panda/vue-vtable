@@ -35,7 +35,7 @@ export class Vtable<T> extends tc.EvTypedComponent<
     VtableEventsOn<T>,
     { cell: VtableSlotCellProps<T> }
 > {
-    $refs: { base: VtableBase<T> };
+    $refs!: { base: VtableBase<T> };
     /* methods */
     ensureVisible(index: number) {
         this.$refs.base.ensureVisible(index);

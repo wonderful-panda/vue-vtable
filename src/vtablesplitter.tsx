@@ -15,7 +15,7 @@ export const VtableSplitter = tsx.component({
         width: p(Number).required,
         mousedownCallback: p.ofFunction<(x: number) => void>().required
     },
-    render(h, { props }): VNode {
+    render(_h, { props }): VNode {
         const { dragging, width, mousedownCallback } = props;
         const className = dragging ? "vtable-dragging-splitter" : "vtable-splitter";
         const style: CssProperties = {
