@@ -127,16 +127,16 @@ export class VtableBase<T> extends tc.StatefulEvTypedComponent<
     updateScrollPosition(args: ScrollEventArgs) {
         this.$data.scrollLeft = args.scrollLeft;
     }
-    onSplitterMouseDown(index: number, screenX: number) {
+    onSplitterMouseDown(index: number, clientX: number) {
         const headerCell = this.$refs.header.querySelectorAll("div.vtable-header-cell")[index];
         const column = this.$props.columns[index];
         const startWidth = headerCell.clientWidth;
-        const startX = screenX;
+        const startX = clientX;
         const minWidth = column.minWidth || 5;
         const onMouseMove = (e: MouseEvent) => {
             e.preventDefault();
             e.stopPropagation();
-            const offset = e.screenX - startX;
+            const offset = e.clientX - startX;
             const width = Math.max(startWidth + offset, minWidth);
             Vue.set(this.$data.widths, index, width);
             this.$data.draggingSplitter = index;
@@ -157,7 +157,7 @@ export class VtableBase<T> extends tc.StatefulEvTypedComponent<
             <VtableSplitter
                 dragging={index === this.$data.draggingSplitter}
                 width={this.actualSplitterWidth}
-                mousedownCallback={screenX => this.onSplitterMouseDown(index, screenX)}
+                mousedownCallback={clientX => this.onSplitterMouseDown(index, clientX)}
             />
         );
     }

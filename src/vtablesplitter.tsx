@@ -30,7 +30,7 @@ export const VtableSplitter = tsx.component({
                 class={className}
                 style={style}
                 onClick={m.stop}
-                onMousedown={m.stop.prevent(ev => mousedownCallback(ev.screenX))}
+                onMousedown={m.stop.prevent(ev => mousedownCallback(ev.clientX))}
             />
         );
     }
