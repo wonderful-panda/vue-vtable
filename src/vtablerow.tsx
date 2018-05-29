@@ -9,7 +9,7 @@ import { px } from "./utils";
 export interface VtableRowProps<T> {
     item: T;
     columns: ReadonlyArray<t.VtableColumn>;
-    columnWidths: ReadonlyArray<number>;
+    columnWidths: { [columnId: string]: number };
     index: number;
     height: number;
 }
@@ -18,7 +18,7 @@ export interface VtableRowProps<T> {
     props: {
         item: p.ofAny().required,
         columns: p.ofRoArray<t.VtableColumn>().required,
-        columnWidths: p.ofRoArray<number>().required,
+        columnWidths: p.ofObject<{ [columnId: string]: number }>().required,
         index: p(Number).validator(v => v >= 0).required,
         height: p(Number).validator(v => v > 0).required
     }
@@ -60,7 +60,7 @@ export class VtableRow<T> extends tc.TypedComponent<
             <div
                 staticClass="vtable-cell"
                 class={c.className}
-                style={this.cellStyle(columnWidths[columnIndex])}
+                style={this.cellStyle(columnWidths[c.id] || c.defaultWidth)}
             >
                 {this.$scopedSlots.cell({ index, item, columnId: c.id })}
             </div>,

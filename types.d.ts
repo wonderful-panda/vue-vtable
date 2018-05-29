@@ -22,7 +22,7 @@ export interface VtableProps<T> {
     splitterWidth?: number;
     rowClass?: string;
     getRowClass?: GetClassFunction<T>;
-    initialWidths?: ReadonlyArray<number>;
+    widths?: { [columnId: string]: number };
     getItemKey: GetKeyFunction<T>;
 }
 
@@ -92,10 +92,6 @@ export interface VlistEventsOn<T> {
     onScroll: ScrollEventArgs;
 }
 
-export interface VtableEvents<T> extends VlistEvents<T> {
-    columnresize: ColumnResizeEventArgs;
-}
+export interface VtableEvents<T> extends VlistEvents<T> {}
 
-export interface VtableEventsOn<T> extends VlistEventsOn<T> {
-    onColumnresize: ColumnResizeEventArgs;
-}
+export interface VtableEventsOn<T> extends VlistEventsOn<T> {}

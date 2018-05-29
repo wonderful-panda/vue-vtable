@@ -29,12 +29,12 @@ export interface VtableBaseProps<T> {
     splitterWidth?: number;
     rowClass?: string;
     getRowClass?: GetClassFunction<T>;
-    initialWidths?: ReadonlyArray<number>;
+    widths?: { [columnId: string]: number };
     getItemKey: GetKeyFunction<T>;
 }
 
 export interface VtableData {
-    widths: number[];
+    widths_: { [columnId: string]: number };
     scrollLeft: number;
     splitterPositions: number[];
     draggingSplitter: number;
@@ -52,7 +52,7 @@ export interface VtableData {
         rowClass: p(String).optional,
         getRowClass: p.ofFunction<GetClassFunction<T>>().optional,
         getItemKey: p.ofFunction<GetKeyFunction<T>>().required,
-        initialWidths: p.ofRoArray<number>().optional
+        widths: p.ofObject<{ [columnId: string]: number }>().optional
     }
 })
 export class VtableBase<T> extends tc.StatefulEvTypedComponent<
@@ -64,9 +64,9 @@ export class VtableBase<T> extends tc.StatefulEvTypedComponent<
 > {
     $refs: { header: Element; vlist: Vlist<T> };
     data(): VtableData {
-        const { columns, initialWidths } = this.$props;
+        const { widths } = this.$props;
         return {
-            widths: initialWidths ? [...initialWidths] : columns.map(c => c.defaultWidth),
+            widths_: (widths ? { ...widths } : {}) as { [columnId: string]: number },
             scrollLeft: 0,
             splitterPositions: [],
             draggingSplitter: -1
@@ -113,7 +113,11 @@ export class VtableBase<T> extends tc.StatefulEvTypedComponent<
         return headerHeight && headerHeight > 0 ? headerHeight : rowHeight;
     }
     get contentWidth() {
-        return _.sumBy(this.$data.widths, w => w + this.actualSplitterWidth);
+        const widths = this.$props.widths || this.$data.widths_;
+        return _.sumBy(
+            this.$props.columns,
+            c => (widths[c.id] || c.defaultWidth) + this.$props.splitterWidth!
+        );
     }
 
     /* methods */
@@ -127,6 +131,18 @@ export class VtableBase<T> extends tc.StatefulEvTypedComponent<
     updateScrollPosition(args: ScrollEventArgs) {
         this.$data.scrollLeft = args.scrollLeft;
     }
+    getColumnWidth(c: VtableColumn): number {
+        const widths = this.$props.widths || this.$data.widths_;
+        const width = widths[c.id];
+        return width === undefined ? c.defaultWidth : width;
+    }
+    setColumnWidth(c: VtableColumn, width: number): void {
+        if (this.$props.widths) {
+            this.$emit("update:widths", { ...this.$props.widths, [c.id]: width });
+        } else {
+            Vue.set(this.$data.widths_, c.id, width);
+        }
+    }
     onSplitterMouseDown(index: number, clientX: number) {
         const headerCell = this.$refs.header.querySelectorAll("div.vtable-header-cell")[index];
         const column = this.$props.columns[index];
@@ -138,9 +154,8 @@ export class VtableBase<T> extends tc.StatefulEvTypedComponent<
             e.stopPropagation();
             const offset = e.clientX - startX;
             const width = Math.max(startWidth + offset, minWidth);
-            Vue.set(this.$data.widths, index, width);
+            this.setColumnWidth(column, width);
             this.$data.draggingSplitter = index;
-            this.$events.emit("columnresize", { widths: this.$data.widths, event: e });
         };
         const onMouseUp = () => {
             document.removeEventListener("mousemove", onMouseMove);
@@ -162,12 +177,12 @@ export class VtableBase<T> extends tc.StatefulEvTypedComponent<
         );
     }
     private get headerCells() {
-        const widths = this.$data.widths;
+        const widths = this.$props.widths || this.$data.widths_;
         return _.map(this.$props.columns, (c, index) => [
             <div
                 staticClass="vtable-header-cell"
                 class={c.className}
-                style={this.headerCellStyle(widths[index])}
+                style={this.headerCellStyle(widths[c.id] || c.defaultWidth)}
             >
                 {c.id || c.title}
             </div>,
@@ -201,7 +216,7 @@ export class VtableBase<T> extends tc.StatefulEvTypedComponent<
                         <VtableRow
                             class={this.actualRowClass(item, index)}
                             columns={columns}
-                            columnWidths={this.$data.widths}
+                            columnWidths={this.$props.widths || this.$data.widths_}
                             item={item}
                             index={index}
                             height={rowHeight}

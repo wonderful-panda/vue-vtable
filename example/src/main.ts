@@ -39,6 +39,7 @@ const columns: VtableColumn[] = [
 const App = Vue.extend({
     // tslint:disable-next-line: no-var-requires
     template: require("./app.html"),
+    name: "App",
     components: { Vtable },
     data() {
         return {
@@ -46,7 +47,8 @@ const App = Vue.extend({
             selectedIndex: -1,
             rowHeight: 20,
             itemCount: 100,
-            message: "vtable demo"
+            message: "vtable demo",
+            widths: {}
         };
     },
     computed: {
