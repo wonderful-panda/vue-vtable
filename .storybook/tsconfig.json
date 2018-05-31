@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "jsx": "preserve",
     "module": "es2015",
     "moduleResolution": "node",
     "noImplicitAny": true,
@@ -15,9 +14,7 @@
     "newLine": "lf"
   },
   "include": [
-    "stories/**/*.ts",
-    "stories/**/*.tsx",
-    "../node_modules/vue-tsx-support/enable-check.d.ts",
+    "stories/**/*.ts"
   ],
   "exclude": [
     "node_modules"
