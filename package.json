@@ -21,10 +21,9 @@
     "tslint:fix": "tslint -c tslint.json src/**/*.{ts,tsx} example/**/*.{ts,tsx} --fix",
     "prettier": "prettier \"{src,example/src}/**/*.{ts,tsx}\" --list-different",
     "prettier:fix": "prettier \"{src,example/src}/**/*.{ts,tsx}\" --write",
-    "bundle-example": "webpack --config webpack.config.example.js",
-    "build-all": "npm-run-all tslint prettier build bundle-example",
-    "dev": "webpack-dev-server --config webpack.config.example.js",
-    "storybook": "start-storybook -p 9001 -c .storybook"
+    "build-storybook": "build-storybook -c .storybook -o example",
+    "storybook": "start-storybook -p 9001 -c .storybook",
+    "build-all": "npm-run-all tslint prettier build build-storybook"
   },
   "dependencies": {
     "lodash": "^4.17.10",
