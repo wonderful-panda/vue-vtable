@@ -13,6 +13,20 @@ Table (grid view) component for Vue
 
 Vue >= 2.5.2
 
+## Breaking changes
+
+### 0.11.0
+
+#### vlist
+
+*   remove prop `items`, add `itemCount` and `sliceItems` instead.
+
+#### vtable
+
+*   remove prop `initialWidths`, add `widths` instead.
+    When specifying `widths`, must be `v-bind:widths.sync`.
+*   remove `columnresize` event. use `widths` instead to watch column resizing.
+
 ## Usage
 
 Not documented yet.
