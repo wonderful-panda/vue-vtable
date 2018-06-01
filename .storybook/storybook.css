@@ -1,0 +1,34 @@
+.vlist-header-row {
+    background-color: #bbf;
+    border-bottom: 1px #888 solid;
+    user-select: none;
+    cursor: default;
+}
+.vlist-row {
+    user-select: none;
+    cursor: default;
+}
+.vlist-row:hover {
+    background-color: #ddf;
+}
+.vtable-row-selected {
+    font-weight: bold;
+}
+.vlist-row:nth-child(odd) {
+    background-color: #eef;
+}
+.vtable-splitter {
+    border-right: 1px #aaa solid;
+}
+.vtable-dragging-splitter {
+    background-color: #aaf;
+}
+.vtable-cell,
+.vtable-header-cell {
+    padding: 0 0.2em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.cell-end {
+    flex: 1 1 auto;
+}

@@ -205,7 +205,7 @@ export class VtableBase<T> extends tc.StatefulEvTypedComponent<
         return (
             <VlistT
                 ref="vlist"
-                style="flex: 1 1 auto"
+                style={{ flex: "1 1 auto" }}
                 rowHeight={rowHeight}
                 itemCount={itemCount}
                 sliceItems={sliceItems}
