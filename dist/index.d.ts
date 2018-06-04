@@ -1,0 +1,10 @@
+import { Vlist } from "./vlist";
+import { Vtable } from "./vtable";
+import { Vtreetable } from "./vtreetable";
+export declare function vlistOf<T>(): new (...args: any[]) => Vlist<T>;
+export declare function vtableOf<T>(): new (...args: any[]) => Vtable<T>;
+export declare function vtreetableOf<T>(): new (...args: any[]) => Vtreetable<T>;
+export { Vlist } from "./vlist";
+export { Vtable } from "./vtable";
+export { Vtreetable, ExpandableCell } from "./vtreetable";
+export * from "../types";
