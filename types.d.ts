@@ -1,9 +1,20 @@
 import * as Vue from "vue";
-import { CssProperties } from "vue-css-definition";
 
 export type SliceFunction<T> = (begin: number, end: number) => ReadonlyArray<T>;
 export type GetKeyFunction<T> = (item: T) => number | string;
 export type GetClassFunction<T> = (item: T, index: number) => string | undefined;
+
+export interface TreeNode<T> {
+    data: T;
+    children?: TreeNode<T>[];
+}
+
+export interface TreeNodeWithState<T> {
+    data: T;
+    children?: TreeNode<T>[];
+    expanded: boolean;
+    level: number;
+}
 
 export interface VtableColumn {
     id: string;
@@ -11,6 +22,20 @@ export interface VtableColumn {
     defaultWidth: number;
     minWidth?: number;
     className?: string;
+}
+
+export interface VtreeProps<T> {
+    rowHeight: number;
+    headerHeight?: number;
+    indentWidth?: number;
+    columns: ReadonlyArray<VtableColumn>;
+    rootNodes: ReadonlyArray<TreeNode<T>>;
+    rowStyleCycle?: number;
+    splitterWidth?: number;
+    rowClass?: string;
+    getRowClass?: GetClassFunction<TreeNodeWithState<T>>;
+    widths?: { [columnId: string]: number };
+    getItemKey: GetKeyFunction<T>;
 }
 
 export interface VtableProps<T> {

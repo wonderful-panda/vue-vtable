@@ -1,0 +1,19 @@
+<div style="min-height: 400px; display: flex; flex-direction: column;">
+  <div>Content of package-lock.json</div>
+  <vtreetable ref="tree"
+              style="flex: 1; border: 1px solid gray;"
+              :row-height="20"
+              :indent-width="12"
+              :columns="columns"
+              :root-nodes="roots"
+              :row-style-cycle="2"
+              :get-item-key="getItemKey"
+              :get-row-class="getRowClass"
+              @rowclick="onRowClick"
+              @rowdblclick="onRowDblclick">
+    <template slot="cell"
+              slot-scope="{ item, columnId }">
+      {{ item.data[columnId] }}
+    </template>
+  </vtreetable>
+</div>

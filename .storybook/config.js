@@ -2,8 +2,9 @@ import { configure } from "@storybook/vue";
 import "./storybook.css";
 
 import Vue from "vue";
-import { Vtable } from "..";
+import { Vtable, Vtreetable } from "..";
 Vue.component("vtable", Vtable);
+Vue.component("vtreetable", Vtreetable);
 
 function loadStories() {
     require("./stories");
