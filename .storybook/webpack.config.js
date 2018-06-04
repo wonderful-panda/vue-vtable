@@ -11,7 +11,11 @@ module.exports = storybookBaseConfig => {
         module: {
             rules: [
                 { test: /\.ts$/, loader: "babel-loader!ts-loader", exclude: /node_modules/ },
-                { test: /\.html$/, loader: "html-loader", exclude: /node_modules/ },
+                {
+                    test: /\.html$/,
+                    loader: "html-loader",
+                    exclude: /node_modules/
+                },
                 { test: /\.css$/, loader: "style-loader!css-loader", exclude: /node_modules/ }
             ]
         }

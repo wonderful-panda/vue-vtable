@@ -1,4 +1,5 @@
 import { Vtreetable, VtableColumn, VtableEvents, TreeNode, TreeNodeWithState } from "../..";
+import jsonp from "jsonp";
 import _c from "vue-component-marker";
 
 interface Item {
@@ -8,7 +9,6 @@ interface Item {
 }
 
 // tslint:disable-next-line: no-var-requires
-const json = require("../../package-lock.json");
 function convertJsonToItemTree(data: object, prefix: string): TreeNode<Item>[] {
     return Object.keys(data).map(key => {
         const value = (data as any)[key];
@@ -29,7 +29,13 @@ export const VtreetableExample = _c({
     data() {
         return {
             selectedKey: null as string | null,
+            url: "https://api.github.com/repos/wonderful-panda/vue-vtable/commits?per_page=100",
             columns: [
+                {
+                    id: "index",
+                    title: "*",
+                    defaultWidth: 50
+                },
                 {
                     id: "key",
                     className: "cell-id",
@@ -41,11 +47,20 @@ export const VtreetableExample = _c({
                     defaultWidth: 200
                 }
             ] as VtableColumn[],
-            roots: convertJsonToItemTree(json, "root/")
+            roots: [] as TreeNode<Item>[]
         };
     },
     mounted() {
-        this.toggleExpand(this.roots[0].data);
+        jsonp(this.url, (err, data) => {
+            if (err) {
+                this.roots = convertJsonToItemTree(err, "error/");
+            } else {
+                this.roots = convertJsonToItemTree(data, "root/");
+            }
+            this.$nextTick(() => {
+                (this.$refs.tree as Vtreetable<Item>).expandAll();
+            });
+        });
     },
     methods: {
         toggleExpand(data: Item) {

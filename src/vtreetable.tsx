@@ -1,4 +1,4 @@
-import Vue, { VNode, VNodeChildrenArrayContents } from "vue";
+import Vue, { VNode, VNodeChildrenArrayContents, VueConstructor } from "vue";
 import { CssProperties } from "vue-css-definition";
 import p from "vue-strict-prop";
 import * as tsx from "vue-tsx-support";
@@ -47,19 +47,17 @@ const ExpandButton = tsx.component(
     },
     ["expanded", "size"]
 );
-const TreeHeadCell = tsx.component(
+
+export const ExpandableCell = tsx.component(
     {
-        name: "TreeHeadCell",
-        functional: true,
+        name: "ExpandableCell",
+        inject: ["toggleExpand", "indentWidth"],
         props: {
-            level: p(Number).required,
-            indentWidth: p(Number).required,
-            expanded: p(Boolean).required,
-            hasChildren: p(Boolean).required,
-            toggleExpand: p.ofFunction<() => void>().required
+            nodeState: p.ofObject<TreeNodeWithState<any>>().required
         },
-        render(_h, { props, children }) {
-            const { level, expanded, indentWidth, hasChildren, toggleExpand } = props;
+        render() {
+            const { data, children, level, expanded } = this.nodeState;
+            const { toggleExpand, indentWidth } = this as any;
             const indent = px(level * indentWidth);
             const expandButtonStyle: CssProperties = {
                 marginLeft: indent,
@@ -73,19 +71,18 @@ const TreeHeadCell = tsx.component(
 
             return (
                 <div style={{ display: "flex" }}>
-                    <div style={expandButtonStyle} onClick={m.stop.prevent(toggleExpand)}>
-                        {hasChildren ? (
-                            <ExpandButton v-show={hasChildren} expanded={expanded} size={12} />
-                        ) : (
-                            undefined
-                        )}
+                    <div
+                        style={expandButtonStyle}
+                        onClick={m.stop.prevent(() => toggleExpand(data))}
+                    >
+                        {children ? <ExpandButton expanded={expanded} size={12} /> : undefined}
                     </div>
-                    {children}
+                    {this.$slots.default}
                 </div>
             );
         }
     },
-    ["level", "expanded", "indentWidth", "hasChildren", "toggleExpand"]
+    ["nodeState"]
 );
 
 @tc.component(Vtreetable, {
@@ -101,6 +98,12 @@ const TreeHeadCell = tsx.component(
         getRowClass: p.ofFunction<GetClassFunction<TreeNodeWithState<T>>>().optional,
         widths: p.ofObject<{ [columnId: string]: number }>().optional,
         getItemKey: p.ofFunction<GetKeyFunction<T>>().required
+    },
+    provide() {
+        return {
+            toggleExpand: this.toggleExpand,
+            indentWidth: this.$props.indentWidth || this.$props.rowHeight
+        };
     }
 })
 export class Vtreetable<T> extends tc.StatefulEvTypedComponent<
@@ -122,10 +125,6 @@ export class Vtreetable<T> extends tc.StatefulEvTypedComponent<
     }
     get itemCount(): number {
         return this.flattenVisibleItems.length;
-    }
-    get firstColumnId(): string {
-        const firstColumn = this.$props.columns[0];
-        return firstColumn ? firstColumn.id : "";
     }
     addDescendentVisibleItems(
         parent: TreeNode<T>,
@@ -162,26 +161,25 @@ export class Vtreetable<T> extends tc.StatefulEvTypedComponent<
         }
     }
 
-    renderCell(
-        props: VtableSlotCellProps<TreeNodeWithState<T>>
-    ): string | VNodeChildrenArrayContents {
-        const content = this.$scopedSlots.cell(props);
-        const { level, data, expanded, children } = props.item;
-        if (props.columnId === this.firstColumnId) {
-            return [
-                <TreeHeadCell
-                    level={level}
-                    expanded={expanded}
-                    indentWidth={this.$props.indentWidth || this.$props.rowHeight}
-                    hasChildren={(children || []).length > 0}
-                    toggleExpand={() => this.toggleExpand(data)}
-                >
-                    {content}
-                </TreeHeadCell>
-            ];
-        } else {
-            return content;
+    expandAll() {
+        for (const root of this.$props.rootNodes) {
+            this.expandAllDescendants(root);
         }
+    }
+
+    expandAllDescendants(from: TreeNode<T>) {
+        const expandMap = this.$data.expandMap;
+        const key = this.$props.getItemKey(from.data).toString();
+        Vue.set(expandMap, key, true);
+        if (from.children) {
+            for (const child of from.children) {
+                this.expandAllDescendants(child);
+            }
+        }
+    }
+
+    collapseAll() {
+        this.$data.expandMap = {};
     }
 
     render(): VNode {
@@ -193,11 +191,6 @@ export class Vtreetable<T> extends tc.StatefulEvTypedComponent<
             sliceItems: this.sliceItems,
             getItemKey: this.getItemKey_
         };
-        return (
-            <VtableBaseT
-                {...{ props, on: this.$listeners }}
-                scopedSlots={{ cell: cellprops => this.renderCell(cellprops) }}
-            />
-        );
+        return <VtableBaseT {...{ props, on: this.$listeners }} scopedSlots={this.$scopedSlots} />;
     }
 }

@@ -14,5 +14,5 @@ export function vtreetableOf<T>(): new (...args: any[]) => Vtreetable<T> {
 
 export { Vlist } from "./vlist";
 export { Vtable } from "./vtable";
-export { Vtreetable } from "./vtreetable";
+export { Vtreetable, ExpandableCell } from "./vtreetable";
 export * from "../types";

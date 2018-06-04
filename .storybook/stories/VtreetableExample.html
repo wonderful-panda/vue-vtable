@@ -1,5 +1,7 @@
 <div style="min-height: 400px; display: flex; flex-direction: column;">
-  <div>Content of package-lock.json</div>
+  <div>Response from
+    <a :href="url">{{ url }}</a>
+  </div>
   <vtreetable ref="tree"
               style="flex: 1; border: 1px solid gray;"
               :row-height="20"
@@ -12,8 +14,16 @@
               @rowclick="onRowClick"
               @rowdblclick="onRowDblclick">
     <template slot="cell"
-              slot-scope="{ item, columnId }">
-      {{ item.data[columnId] }}
+              slot-scope="{ item, columnId, index }">
+      <template v-if="columnId === 'key'">
+        <expandable-cell :node-state="item">{{ item.data.key }}</expandable-cell>
+      </template>
+      <template v-else-if="columnId === 'index'">
+        {{ index }}
+      </template>
+      <template v-else>
+        {{ item.data[columnId] }}
+      </template>
     </template>
   </vtreetable>
 </div>

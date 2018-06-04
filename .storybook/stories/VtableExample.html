@@ -1,11 +1,16 @@
-<vtable style="width: 80vw; height: 60vh; border: 1px solid gray;" :items="items"
-  :row-height="20" :columns="columns" :get-row-class="getRowClass" :row-style-cycle="2"
-  :get-item-key="getItemKey" @rowclick="onRowClick">
-
-  <template slot="cell" slot-scope="{ item, columnId }">
-
+<vtable style="width: 80vw; height: 60vh; border: 1px solid gray;"
+        :items="items"
+        :row-height="20"
+        :columns="columns"
+        :get-row-class="getRowClass"
+        :row-style-cycle="2"
+        :get-item-key="getItemKey"
+        @rowclick="onRowClick">
+  <template slot="cell"
+            slot-scope="{ item, columnId }">
     <template v-if="columnId === 'id'">
-      <input type="checkbox" v-model="item.checked"> {{ item.id }}
+      <input type="checkbox"
+             v-model="item.checked"> {{ item.id }}
     </template>
     <template v-else>
       {{ item[columnId] }}
