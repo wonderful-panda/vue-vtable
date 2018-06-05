@@ -184,7 +184,7 @@ export class VtableBase<T> extends tc.StatefulEvTypedComponent<
                 class={c.className}
                 style={this.headerCellStyle(widths[c.id] || c.defaultWidth)}
             >
-                {c.id || c.title}
+                {c.title === undefined ? c.id : c.title}
             </div>,
             this.splitter(index)
         ]);
