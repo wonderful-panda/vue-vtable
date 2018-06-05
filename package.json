@@ -61,7 +61,7 @@
     "vue-loader": "14.2.1",
     "vue-template-compiler": "^2.5.16",
     "vue-template-compiler-loader": "^1.0.4",
-    "vue-tsx-support": "^1.1.0",
+    "vue-tsx-support": "^1.2.1",
     "vue-typed-component": "^0.10.0",
     "webpack": "^2.6.1",
     "webpack-dev-server": "^2.4.5",
@@ -70,7 +70,7 @@
   "peerDependencies": {
     "vue": "^2.5.2",
     "vue-class-component": "^6.0.0",
-    "vue-tsx-support": "^1.1.0",
+    "vue-tsx-support": "^1.2.1",
     "vue-typed-component": "^0.10.0"
   },
   "prettier": {
