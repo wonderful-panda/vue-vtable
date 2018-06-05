@@ -4,7 +4,7 @@
   "author": "Iwata Hidetaka <iwata0303@gmail.com>",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -33,7 +33,6 @@
   },
   "devDependencies": {
     "@storybook/vue": "^3.4.6",
-    "@types/jsonp": "^0.2.0",
     "@types/lodash": "4.14.109",
     "@types/node": "^8.0.34",
     "@types/storybook__vue": "^3.3.0",
@@ -47,7 +46,6 @@
     "babel-preset-env": "^1.6.0",
     "cross-env": "^5.0.0",
     "html-loader": "^0.4.5",
-    "jsonp": "^0.2.1",
     "npm-run-all": "^4.0.2",
     "prettier": "1.12.1",
     "storybook-addon-vue-info": "^0.4.2",
@@ -61,7 +59,7 @@
     "vue-loader": "14.2.1",
     "vue-template-compiler": "^2.5.16",
     "vue-template-compiler-loader": "^1.0.4",
-    "vue-tsx-support": "^1.1.0",
+    "vue-tsx-support": "^1.2.1",
     "vue-typed-component": "^0.10.0",
     "webpack": "^2.6.1",
     "webpack-dev-server": "^2.4.5",
@@ -70,7 +68,7 @@
   "peerDependencies": {
     "vue": "^2.5.2",
     "vue-class-component": "^6.0.0",
-    "vue-tsx-support": "^1.1.0",
+    "vue-tsx-support": "^1.2.1",
     "vue-typed-component": "^0.10.0"
   },
   "prettier": {
