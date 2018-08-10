@@ -11,9 +11,14 @@ Table (grid view) component for Vue
 
 ## Requirement
 
-Vue >= 2.5.2
+Vue >= 2.5.13
 
 ## Breaking changes
+
+### 0.14.0
+
+*   only support Vue >= 2.5.13
+*   only support TypeScript >= 2.8
 
 ### 0.11.0
 
