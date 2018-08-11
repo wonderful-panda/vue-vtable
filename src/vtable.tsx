@@ -26,7 +26,8 @@ import { VtableBase, VtableBaseProps } from "./vtablebase";
         rowClass: p(String).optional,
         getRowClass: p.ofFunction<GetClassFunction<T>>().optional,
         getItemKey: p.ofFunction<GetKeyFunction<T>>().required,
-        widths: p.ofObject<{ [columnId: string]: number }>().optional
+        widths: p.ofObject<{ [columnId: string]: number }>().optional,
+        overscan: p(Number).default(8)
     }
 })
 export class Vtable<T> extends tc.EvTypedComponent<

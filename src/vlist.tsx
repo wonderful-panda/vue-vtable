@@ -16,6 +16,7 @@ const ResizeSensor = resizeSensor as tsx.TsxComponent<
 export interface VlistData {
     scrollLeft: number;
     scrollTop: number;
+    scrollDirection: "forward" | "backward";
     bodyWidth: number;
     bodyHeight: number;
     vScrollBarWidth: number;
@@ -29,7 +30,8 @@ export interface VlistData {
         rowStyleCycle: p(Number).default(1),
         rowHeight: p(Number).required,
         itemCount: p(Number).required,
-        sliceItems: p.ofFunction<t.SliceFunction<T>>().required
+        sliceItems: p.ofFunction<t.SliceFunction<T>>().required,
+        overscan: p(Number).default(8)
     },
     watch: {
         contentWidth: "onContentWidthChanged",
@@ -49,6 +51,7 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
         return {
             scrollLeft: 0,
             scrollTop: 0,
+            scrollDirection: "forward",
             bodyWidth: 0,
             bodyHeight: 0,
             vScrollBarWidth: 0,
@@ -116,6 +119,9 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
     /* computed */
     private get firstIndex() {
         let value = Math.floor(this.$data.scrollTop / this.$props.rowHeight);
+        if (this.$data.scrollDirection === "backward") {
+            value = Math.max(0, value - this.$props.overscan!);
+        }
         const { rowStyleCycle } = this.$props;
         if (rowStyleCycle && rowStyleCycle > 1) {
             value -= value % rowStyleCycle;
@@ -124,7 +130,11 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
     }
     private get lastIndex() {
         const { scrollTop, bodyHeight } = this.$data;
-        return Math.ceil((scrollTop + bodyHeight) / this.$props.rowHeight);
+        let value = Math.ceil((scrollTop + bodyHeight) / this.$props.rowHeight);
+        if (this.$data.scrollDirection === "forward") {
+            value += this.$props.overscan!;
+        }
+        return value;
     }
     private get renderedItems() {
         return this.$props.sliceItems(this.firstIndex, this.lastIndex + 1);
@@ -180,6 +190,7 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
     }
     onScroll(event: Event) {
         const { scrollLeft, scrollTop } = this.$refs.scrollable;
+        this.$data.scrollDirection = scrollTop < this.$data.scrollTop ? "backward" : "forward";
         this.$data.scrollLeft = scrollLeft;
         this.$data.scrollTop = scrollTop;
         this.$events.emit("scroll", { scrollLeft, scrollTop, event });

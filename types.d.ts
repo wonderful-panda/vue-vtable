@@ -36,6 +36,7 @@ export interface VtreeProps<T> {
     getRowClass?: GetClassFunction<TreeNodeWithState<T>>;
     widths?: { [columnId: string]: number };
     getItemKey: GetKeyFunction<T>;
+    overscan?: number;
 }
 
 export interface VtableProps<T> {
@@ -49,6 +50,7 @@ export interface VtableProps<T> {
     getRowClass?: GetClassFunction<T>;
     widths?: { [columnId: string]: number };
     getItemKey: GetKeyFunction<T>;
+    overscan?: number;
 }
 
 export interface VlistProps<T> {
@@ -58,6 +60,7 @@ export interface VlistProps<T> {
     contentWidth?: number | string;
     rowHeight: number;
     rowStyleCycle?: number;
+    overscan?: number;
 }
 
 export interface VlistSlotRowProps<T> {

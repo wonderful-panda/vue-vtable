@@ -97,7 +97,8 @@ export const ExpandableCell = tsx.component(
         rowClass: p(String).optional,
         getRowClass: p.ofFunction<GetClassFunction<TreeNodeWithState<T>>>().optional,
         widths: p.ofObject<{ [columnId: string]: number }>().optional,
-        getItemKey: p.ofFunction<GetKeyFunction<T>>().required
+        getItemKey: p.ofFunction<GetKeyFunction<T>>().required,
+        overscan: p(Number).default(8)
     },
     provide() {
         return {

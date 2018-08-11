@@ -31,6 +31,7 @@ export interface VtableBaseProps<T> {
     getRowClass?: GetClassFunction<T>;
     widths?: { [columnId: string]: number };
     getItemKey: GetKeyFunction<T>;
+    overscan?: number;
 }
 
 export interface VtableData {
@@ -52,7 +53,8 @@ export interface VtableData {
         rowClass: p(String).optional,
         getRowClass: p.ofFunction<GetClassFunction<T>>().optional,
         getItemKey: p.ofFunction<GetKeyFunction<T>>().required,
-        widths: p.ofObject<{ [columnId: string]: number }>().optional
+        widths: p.ofObject<{ [columnId: string]: number }>().optional,
+        overscan: p(Number).default(8)
     }
 })
 export class VtableBase<T> extends tc.StatefulEvTypedComponent<
@@ -198,7 +200,8 @@ export class VtableBase<T> extends tc.StatefulEvTypedComponent<
             sliceItems,
             rowStyleCycle,
             getItemKey,
-            columns
+            columns,
+            overscan
         } = this.$props;
         const emit = this.$events.emit;
         const on = { ...this.$listeners, scroll: this.onScroll };
@@ -212,6 +215,7 @@ export class VtableBase<T> extends tc.StatefulEvTypedComponent<
                 rowStyleCycle={rowStyleCycle}
                 contentWidth={this.contentWidth}
                 getItemKey={getItemKey}
+                overscan={overscan}
                 scopedSlots={{
                     row: ({ item, index }) => [
                         <VtableRowT
