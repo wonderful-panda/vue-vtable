@@ -5,31 +5,29 @@ import p from "vue-strict-prop";
 import * as tc from "vue-typed-component";
 import * as t from "../types";
 import { px } from "./utils";
+import Component from "vue-class-component";
+import { ScopedSlots } from "vue-tsx-support/types/base";
 
-export interface VtableRowProps<T> {
-    item: T;
-    columns: ReadonlyArray<t.VtableColumn>;
-    columnWidths: { [columnId: string]: number };
-    index: number;
-    height: number;
-}
+const propsDef = {} as any;
 
-@tc.component(VtableRow, {
-    props: {
-        item: p.ofAny().required,
-        columns: p.ofRoArray<t.VtableColumn>().required,
-        columnWidths: p.ofObject<{ [columnId: string]: number }>().required,
-        index: p(Number).validator(v => v >= 0).required,
-        height: p(Number).validator(v => v > 0).required
+@Component
+export class VtableRow_<T extends object> extends Base {
+    @propsDef
+    propsDef() {
+        return {
+            item: p.ofObject<T>().required,
+            columns: p.ofRoArray<t.VtableColumn>().required,
+            columnWidths: p.ofObject<{ [columnId: string]: number }>().required,
+            index: p(Number).validator(v => v >= 0).required,
+            height: p(Number).validator(v => v > 0).required
+        };
     }
-})
-export class VtableRow<T> extends tc.TypedComponent<
-    VtableRowProps<T>,
-    {
+
+    $scopedSlots!: ScopedSlots<{
         splitter: { index: number };
         cell: t.VtableSlotCellProps<T>;
-    }
-> {
+    }>;
+
     get rowStyle(): CssProperties {
         return {
             display: "flex",

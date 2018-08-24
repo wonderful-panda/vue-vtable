@@ -30,7 +30,7 @@ import { VtableBase, VtableBaseProps } from "./vtablebase";
         overscan: p(Number).default(8)
     }
 })
-export class Vtable<T> extends tc.EvTypedComponent<
+export class Vtable<T extends object> extends tc.EvTypedComponent<
     VtableProps<T>,
     VtableEvents<T>,
     VtableEventsOn<T>,

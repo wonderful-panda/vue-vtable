@@ -2,13 +2,13 @@ import { Vlist } from "./vlist";
 import { Vtable } from "./vtable";
 import { Vtreetable } from "./vtreetable";
 
-export function vlistOf<T>(): new (...args: any[]) => Vlist<T> {
+export function vlistOf<T extends object>(): new (...args: any[]) => Vlist<T> {
     return Vlist;
 }
-export function vtableOf<T>(): new (...args: any[]) => Vtable<T> {
+export function vtableOf<T extends object>(): new (...args: any[]) => Vtable<T> {
     return Vtable;
 }
-export function vtreetableOf<T>(): new (...args: any[]) => Vtreetable<T> {
+export function vtreetableOf<T extends object>(): new (...args: any[]) => Vtreetable<T> {
     return Vtreetable;
 }
 

@@ -28,8 +28,7 @@
   "dependencies": {
     "lodash": "^4.17.10",
     "vue-css-definition": "^0.1.0",
-    "vue-resizesensor": "^0.2.1",
-    "vue-strict-prop": "^0.1.1"
+    "vue-resizesensor": "^0.2.1"
   },
   "devDependencies": {
     "@storybook/vue": "^3.4.6",
@@ -52,11 +51,12 @@
     "ts-loader": "^2.1.0",
     "tslint": "^5.10.0",
     "tslint-config-prettier": "^1.13.0",
-    "typescript": "^2.8.3",
+    "typescript": "^3.0.1",
     "vue": "^2.5.13",
     "vue-class-component": "^6.2.0",
     "vue-component-marker": "^0.1.1",
     "vue-loader": "14.2.1",
+    "vue-strict-prop": "^0.2.0",
     "vue-template-compiler": "^2.5.13",
     "vue-template-compiler-loader": "^1.0.4",
     "vue-tsx-support": "^2.0.1",
