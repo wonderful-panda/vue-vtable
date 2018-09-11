@@ -13,7 +13,7 @@ interface Item {
 const columns: VtableColumn[] = [
     {
         id: "id",
-        defaultWidth: 150
+        defaultWidth: 100
     },
     {
         id: "name",

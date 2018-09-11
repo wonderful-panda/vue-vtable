@@ -24,45 +24,6 @@ export interface VtableColumn {
     className?: string;
 }
 
-export interface VtreeProps<T> {
-    rowHeight: number;
-    headerHeight?: number;
-    indentWidth?: number;
-    columns: ReadonlyArray<VtableColumn>;
-    rootNodes: ReadonlyArray<TreeNode<T>>;
-    rowStyleCycle?: number;
-    splitterWidth?: number;
-    rowClass?: string;
-    getRowClass?: GetClassFunction<TreeNodeWithState<T>>;
-    widths?: { [columnId: string]: number };
-    getItemKey: GetKeyFunction<T>;
-    overscan?: number;
-}
-
-export interface VtableProps<T> {
-    rowHeight: number;
-    headerHeight?: number;
-    columns: ReadonlyArray<VtableColumn>;
-    items: ReadonlyArray<T>;
-    rowStyleCycle?: number;
-    splitterWidth?: number;
-    rowClass?: string;
-    getRowClass?: GetClassFunction<T>;
-    widths?: { [columnId: string]: number };
-    getItemKey: GetKeyFunction<T>;
-    overscan?: number;
-}
-
-export interface VlistProps<T> {
-    itemCount: number;
-    sliceItems: SliceFunction<T>;
-    getItemKey: GetKeyFunction<T>;
-    contentWidth?: number | string;
-    rowHeight: number;
-    rowStyleCycle?: number;
-    overscan?: number;
-}
-
 export interface VlistSlotRowProps<T> {
     item: T;
     index: number;

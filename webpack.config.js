@@ -9,20 +9,13 @@ module.exports = {
         path: path.join(__dirname, "dist"),
         filename: "index.js"
     },
-    devtool: 'source-map',
+    devtool: "source-map",
     resolve: {
         extensions: [".ts", ".tsx", ".js"],
-        modules: [ path.join(__dirname, "src"), "node_modules" ]
+        modules: [path.join(__dirname, "src"), "node_modules"]
     },
     module: {
-        loaders: [
-          { test: /\.tsx?$/, loader: "babel-loader!ts-loader", exclude: /node_modules/ }
-        ]
+        loaders: [{ test: /\.tsx?$/, loader: "babel-loader!ts-loader", exclude: /node_modules/ }]
     },
-    externals: [
-        "vue",
-        "vue-tsx-support",
-        "vue-typed-component",
-        "lodash"
-    ]
+    externals: ["vue", "vue-tsx-support", "lodash"]
 };

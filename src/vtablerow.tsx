@@ -1,35 +1,28 @@
 import * as _ from "lodash";
-import Vue, { VNode } from "vue";
+import Vue, { VNode, VueConstructor, PropOptions } from "vue";
 import { CssProperties } from "vue-css-definition";
 import p from "vue-strict-prop";
-import * as tc from "vue-typed-component";
 import * as t from "../types";
 import { px } from "./utils";
+import { Component, ComponentExtension, ExVue, Keys } from "vue-tsx-support/lib/class";
 
-export interface VtableRowProps<T> {
-    item: T;
-    columns: ReadonlyArray<t.VtableColumn>;
-    columnWidths: { [columnId: string]: number };
-    index: number;
-    height: number;
-}
-
-@tc.component(VtableRow, {
-    props: {
-        item: p.ofAny().required,
-        columns: p.ofRoArray<t.VtableColumn>().required,
-        columnWidths: p.ofObject<{ [columnId: string]: number }>().required,
-        index: p(Number).validator(v => v >= 0).required,
-        height: p(Number).validator(v => v > 0).required
+@Component
+export class VtableRow<T> extends ExVue {
+    get [Keys.PropsDef]() {
+        return {
+            item: { required: true } as PropOptions<T> & { required: true },
+            columns: p.ofRoArray<t.VtableColumn>().required,
+            columnWidths: p.ofObject<{ [columnId: string]: number }>().required,
+            index: p(Number).validator(v => v >= 0).required,
+            height: p(Number).validator(v => v > 0).required
+        };
     }
-})
-export class VtableRow<T> extends tc.TypedComponent<
-    VtableRowProps<T>,
-    {
-        splitter: { index: number };
-        cell: t.VtableSlotCellProps<T>;
+    get [Keys.ScopedSlots]() {
+        return {
+            splitter(_props: { index: number }) {},
+            cell(_props: t.VtableSlotCellProps<T>) {}
+        };
     }
-> {
     get rowStyle(): CssProperties {
         return {
             display: "flex",
@@ -56,15 +49,15 @@ export class VtableRow<T> extends tc.TypedComponent<
 
     private get cells() {
         const { item, columns, columnWidths, index } = this.$props;
+        const { cell, splitter } = this.$scopedSlots;
         return columns.map((c, columnIndex) => [
             <div
-                staticClass="vtable-cell"
-                class={c.className}
+                class={["vtable-cell", c.className]}
                 style={this.cellStyle(columnWidths[c.id] || c.defaultWidth)}
             >
-                {this.$scopedSlots.cell({ index, item, columnId: c.id })}
+                {cell({ index, item, columnId: c.id })}
             </div>,
-            this.$scopedSlots.splitter({ index: columnIndex })
+            splitter({ index: columnIndex })
         ]);
     }
 

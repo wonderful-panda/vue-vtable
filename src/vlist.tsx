@@ -1,11 +1,12 @@
-import Vue, { VNode } from "vue";
+import Vue, { VNode, VueConstructor, PropOptions } from "vue";
+import { Component, ComponentExtension, Keys, ExVue } from "vue-tsx-support/lib/class";
 import { CssProperties } from "vue-css-definition";
 import * as resizeSensor from "vue-resizesensor";
 import p from "vue-strict-prop";
 import * as tsx from "vue-tsx-support";
-import * as tc from "vue-typed-component";
 import * as t from "../types";
 import { px } from "./utils";
+import events from "./events";
 
 const ResizeSensor = resizeSensor as tsx.TsxComponent<
     Vue,
@@ -13,51 +14,43 @@ const ResizeSensor = resizeSensor as tsx.TsxComponent<
     { onResized: void }
 >;
 
-export interface VlistData {
-    scrollLeft: number;
-    scrollTop: number;
-    scrollDirection: "forward" | "backward";
-    bodyWidth: number;
-    bodyHeight: number;
-    vScrollBarWidth: number;
-    hScrollBarHeight: number;
-}
-
-@tc.component(Vlist, {
-    props: {
-        getItemKey: p.ofFunction<t.GetKeyFunction<T>>().required,
-        contentWidth: p(Number).optional,
-        rowStyleCycle: p(Number).default(1),
-        rowHeight: p(Number).required,
-        itemCount: p(Number).required,
-        sliceItems: p.ofFunction<t.SliceFunction<T>>().required,
-        overscan: p(Number).default(8)
-    },
+@Component({
     watch: {
         contentWidth: "onContentWidthChanged",
         contentHeight: "onContentHeightChanged"
     }
 })
-export class Vlist<T> extends tc.StatefulEvTypedComponent<
-    t.VlistProps<T>,
-    t.VlistEvents<T>,
-    VlistData,
-    t.VlistEventsOn<T>,
-    { row: t.VlistSlotRowProps<T> }
-> {
+export class Vlist<T> extends ExVue {
     $refs!: { scrollable: Element; content: Element };
-
-    data(): VlistData {
+    get [Keys.PropsDef]() {
         return {
-            scrollLeft: 0,
-            scrollTop: 0,
-            scrollDirection: "forward",
-            bodyWidth: 0,
-            bodyHeight: 0,
-            vScrollBarWidth: 0,
-            hScrollBarHeight: 0
+            getItemKey: p.ofFunction<t.GetKeyFunction<T>>().required,
+            contentWidth: p(Number).optional,
+            rowStyleCycle: p(Number).default(1),
+            rowHeight: p(Number).required,
+            itemCount: p(Number).required,
+            sliceItems: p.ofFunction<t.SliceFunction<T>>().required,
+            overscan: p(Number).default(8)
         };
     }
+
+    get [Keys.ScopedSlots]() {
+        return {
+            row(_payload: { item: T; index: number }) {}
+        };
+    }
+
+    get [Keys.Events]() {
+        return events<T>();
+    }
+
+    scrollLeft = 0;
+    scrollTop = 0;
+    scrollDirection: "forward" | "backward" = "forward";
+    bodyWidth = 0;
+    bodyHeight = 0;
+    vScrollBarWidth = 0;
+    hScrollBarHeight = 0;
 
     /* styles */
     private get containerStyle(): CssProperties {
@@ -74,9 +67,9 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
             boxSizing: "border-box",
             minWidth: px(this.$props.contentWidth),
             position: "relative",
-            left: px(this.$data.scrollLeft * -1),
+            left: px(this.scrollLeft * -1),
             overflow: "hidden",
-            padding: `0 ${px(this.$data.vScrollBarWidth)} 0 0`
+            padding: `0 ${px(this.vScrollBarWidth)} 0 0`
         };
     }
     private get scrollableStyle(): CssProperties {
@@ -118,8 +111,8 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
 
     /* computed */
     private get firstIndex() {
-        let value = Math.floor(this.$data.scrollTop / this.$props.rowHeight);
-        if (this.$data.scrollDirection === "backward") {
+        let value = Math.floor(this.scrollTop / this.$props.rowHeight);
+        if (this.scrollDirection === "backward") {
             value = Math.max(0, value - this.$props.overscan!);
         }
         const { rowStyleCycle } = this.$props;
@@ -129,9 +122,9 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
         return value;
     }
     private get lastIndex() {
-        const { scrollTop, bodyHeight } = this.$data;
+        const { scrollTop, bodyHeight } = this;
         let value = Math.ceil((scrollTop + bodyHeight) / this.$props.rowHeight);
-        if (this.$data.scrollDirection === "forward") {
+        if (this.scrollDirection === "forward") {
             value += this.$props.overscan!;
         }
         return value;
@@ -147,15 +140,15 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
     activated() {
         this.updateBodySize();
         const { scrollLeft, scrollTop } = this.$refs.scrollable;
-        this.$data.scrollLeft = scrollLeft;
-        this.$data.scrollTop = scrollTop;
+        this.scrollLeft = scrollLeft;
+        this.scrollTop = scrollTop;
     }
 
     /* methods */
     ensureVisible(index: number) {
         const { rowHeight } = this.$props;
-        const { bodyHeight } = this.$data;
-        let { scrollTop } = this.$data;
+        const { bodyHeight } = this;
+        let { scrollTop } = this;
         const scrollTopMax = rowHeight * index;
         const scrollTopMin = Math.max(rowHeight * index - bodyHeight + rowHeight, 0);
         if (scrollTopMax < scrollTop) {
@@ -175,36 +168,28 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
         const bodyHeight = sc.clientHeight;
         const vScrollBarWidth = Math.floor(bound.width - bodyWidth);
         const hScrollBarHeight = Math.floor(bound.height - bodyHeight);
-        const data = this.$data;
         if (
-            data.bodyWidth !== bodyWidth ||
-            data.bodyHeight !== bodyHeight ||
-            data.vScrollBarWidth !== vScrollBarWidth ||
-            data.hScrollBarHeight !== hScrollBarHeight
+            this.bodyWidth !== bodyWidth ||
+            this.bodyHeight !== bodyHeight ||
+            this.vScrollBarWidth !== vScrollBarWidth ||
+            this.hScrollBarHeight !== hScrollBarHeight
         ) {
-            data.bodyWidth = bodyWidth;
-            data.bodyHeight = bodyHeight;
-            data.vScrollBarWidth = vScrollBarWidth;
-            data.hScrollBarHeight = hScrollBarHeight;
+            this.bodyWidth = bodyWidth;
+            this.bodyHeight = bodyHeight;
+            this.vScrollBarWidth = vScrollBarWidth;
+            this.hScrollBarHeight = hScrollBarHeight;
         }
     }
     onScroll(event: Event) {
         const { scrollLeft, scrollTop } = this.$refs.scrollable;
-        this.$data.scrollDirection = scrollTop < this.$data.scrollTop ? "backward" : "forward";
-        this.$data.scrollLeft = scrollLeft;
-        this.$data.scrollTop = scrollTop;
-        this.$events.emit("scroll", { scrollLeft, scrollTop, event });
-    }
-    onRowEvent(eventName: string, item: T, physicalIndex: number, event: Event) {
-        this.$events.emit(("row" + eventName) as any, {
-            item,
-            index: physicalIndex + this.firstIndex,
-            event
-        });
+        this.scrollDirection = scrollTop < this.scrollTop ? "backward" : "forward";
+        this.scrollLeft = scrollLeft;
+        this.scrollTop = scrollTop;
+        this.$$emit.onScroll({ scrollLeft, scrollTop, event });
     }
     onContentHeightChanged(newValue: number, _oldValue: number) {
-        const hScrollBarHeight = this.$data.hScrollBarHeight;
-        const height = this.$data.bodyHeight + hScrollBarHeight;
+        const hScrollBarHeight = this.hScrollBarHeight;
+        const height = this.bodyHeight + hScrollBarHeight;
         if (0 < hScrollBarHeight === newValue < height) {
             // must re-check scrollbar visibilities
             this.updateBodySize();
@@ -212,8 +197,8 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
     }
 
     onContentWidthChanged(newValue: number, _oldValue: number) {
-        const vScrollBarWidth = this.$data.vScrollBarWidth;
-        const width = this.$data.bodyWidth + vScrollBarWidth;
+        const vScrollBarWidth = this.vScrollBarWidth;
+        const width = this.bodyWidth + vScrollBarWidth;
         if (0 < vScrollBarWidth === newValue < width) {
             // must re-check scrollbar visibilities
             this.updateBodySize();
@@ -222,26 +207,29 @@ export class Vlist<T> extends tc.StatefulEvTypedComponent<
 
     /* render */
     private get rows() {
-        const props = this.$props;
+        const emit = this.$$emit;
         const row = this.$scopedSlots.row;
-        return this.renderedItems.map((item, index) => (
-            <div
-                staticClass="vlist-row"
-                key={props.getItemKey(item)}
-                style={this.rowStyle}
-                onClick={e => this.onRowEvent("click", item, index, e)}
-                onDblclick={e => this.onRowEvent("dblclick", item, index, e)}
-                onContextmenu={e => this.onRowEvent("contextmenu", item, index, e)}
-                onDragenter={e => this.onRowEvent("dragenter", item, index, e)}
-                onDragleave={e => this.onRowEvent("dragleave", item, index, e)}
-                onDragstart={e => this.onRowEvent("dragstart", item, index, e)}
-                onDragend={e => this.onRowEvent("dragend", item, index, e)}
-                onDragover={e => this.onRowEvent("dragover", item, index, e)}
-                onDrop={e => this.onRowEvent("drop", item, index, e)}
-            >
-                {row({ item, index: index + this.firstIndex })}
-            </div>
-        ));
+        return this.renderedItems.map((item, physicalIndex) => {
+            const index = physicalIndex + this.firstIndex;
+            return (
+                <div
+                    staticClass="vlist-row"
+                    key={this.$props.getItemKey(item)}
+                    style={this.rowStyle}
+                    onClick={event => emit.onRowclick({ item, index, event })}
+                    onDblclick={event => emit.onRowdblclick({ item, index, event })}
+                    onContextmenu={event => emit.onRowcontextmenu({ item, index, event })}
+                    onDragenter={event => emit.onRowdragenter({ item, index, event })}
+                    onDragleave={event => emit.onRowdragleave({ item, index, event })}
+                    onDragstart={event => emit.onRowdragstart({ item, index, event })}
+                    onDragend={event => emit.onRowdragend({ item, index, event })}
+                    onDragover={event => emit.onRowdragover({ item, index, event })}
+                    onDrop={event => emit.onRowdrop({ item, index, event })}
+                >
+                    {row({ item, index })}
+                </div>
+            );
+        });
     }
 
     render(): VNode {
