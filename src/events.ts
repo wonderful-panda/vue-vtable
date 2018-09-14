@@ -1,4 +1,4 @@
-import { RowEventArgs, RowClickEventArgs, RowDragEventArgs, ScrollEventArgs } from "../types";
+import { RowClickEventArgs, RowDragEventArgs, RowEventArgs, ScrollEventArgs } from "../types";
 
 export default function events<T>() {
     return {

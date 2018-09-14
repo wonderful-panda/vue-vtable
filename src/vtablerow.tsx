@@ -1,10 +1,10 @@
 import * as _ from "lodash";
-import Vue, { VNode, VueConstructor, PropOptions } from "vue";
+import Vue, { PropOptions, VNode, VueConstructor } from "vue";
 import { CssProperties } from "vue-css-definition";
 import p from "vue-strict-prop";
+import { Component, ComponentExtension, ExVue, Keys } from "vue-tsx-support/lib/class";
 import * as t from "../types";
 import { px } from "./utils";
-import { Component, ComponentExtension, ExVue, Keys } from "vue-tsx-support/lib/class";
 
 @Component
 export class VtableRow<T> extends ExVue {

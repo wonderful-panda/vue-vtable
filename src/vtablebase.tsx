@@ -1,7 +1,8 @@
 import * as _ from "lodash";
-import Vue, { VNode, VueConstructor, PropOptions } from "vue";
+import Vue, { PropOptions, VNode, VueConstructor } from "vue";
 import { CssProperties } from "vue-css-definition";
 import p from "vue-strict-prop";
+import { Component, ComponentExtension, ExVue, Keys } from "vue-tsx-support/lib/class";
 import {
     GetClassFunction,
     GetKeyFunction,
@@ -11,12 +12,11 @@ import {
     VtableColumn,
     VtableSlotCellProps
 } from "../types";
+import events from "./events";
 import { ensureNotUndefined, px } from "./utils";
 import { Vlist } from "./vlist";
 import { VtableRow } from "./vtablerow";
 import { VtableSplitter } from "./vtablesplitter";
-import { Component, ComponentExtension, Keys, ExVue } from "vue-tsx-support/lib/class";
-import events from "./events";
 @Component
 export class VtableBase<T> extends ExVue {
     $refs!: { header: Element; vlist: Vlist<T> };

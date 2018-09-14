@@ -7,7 +7,7 @@ interface Item {
     value: string;
 }
 
-const packageLockJson = require("../../package-lock.json");
+const packageJson = require("../../package.json");
 
 // tslint:disable-next-line: no-var-requires
 function convertJsonToItemTree(data: object, prefix: string): TreeNode<Item>[] {
@@ -47,7 +47,7 @@ export const VtreetableExample = _c({
                     defaultWidth: 200
                 }
             ] as VtableColumn[],
-            roots: convertJsonToItemTree(packageLockJson, "root/")
+            roots: convertJsonToItemTree(packageJson, "root/")
         };
     },
     mounted() {

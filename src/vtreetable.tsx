@@ -1,21 +1,21 @@
-import Vue, { VNode, VNodeChildrenArrayContents, VueConstructor, PropOptions } from "vue";
+import Vue, { PropOptions, VNode, VNodeChildrenArrayContents, VueConstructor } from "vue";
 import { CssProperties } from "vue-css-definition";
 import p from "vue-strict-prop";
 import * as tsx from "vue-tsx-support";
+import { Component, ComponentExtension, ExVue, Keys } from "vue-tsx-support/lib/class";
 import {
     GetClassFunction,
     GetKeyFunction,
+    RowEventArgs,
+    ScrollEventArgs,
     TreeNode,
     TreeNodeWithState,
     VtableColumn,
-    VtableSlotCellProps,
-    RowEventArgs,
-    ScrollEventArgs
+    VtableSlotCellProps
 } from "../types";
+import events from "./events";
 import { px } from "./utils";
 import { VtableBase } from "./vtablebase";
-import { Component, ComponentExtension, ExVue, Keys } from "vue-tsx-support/lib/class";
-import events from "./events";
 
 const m = tsx.modifiers;
 
@@ -177,18 +177,18 @@ export class Vtreetable<T> extends ExVue {
 
     render(): VNode {
         const VtableBaseT = VtableBase as new () => VtableBase<TreeNodeWithState<T>>;
-        const p = this.$props;
+        const props = this.$props;
         return (
             <VtableBaseT
-                rowHeight={p.rowHeight}
-                headerHeight={p.headerHeight}
-                columns={p.columns}
-                rowStyleCycle={p.rowStyleCycle}
-                splitterWidth={p.splitterWidth}
-                rowClass={p.rowClass}
-                getRowClass={p.getRowClass}
-                widths={p.widths}
-                overscan={p.overscan}
+                rowHeight={props.rowHeight}
+                headerHeight={props.headerHeight}
+                columns={props.columns}
+                rowStyleCycle={props.rowStyleCycle}
+                splitterWidth={props.splitterWidth}
+                rowClass={props.rowClass}
+                getRowClass={props.getRowClass}
+                widths={props.widths}
+                overscan={props.overscan}
                 itemCount={this.itemCount}
                 sliceItems={this.sliceItems}
                 getItemKey={this.getItemKey_}

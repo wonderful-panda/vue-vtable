@@ -1,12 +1,12 @@
-import Vue, { VNode, VueConstructor, PropOptions } from "vue";
-import { Component, ComponentExtension, Keys, ExVue } from "vue-tsx-support/lib/class";
+import Vue, { PropOptions, VNode, VueConstructor } from "vue";
 import { CssProperties } from "vue-css-definition";
 import * as resizeSensor from "vue-resizesensor";
 import p from "vue-strict-prop";
 import * as tsx from "vue-tsx-support";
+import { Component, ComponentExtension, ExVue, Keys } from "vue-tsx-support/lib/class";
 import * as t from "../types";
-import { px } from "./utils";
 import events from "./events";
+import { px } from "./utils";
 
 const ResizeSensor = resizeSensor as tsx.TsxComponent<
     Vue,
@@ -122,8 +122,7 @@ export class Vlist<T> extends ExVue {
         return value;
     }
     private get lastIndex() {
-        const { scrollTop, bodyHeight } = this;
-        let value = Math.ceil((scrollTop + bodyHeight) / this.$props.rowHeight);
+        let value = Math.ceil((this.scrollTop + this.bodyHeight) / this.$props.rowHeight);
         if (this.scrollDirection === "forward") {
             value += this.$props.overscan!;
         }
@@ -147,10 +146,9 @@ export class Vlist<T> extends ExVue {
     /* methods */
     ensureVisible(index: number) {
         const { rowHeight } = this.$props;
-        const { bodyHeight } = this;
-        let { scrollTop } = this;
+        let scrollTop = this.scrollTop;
         const scrollTopMax = rowHeight * index;
-        const scrollTopMin = Math.max(rowHeight * index - bodyHeight + rowHeight, 0);
+        const scrollTopMin = Math.max(rowHeight * index - this.bodyHeight + rowHeight, 0);
         if (scrollTopMax < scrollTop) {
             scrollTop = scrollTopMax;
         } else if (scrollTop < scrollTopMin) {

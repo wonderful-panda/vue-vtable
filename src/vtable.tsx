@@ -1,7 +1,8 @@
 import * as _ from "lodash";
-import Vue, { VNode, VueConstructor, PropOptions } from "vue";
+import Vue, { PropOptions, VNode, VueConstructor } from "vue";
 import { CssProperties } from "vue-css-definition";
 import p from "vue-strict-prop";
+import { Component, ComponentExtension, ExVue, Keys, WithProps } from "vue-tsx-support/lib/class";
 import {
     GetClassFunction,
     GetKeyFunction,
@@ -10,7 +11,6 @@ import {
     VtableSlotCellProps
 } from "../types";
 import { VtableBase } from "./vtablebase";
-import { Component, WithProps, ComponentExtension, Keys, ExVue } from "vue-tsx-support/lib/class";
 
 @Component
 export class Vtable<T> extends ExVue {
@@ -46,22 +46,22 @@ export class Vtable<T> extends ExVue {
         const VtableBaseT = VtableBase as new () => VtableBase<T>;
         const on = this.$listeners;
         const scopedSlots = this.$scopedSlots;
-        const p = this.$props;
+        const props = this.$props;
         return (
             <VtableBaseT
                 ref="base"
-                rowHeight={p.rowHeight}
-                headerHeight={p.headerHeight}
-                columns={p.columns}
-                itemCount={p.items.length}
+                rowHeight={props.rowHeight}
+                headerHeight={props.headerHeight}
+                columns={props.columns}
+                itemCount={props.items.length}
                 sliceItems={this.sliceItems}
-                rowStyleCycle={p.rowStyleCycle}
-                splitterWidth={p.splitterWidth}
-                rowClass={p.rowClass}
-                getRowClass={p.getRowClass}
-                getItemKey={p.getItemKey}
-                widths={p.widths}
-                overscan={p.overscan}
+                rowStyleCycle={props.rowStyleCycle}
+                splitterWidth={props.splitterWidth}
+                rowClass={props.rowClass}
+                getRowClass={props.getRowClass}
+                getItemKey={props.getItemKey}
+                widths={props.widths}
+                overscan={props.overscan}
                 {...{ on, scopedSlots }}
             />
         );

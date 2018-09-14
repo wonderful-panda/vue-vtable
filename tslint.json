@@ -8,6 +8,6 @@
         "no-submodule-imports": false,
         "object-literal-sort-keys": false,
         "only-arrow-functions": [true, "allow-declarations", "allow-named-functions"],
-        "variable-name": [true, "allow-leading-underscore", "allow-pascal-case"]
+        "variable-name": [true, "allow-leading-underscore", "allow-trailing-underscore", "allow-pascal-case"]
     }
 }
