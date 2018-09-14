@@ -5,6 +5,7 @@ node_js:
 script:
 - npm run build-all
 deploy:
+  tag: beta
   provider: npm
   email: iwata0303@gmail.com
   on:
