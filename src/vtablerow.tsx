@@ -10,7 +10,7 @@ import { Component, ComponentExtension, ExVue, Keys } from "vue-tsx-support/lib/
 export class VtableRow<T> extends ExVue {
     get [Keys.PropsDef]() {
         return {
-            item: { required: true } as PropOptions<T> & { required: true },
+            item: p.ofType<T>().required,
             columns: p.ofRoArray<t.VtableColumn>().required,
             columnWidths: p.ofObject<{ [columnId: string]: number }>().required,
             index: p(Number).validator(v => v >= 0).required,
