@@ -6,10 +6,12 @@ import { Component, ComponentExtension, ExVue, Keys, WithProps } from "vue-tsx-s
 import {
     GetClassFunction,
     GetKeyFunction,
+    RowEventArgs,
     ScrollEventArgs,
     VtableColumn,
     VtableSlotCellProps
 } from "../types";
+import events from "./events";
 import { VtableBase } from "./vtablebase";
 
 @Component
@@ -34,6 +36,9 @@ export class Vtable<T> extends ExVue {
         return {
             cell(_props: VtableSlotCellProps<T>) {}
         };
+    }
+    get [Keys.Events]() {
+        return events<T>();
     }
     /* methods */
     ensureVisible(index: number) {
