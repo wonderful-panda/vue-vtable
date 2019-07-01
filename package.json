@@ -52,27 +52,22 @@
     "ts-loader": "^2.1.0",
     "tslint": "^5.10.0",
     "tslint-config-prettier": "^1.13.0",
-    "typescript": "^2.8.3",
-    "vue": "^2.5.13",
-    "vue-class-component": "^6.2.0",
+    "typescript": "^3.5.1",
+    "vue": "^2.6.1",
+    "vue-class-component": "^7.0.0",
     "vue-component-marker": "^0.1.1",
     "vue-loader": "14.2.1",
-    "vue-template-compiler": "^2.5.13",
-    "vue-template-compiler-loader": "^1.0.4",
-    "vue-tsx-support": "^2.0.1",
+    "vue-property-decorator": "^8.2.1",
+    "vue-template-compiler": "^2.6.1",
+    "vue-tsx-support": "^3.0.0-dev.3",
     "vue-typed-component": "^0.11.0",
     "webpack": "^2.6.1",
     "webpack-dev-server": "^2.4.5",
     "webpack-merge": "^4.1.2"
   },
   "peerDependencies": {
-    "vue": "^2.5.13",
-    "vue-class-component": "^6.2.0",
-    "vue-tsx-support": "^2.0.1",
+    "vue": "^2.6.1",
+    "vue-tsx-support": "^3.0.0-dev.3",
     "vue-typed-component": "^0.11.0"
-  },
-  "prettier": {
-    "printWidth": 100,
-    "tabWidth": 4
   }
 }

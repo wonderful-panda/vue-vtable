@@ -3,6 +3,7 @@
     "target": "es6",
     "declaration": true,
     "jsx": "preserve",
+    "jsxFactory": "VueTsxSupport",
     "module": "es2015",
     "moduleResolution": "node",
     "noUnusedParameters": true,

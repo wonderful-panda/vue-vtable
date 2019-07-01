@@ -3,13 +3,13 @@ import { Vtable } from "./vtable";
 import { Vtreetable } from "./vtreetable";
 
 export function vlistOf<T>(): new (...args: any[]) => Vlist<T> {
-    return Vlist;
+  return Vlist;
 }
 export function vtableOf<T>(): new (...args: any[]) => Vtable<T> {
-    return Vtable;
+  return Vtable;
 }
 export function vtreetableOf<T>(): new (...args: any[]) => Vtreetable<T> {
-    return Vtreetable;
+  return Vtreetable;
 }
 
 export { Vlist } from "./vlist";
