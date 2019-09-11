@@ -1,8 +1,7 @@
-import Vue, { VNode, VNodeChildrenArrayContents, VNodeData } from "vue";
+import { VNode } from "vue";
 import { CssProperties } from "vue-css-definition";
 import p from "vue-strict-prop";
 import * as tsx from "vue-tsx-support";
-import { VueConstructor } from "vue/types/vue";
 import { px } from "./utils";
 
 const m = tsx.modifiers;

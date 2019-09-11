@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { VNode } from "vue";
+import Vue, { VNode } from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { CssProperties } from "vue-css-definition";
 import {
@@ -7,24 +7,25 @@ import {
   GetKeyFunction,
   SliceFunction,
   VtableColumn,
-  VtableSlotCellProps
+  VtableSlotCellProps,
+  VlistEvents
 } from "../types";
 import { px } from "./utils";
 import { Vlist } from "./vlist";
 import { VtableRow } from "./vtablerow";
 import { VtableSplitter } from "./vtablesplitter";
-import { VlistEventsMixin } from "./vlisteventsmixin";
-import { InnerScopedSlots, ExposeAllPublicMembers } from "vue-tsx-support";
+import {
+  InnerScopedSlots,
+  ExposeAllPublicMembers,
+  DefineEvents
+} from "vue-tsx-support";
 
 @Component
-export class VtableBase<T> extends VlistEventsMixin<T> {
+export class VtableBase<T> extends Vue {
   $refs!: { header: Element; vlist: Vlist<T> };
   $scopedSlots!: InnerScopedSlots<{ cell: VtableSlotCellProps<T> }>;
-  $tsx: ExposeAllPublicMembers<
-    VtableBase<T>,
-    VlistEventsMixin<T>,
-    "ensureVisible"
-  >;
+  _tsx!: ExposeAllPublicMembers<VtableBase<T>, Vue, "ensureVisible"> &
+    DefineEvents<VlistEvents<T>>;
 
   @Prop(Number) rowHeight!: number;
   @Prop(Number) headerHeight!: number;
@@ -36,7 +37,7 @@ export class VtableBase<T> extends VlistEventsMixin<T> {
   @Prop(String) rowClass?: string;
   @Prop(Function) getRowClass?: GetClassFunction<T>;
   @Prop(Function) getItemKey!: GetKeyFunction<T>;
-  @Prop(Object) widths!: Record<string, number>;
+  @Prop(Object) widths?: Record<string, number>;
   @Prop(Number) overscan?: number;
 
   private widthsPrivate: Record<string, number> = {};
@@ -196,7 +197,6 @@ export class VtableBase<T> extends VlistEventsMixin<T> {
             />
           ]
         }}
-        {...{ on: this.$listeners }}
       >
         <div
           staticClass="vtable-header"

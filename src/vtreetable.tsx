@@ -2,7 +2,6 @@ import Vue, { VNode, VNodeChildrenArrayContents, VueConstructor } from "vue";
 import { CssProperties } from "vue-css-definition";
 import p from "vue-strict-prop";
 import * as tsx from "vue-tsx-support";
-import * as tc from "vue-typed-component";
 import {
   GetClassFunction,
   GetKeyFunction,
@@ -15,7 +14,8 @@ import {
   VtreeProps
 } from "../types";
 import { px } from "./utils";
-import { VtableBase, VtableBaseProps } from "./vtablebase";
+import { VtableBase } from "./vtablebase";
+import { Component, Prop } from "vue-property-decorator";
 
 const m = tsx.modifiers;
 export interface VtreeTableData {
@@ -89,44 +89,39 @@ export const ExpandableCell = tsx.component(
   ["nodeState"]
 );
 
-@tc.component(Vtreetable, {
-  props: {
-    rowHeight: p(Number).required,
-    headerHeight: p(Number).optional,
-    indentWidth: p(Number).optional,
-    columns: p.ofRoArray<VtableColumn>().required,
-    rootNodes: p.ofRoArray<TreeNode<T>>().required,
-    rowStyleCycle: p(Number).default(1),
-    splitterWidth: p(Number).default(3),
-    rowClass: p(String).optional,
-    getRowClass: p.ofFunction<GetClassFunction<TreeNodeWithState<T>>>()
-      .optional,
-    widths: p.ofObject<{ [columnId: string]: number }>().optional,
-    getItemKey: p.ofFunction<GetKeyFunction<T>>().required,
-    overscan: p(Number).default(8)
-  },
-  provide() {
+@Component({
+  provide(this: Vtreetable<any>) {
     return {
       toggleExpand: this.toggleExpand,
-      indentWidth: this.$props.indentWidth || this.$props.rowHeight
+      indentWidth: this.indentWidth || this.rowHeight
     };
   }
 })
-export class Vtreetable<T> extends tc.StatefulEvTypedComponent<
-  VtreeProps<T>,
-  VtableEvents<TreeNodeWithState<T>>,
-  VtreeTableData,
-  VtableEventsOn<TreeNodeWithState<T>>,
-  { cell: VtableSlotCellProps<TreeNodeWithState<T>> }
-> {
-  data(): VtreeTableData {
-    return {
-      expandMap: {}
-    };
-  }
+export class Vtreetable<T> extends Vue {
+  $scopedSlots!: tsx.InnerScopedSlots<{
+    cell: VtableSlotCellProps<TreeNodeWithState<T>>;
+  }>;
+  @Prop(Number) rowHeight!: number;
+  @Prop(Number) headerHeight?: number;
+  @Prop(Number) indentWidth!: number;
+  @Prop(Array) columns!: ReadonlyArray<VtableColumn>;
+  @Prop(Array) rootNodes!: ReadonlyArray<TreeNode<T>>;
+  @Prop({ type: Number, default: 1 })
+  rowStyleCycle?: number;
+  @Prop({ type: Number, default: 3 })
+  splitterWidth?: number;
+  @Prop(String) rowClass?: string;
+  @Prop(Function) getRowClass?: GetClassFunction<TreeNodeWithState<T>>;
+  @Prop(Function) getItemKey!: GetKeyFunction<T>;
+  @Prop(Object) widths?: Record<string, number>;
+  @Prop({ type: Number, default: 8 })
+  overscan?: number;
+
+  expandMap = {} as Record<string, boolean>;
+
   get flattenVisibleItems(): ReadonlyArray<TreeNodeWithState<T>> {
     const ret = [] as Array<TreeNodeWithState<T>>;
-    this.$props.rootNodes.forEach(root =>
+    this.rootNodes.forEach(root =>
       this.addDescendentVisibleItems(root, 0, ret)
     );
     return ret;
@@ -139,8 +134,8 @@ export class Vtreetable<T> extends tc.StatefulEvTypedComponent<
     level: number,
     arr: Array<TreeNodeWithState<T>>
   ) {
-    const key = this.$props.getItemKey(parent.data).toString();
-    const expanded = !!this.$data.expandMap[key];
+    const key = this.getItemKey(parent.data).toString();
+    const expanded = !!this.expandMap[key];
     arr.push({ ...parent, expanded, level });
     if (!expanded || !parent.children) {
       return;
@@ -155,12 +150,12 @@ export class Vtreetable<T> extends tc.StatefulEvTypedComponent<
   }
 
   getItemKey_({ data }: TreeNodeWithState<T>): string | number {
-    return this.$props.getItemKey(data);
+    return this.getItemKey(data);
   }
 
   toggleExpand(data: T) {
     const expandMap = this.$data.expandMap;
-    const key = this.$props.getItemKey(data).toString();
+    const key = this.getItemKey(data).toString();
     const newValue = !expandMap[key];
     if (newValue) {
       Vue.set(expandMap, key, true);
@@ -170,14 +165,14 @@ export class Vtreetable<T> extends tc.StatefulEvTypedComponent<
   }
 
   expandAll() {
-    for (const root of this.$props.rootNodes) {
+    for (const root of this.rootNodes) {
       this.expandAllDescendants(root);
     }
   }
 
   expandAllDescendants(from: TreeNode<T>) {
-    const expandMap = this.$data.expandMap;
-    const key = this.$props.getItemKey(from.data).toString();
+    const expandMap = this.expandMap;
+    const key = this.getItemKey(from.data).toString();
     Vue.set(expandMap, key, true);
     if (from.children) {
       for (const child of from.children) {
@@ -187,23 +182,28 @@ export class Vtreetable<T> extends tc.StatefulEvTypedComponent<
   }
 
   collapseAll() {
-    this.$data.expandMap = {};
+    this.expandMap = {};
   }
 
   render(): VNode {
     const VtableBaseT = VtableBase as new () => VtableBase<
       TreeNodeWithState<T>
     >;
-    const { rootNodes, indentWidth, ...others } = this.$props;
-    const props: VtableBaseProps<TreeNodeWithState<T>> = {
-      ...others,
-      itemCount: this.itemCount,
-      sliceItems: this.sliceItems,
-      getItemKey: this.getItemKey_
-    };
     return (
       <VtableBaseT
-        {...{ props, on: this.$listeners }}
+        itemCount={this.itemCount}
+        sliceItems={this.sliceItems}
+        rowHeight={this.rowHeight}
+        headerHeight={this.headerHeight || this.rowHeight}
+        columns={this.columns}
+        splitterWidth={this.splitterWidth}
+        rowStyleCycle={this.rowStyleCycle}
+        rowClass={this.rowClass}
+        getRowClass={this.getRowClass}
+        getItemKey={this.getItemKey_}
+        widths={this.widths}
+        overscan={this.overscan}
+        {...{ on: this.$listeners }}
         scopedSlots={this.$scopedSlots}
       />
     );

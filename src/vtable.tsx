@@ -2,41 +2,36 @@ import * as _ from "lodash";
 import Vue, { VNode } from "vue";
 import { CssProperties } from "vue-css-definition";
 import p from "vue-strict-prop";
-import * as tc from "vue-typed-component";
+import { Prop, Component } from "vue-property-decorator";
 import {
   GetClassFunction,
   GetKeyFunction,
-  ScrollEventArgs,
   VtableColumn,
-  VtableEvents,
-  VtableEventsOn,
-  VtableProps,
   VtableSlotCellProps
 } from "../types";
-import { VtableBase, VtableBaseProps } from "./vtablebase";
+import { VtableBase } from "./vtablebase";
+import { InnerScopedSlots } from "vue-tsx-support";
 
-@tc.component(Vtable, {
-  props: {
-    rowHeight: p(Number).required,
-    headerHeight: p(Number).optional,
-    columns: p.ofRoArray<VtableColumn>().required,
-    items: p.ofRoArray<T>().required,
-    rowStyleCycle: p(Number).default(1),
-    splitterWidth: p(Number).default(3),
-    rowClass: p(String).optional,
-    getRowClass: p.ofFunction<GetClassFunction<T>>().optional,
-    getItemKey: p.ofFunction<GetKeyFunction<T>>().required,
-    widths: p.ofObject<{ [columnId: string]: number }>().optional,
-    overscan: p(Number).default(8)
-  }
-})
-export class Vtable<T> extends tc.EvTypedComponent<
-  VtableProps<T>,
-  VtableEvents<T>,
-  VtableEventsOn<T>,
-  { cell: VtableSlotCellProps<T> }
-> {
+@Component
+export class Vtable<T> extends Vue {
   $refs!: { base: VtableBase<T> };
+  $scopedSlots!: InnerScopedSlots<{ cell: VtableSlotCellProps<T> }>;
+
+  @Prop(Number) rowHeight!: number;
+  @Prop(Number) headerHeight?: number;
+  @Prop(Array) columns!: ReadonlyArray<VtableColumn>;
+  @Prop(Array) items!: ReadonlyArray<T>;
+  @Prop({ type: Number, default: 1 })
+  rowStyleCycle?: number;
+  @Prop({ type: Number, default: 3 })
+  splitterWidth?: number;
+  @Prop(String) rowClass?: string;
+  @Prop(Function) getRowClass?: GetClassFunction<T>;
+  @Prop(Function) getItemKey!: GetKeyFunction<T>;
+  @Prop(Object) widths?: Record<string, number>;
+  @Prop({ type: Number, default: 8 })
+  overscan?: number;
+
   /* methods */
   ensureVisible(index: number) {
     this.$refs.base.ensureVisible(index);
@@ -46,14 +41,25 @@ export class Vtable<T> extends tc.EvTypedComponent<
   }
   render(): VNode {
     const VtableBaseT = VtableBase as new () => VtableBase<T>;
-    const { items, ...others } = this.$props;
-    const props: VtableBaseProps<T> = {
-      ...others,
-      itemCount: items.length,
-      sliceItems: this.sliceItems
-    };
     const on = this.$listeners;
     const scopedSlots = this.$scopedSlots;
-    return <VtableBaseT ref="base" {...{ props, on, scopedSlots }} />;
+    return (
+      <VtableBaseT
+        ref="base"
+        itemCount={this.items.length}
+        sliceItems={this.sliceItems}
+        rowHeight={this.rowHeight}
+        headerHeight={this.headerHeight || this.rowHeight}
+        columns={this.columns}
+        splitterWidth={this.splitterWidth}
+        rowStyleCycle={this.rowStyleCycle}
+        rowClass={this.rowClass}
+        getRowClass={this.getRowClass}
+        getItemKey={this.getItemKey}
+        widths={this.widths}
+        overscan={this.overscan}
+        {...{ on, scopedSlots }}
+      />
+    );
   }
 }

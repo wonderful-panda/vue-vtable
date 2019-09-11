@@ -1,42 +1,38 @@
 import * as _ from "lodash";
 import Vue, { VNode } from "vue";
+import { Component, Prop } from "vue-property-decorator";
+import * as tsx from "vue-tsx-support";
 import { CssProperties } from "vue-css-definition";
-import p from "vue-strict-prop";
-import * as tc from "vue-typed-component";
 import * as t from "../types";
 import { px } from "./utils";
 
-export interface VtableRowProps<T> {
-  item: T;
-  columns: ReadonlyArray<t.VtableColumn>;
-  columnWidths: { [columnId: string]: number };
-  index: number;
-  height: number;
-}
+@Component
+export class VtableRow<T> extends Vue {
+  @Prop({ required: true })
+  item!: T;
+  @Prop({ type: Array, required: true })
+  columns!: ReadonlyArray<t.VtableColumn>;
+  @Prop({ type: Object, required: true })
+  columnWidths!: Record<string, number>;
+  @Prop({ type: Number, required: true, validator: v => v >= 0 })
+  index!: number;
+  @Prop({ type: Number, required: true, validator: v => v > 0 })
+  height!: number;
 
-@tc.component(VtableRow, {
-  props: {
-    item: p.ofAny().required,
-    columns: p.ofRoArray<t.VtableColumn>().required,
-    columnWidths: p.ofObject<{ [columnId: string]: number }>().required,
-    index: p(Number).validator(v => v >= 0).required,
-    height: p(Number).validator(v => v > 0).required
-  }
-})
-export class VtableRow<T> extends tc.TypedComponent<
-  VtableRowProps<T>,
-  {
+  _tsx!: tsx.ExposeAllPublicMembers<VtableRow<T>, Vue>;
+
+  $scopedSlots!: tsx.InnerScopedSlots<{
     splitter: { index: number };
     cell: t.VtableSlotCellProps<T>;
-  }
-> {
-  get rowStyle(): CssProperties {
+  }>;
+
+  private get rowStyle(): CssProperties {
     return {
       display: "flex",
       flex: "1 1 auto",
       width: "100%",
-      height: px(this.$props.height),
-      lineHeight: px(this.$props.height),
+      height: px(this.height),
+      lineHeight: px(this.height),
       boxSizing: "border-box",
       margin: 0
     };
@@ -47,7 +43,7 @@ export class VtableRow<T> extends tc.TypedComponent<
     return {
       minWidth: w,
       width: w,
-      lineHeight: px(this.$props.height),
+      lineHeight: px(this.height),
       margin: 0,
       boxSizing: "border-box",
       overflow: "hidden"
@@ -55,7 +51,7 @@ export class VtableRow<T> extends tc.TypedComponent<
   }
 
   private get cells() {
-    const { item, columns, columnWidths, index } = this.$props;
+    const { item, columns, columnWidths, index } = this;
     return columns.map((c, columnIndex) => [
       <div
         staticClass="vtable-cell"

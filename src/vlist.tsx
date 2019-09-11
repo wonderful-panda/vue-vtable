@@ -5,23 +5,19 @@ import * as tsx from "vue-tsx-support";
 import * as t from "../types";
 import { px } from "./utils";
 import { Component, Prop, Watch } from "vue-property-decorator";
-import { VlistEventsMixin } from "./vlisteventsmixin";
 
-const ResizeSensor = resizeSensor as tsx.TsxComponent<
-  Vue,
-  { debounce?: number },
-  { onResized: void }
->;
+const emit = tsx.emit;
+
+const ResizeSensor = tsx
+  .ofType<{ debounce?: number }, { onResized: void }>()
+  .convert(resizeSensor);
 
 @Component
-export class Vlist<T> extends VlistEventsMixin<T> {
+export class Vlist<T> extends Vue {
   $refs!: { scrollable: Element; content: Element };
   $scopedSlots!: tsx.InnerScopedSlots<{ row: t.VlistSlotRowProps<T> }>;
-  $tsx!: tsx.ExposeAllPublicMembers<
-    Vlist<T>,
-    VlistEventsMixin<T>,
-    "ensureVisible"
-  >;
+  _tsx!: tsx.ExposeAllPublicMembers<Vlist<T>, Vue, "ensureVisible"> &
+    tsx.DefineEvents<t.VlistEvents<T>>;
 
   @Prop(Function) getItemKey!: t.GetKeyFunction<T>;
   @Prop(Number) contentWidth!: number;
@@ -176,7 +172,7 @@ export class Vlist<T> extends VlistEventsMixin<T> {
     this.scrollDirection = scrollTop < this.scrollTop ? "backward" : "forward";
     this.scrollLeft = scrollLeft;
     this.scrollTop = scrollTop;
-    this.onScroll({ scrollLeft, scrollTop, event });
+    emit(this, "scroll", { scrollLeft, scrollTop, event });
   }
   private payload<E extends Event>(item: T, physicalIndex: number, event: E) {
     return { item, index: physicalIndex + this.firstIndex, event };
@@ -209,15 +205,15 @@ export class Vlist<T> extends VlistEventsMixin<T> {
         staticClass="vlist-row"
         key={this.getItemKey(item)}
         style={this.rowStyle}
-        onClick={e => this.onRowclick(p(item, index, e))}
-        onDblclick={e => this.onRowdblclick(p(item, index, e))}
-        onContextmenu={e => this.onRowcontextmenu(p(item, index, e))}
-        onDragenter={e => this.onRowdragenter(p(item, index, e))}
-        onDragleave={e => this.onRowdragleave(p(item, index, e))}
-        onDragstart={e => this.onRowdragstart(p(item, index, e))}
-        onDragend={e => this.onRowdragend(p(item, index, e))}
-        onDragover={e => this.onRowdragover(p(item, index, e))}
-        onDrop={e => this.onRowdrop(p(item, index, e))}
+        onClick={e => emit(this, "rowclick", p(item, index, e))}
+        onDblclick={e => emit(this, "rowdblclick", p(item, index, e))}
+        onContextmenu={e => emit(this, "rowcontextmenu", p(item, index, e))}
+        onDragenter={e => emit(this, "rowdragenter", p(item, index, e))}
+        onDragleave={e => emit(this, "rowdragleave", p(item, index, e))}
+        onDragstart={e => emit(this, "rowdragstart", p(item, index, e))}
+        onDragend={e => emit(this, "rowdragend", p(item, index, e))}
+        onDragover={e => emit(this, "rowdragover", p(item, index, e))}
+        onDrop={e => emit(this, "rowdrop", p(item, index, e))}
       >
         {row({ item, index: index + this.firstIndex })}
       </div>
