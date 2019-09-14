@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es6",
     "declaration": true,
+    "declarationDir": "../dist",
     "jsx": "preserve",
     "jsxFactory": "VueTsxSupport",
     "module": "es2015",
