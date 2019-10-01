@@ -19,7 +19,7 @@ export class VtableRow<T> extends Vue {
   @Prop({ type: Number, required: true, validator: v => v > 0 })
   height!: number;
 
-  _tsx!: tsx.ExposeAllPublicMembers<VtableRow<T>, Vue>;
+  _tsx!: tsx.DeclarePropsFromAllPublicMembers<VtableRow<T>, Vue>;
 
   $scopedSlots!: tsx.InnerScopedSlots<{
     splitter: { index: number };

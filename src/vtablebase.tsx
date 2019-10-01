@@ -8,7 +8,8 @@ import {
   SliceFunction,
   VtableColumn,
   VtableSlotCellProps,
-  VlistEvents
+  VlistEvents,
+  VlistEventsOn
 } from "../types";
 import { px } from "./utils";
 import { Vlist } from "./vlist";
@@ -16,16 +17,18 @@ import { VtableRow } from "./vtablerow";
 import { VtableSplitter } from "./vtablesplitter";
 import {
   InnerScopedSlots,
-  ExposeAllPublicMembers,
-  DefineEvents
+  DeclarePropsFromAllPublicMembers,
+  DeclareOn,
+  DeclarePrefixedEvents
 } from "vue-tsx-support";
 
 @Component
 export class VtableBase<T> extends Vue {
   $refs!: { header: Element; vlist: Vlist<T> };
   $scopedSlots!: InnerScopedSlots<{ cell: VtableSlotCellProps<T> }>;
-  _tsx!: ExposeAllPublicMembers<VtableBase<T>, Vue, "ensureVisible"> &
-    DefineEvents<VlistEvents<T>>;
+  _tsx!: DeclarePropsFromAllPublicMembers<VtableBase<T>, Vue, "ensureVisible"> &
+    DeclareOn<VlistEvents<T>> &
+    DeclarePrefixedEvents<VlistEventsOn<T>>;
 
   @Prop(Number) rowHeight!: number;
   @Prop(Number) headerHeight!: number;
@@ -197,6 +200,7 @@ export class VtableBase<T> extends Vue {
             />
           ]
         }}
+        on={this.$listeners}
       >
         <div
           staticClass="vtable-header"

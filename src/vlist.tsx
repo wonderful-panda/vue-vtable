@@ -1,6 +1,6 @@
 import Vue, { VNode } from "vue";
 import { CssProperties } from "vue-css-definition";
-import * as resizeSensor from "vue-resizesensor";
+import resizeSensor from "vue-resizesensor";
 import * as tsx from "vue-tsx-support";
 import * as t from "../types";
 import { px } from "./utils";
@@ -16,8 +16,9 @@ const ResizeSensor = tsx
 export class Vlist<T> extends Vue {
   $refs!: { scrollable: Element; content: Element };
   $scopedSlots!: tsx.InnerScopedSlots<{ row: t.VlistSlotRowProps<T> }>;
-  _tsx!: tsx.ExposeAllPublicMembers<Vlist<T>, Vue, "ensureVisible"> &
-    tsx.DefineEvents<t.VlistEvents<T>>;
+  _tsx!: tsx.DeclarePropsFromAllPublicMembers<Vlist<T>, Vue, "ensureVisible"> &
+    tsx.DeclareOn<t.VlistEvents<T>> &
+    tsx.DeclarePrefixedEvents<t.VlistEventsOn<T>>;
 
   @Prop(Function) getItemKey!: t.GetKeyFunction<T>;
   @Prop(Number) contentWidth!: number;

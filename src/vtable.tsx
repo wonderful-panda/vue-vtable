@@ -1,21 +1,29 @@
 import * as _ from "lodash";
 import Vue, { VNode } from "vue";
-import { CssProperties } from "vue-css-definition";
-import p from "vue-strict-prop";
 import { Prop, Component } from "vue-property-decorator";
 import {
   GetClassFunction,
   GetKeyFunction,
   VtableColumn,
-  VtableSlotCellProps
+  VtableSlotCellProps,
+  VtableEvents,
+  VtableEventsOn
 } from "../types";
 import { VtableBase } from "./vtablebase";
-import { InnerScopedSlots } from "vue-tsx-support";
+import {
+  InnerScopedSlots,
+  DeclarePropsFromAllPublicMembers,
+  DeclareOn,
+  DeclarePrefixedEvents
+} from "vue-tsx-support";
 
 @Component
 export class Vtable<T> extends Vue {
   $refs!: { base: VtableBase<T> };
   $scopedSlots!: InnerScopedSlots<{ cell: VtableSlotCellProps<T> }>;
+  _tsx!: DeclarePropsFromAllPublicMembers<Vtable<T>, Vue, "ensureVisible"> &
+    DeclareOn<VtableEvents<T>> &
+    DeclarePrefixedEvents<VtableEventsOn<T>>;
 
   @Prop(Number) rowHeight!: number;
   @Prop(Number) headerHeight?: number;
@@ -37,12 +45,10 @@ export class Vtable<T> extends Vue {
     this.$refs.base.ensureVisible(index);
   }
   private sliceItems(start: number, end: number): ReadonlyArray<T> {
-    return this.$props.items.slice(start, end);
+    return this.items.slice(start, end);
   }
   render(): VNode {
     const VtableBaseT = VtableBase as new () => VtableBase<T>;
-    const on = this.$listeners;
-    const scopedSlots = this.$scopedSlots;
     return (
       <VtableBaseT
         ref="base"
@@ -58,7 +64,8 @@ export class Vtable<T> extends Vue {
         getItemKey={this.getItemKey}
         widths={this.widths}
         overscan={this.overscan}
-        {...{ on, scopedSlots }}
+        on={this.$listeners}
+        scopedSlots={this.$scopedSlots}
       />
     );
   }

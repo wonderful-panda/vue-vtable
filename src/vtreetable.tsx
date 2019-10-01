@@ -10,8 +10,7 @@ import {
   VtableColumn,
   VtableEvents,
   VtableEventsOn,
-  VtableSlotCellProps,
-  VtreeProps
+  VtableSlotCellProps
 } from "../types";
 import { px } from "./utils";
 import { VtableBase } from "./vtablebase";
@@ -117,19 +116,27 @@ export class Vtreetable<T> extends Vue {
   @Prop({ type: Number, default: 8 })
   overscan?: number;
 
-  expandMap = {} as Record<string, boolean>;
+  _tsx!: tsx.DeclarePropsFromAllPublicMembers<
+    Vtreetable<T>,
+    Vue,
+    "toggleExpand" | "expandAll" | "collapseAll" | "expandAllDescendants"
+  > &
+    tsx.DeclareOn<VtableEvents<TreeNodeWithState<T>>> &
+    tsx.DeclarePrefixedEvents<VtableEventsOn<TreeNodeWithState<T>>>;
 
-  get flattenVisibleItems(): ReadonlyArray<TreeNodeWithState<T>> {
+  private expandMap = {} as Record<string, boolean>;
+
+  private get flattenVisibleItems(): ReadonlyArray<TreeNodeWithState<T>> {
     const ret = [] as Array<TreeNodeWithState<T>>;
     this.rootNodes.forEach(root =>
       this.addDescendentVisibleItems(root, 0, ret)
     );
     return ret;
   }
-  get itemCount(): number {
+  private get itemCount(): number {
     return this.flattenVisibleItems.length;
   }
-  addDescendentVisibleItems(
+  private addDescendentVisibleItems(
     parent: TreeNode<T>,
     level: number,
     arr: Array<TreeNodeWithState<T>>
@@ -145,11 +152,14 @@ export class Vtreetable<T> extends Vue {
     }
   }
 
-  sliceItems(start: number, end: number): ReadonlyArray<TreeNodeWithState<T>> {
+  private sliceItems(
+    start: number,
+    end: number
+  ): ReadonlyArray<TreeNodeWithState<T>> {
     return this.flattenVisibleItems.slice(start, end);
   }
 
-  getItemKey_({ data }: TreeNodeWithState<T>): string | number {
+  private getItemKey_({ data }: TreeNodeWithState<T>): string | number {
     return this.getItemKey(data);
   }
 
@@ -203,7 +213,7 @@ export class Vtreetable<T> extends Vue {
         getItemKey={this.getItemKey_}
         widths={this.widths}
         overscan={this.overscan}
-        {...{ on: this.$listeners }}
+        on={this.$listeners}
         scopedSlots={this.$scopedSlots}
       />
     );
