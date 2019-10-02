@@ -1,4 +1,3 @@
-import * as _ from "lodash";
 import Vue, { VNode } from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import * as tsx from "vue-tsx-support";

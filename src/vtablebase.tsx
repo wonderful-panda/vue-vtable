@@ -1,4 +1,3 @@
-import * as _ from "lodash";
 import Vue, { VNode } from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { CssProperties } from "vue-css-definition";
@@ -89,12 +88,13 @@ export class VtableBase<T> extends Vue {
     return this.widths || this.widthsPrivate;
   }
 
-  private get contentWidth() {
+  private get contentWidth(): number {
     const widths = this.actualWidths;
-    return _.sumBy(
-      this.columns,
-      c => (widths[c.id] || c.defaultWidth) + (this.splitterWidth || 3)
-    );
+    let sum = 0;
+    for (const c of this.columns) {
+      sum += (widths[c.id] || c.defaultWidth) + (this.splitterWidth || 3);
+    }
+    return sum;
   }
 
   /* methods */

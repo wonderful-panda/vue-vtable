@@ -27,7 +27,6 @@
     "build-all": "npm-run-all tslint prettier build build-storybook"
   },
   "dependencies": {
-    "lodash": "^4.17.10",
     "vue-css-definition": "^0.1.0",
     "vue-resizesensor": "^0.2.1",
     "vue-strict-prop": "^0.1.1"
@@ -46,6 +45,7 @@
     "babel-polyfill": "^6.26.0",
     "cross-env": "^5.0.0",
     "html-loader": "^0.4.5",
+    "lodash": "^4.17.10",
     "npm-run-all": "^4.0.2",
     "prettier": "1.12.1",
     "storybook-addon-vue-info": "^0.4.2",

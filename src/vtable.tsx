@@ -1,4 +1,3 @@
-import * as _ from "lodash";
 import Vue, { VNode } from "vue";
 import { Prop, Component } from "vue-property-decorator";
 import {
