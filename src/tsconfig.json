@@ -17,7 +17,7 @@
     "rootDir": ".",
     "newLine": "lf"
   },
-  "filesGlob": [
+  "include": [
     "**/*.ts",
     "**/*.tsx"
   ],
