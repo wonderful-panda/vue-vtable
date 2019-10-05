@@ -2,6 +2,8 @@
   "compilerOptions": {
     "target": "es6",
     "module": "es2015",
+    "jsx": "preserve",
+    "jsxFactory": "VueTsxSupport",
     "moduleResolution": "node",
     "noImplicitAny": true,
     "strict": true,
@@ -11,10 +13,13 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
-    "newLine": "lf"
+    "newLine": "lf",
+    "resolveJsonModule": true
   },
   "include": [
-    "stories/**/*.ts"
+    "stories/**/*.ts",
+    "stories/**/*.tsx",
+    "../node_modules/vue-tsx-support/enable-check.d.ts"
   ],
   "exclude": [
     "node_modules"
