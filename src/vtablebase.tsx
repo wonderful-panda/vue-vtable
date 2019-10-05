@@ -101,16 +101,12 @@ export class VtableBase<T> extends Vue {
   ensureVisible(index: number) {
     this.$refs.vlist.ensureVisible(index);
   }
-  private getColumnWidth(c: VtableColumn): number {
-    const width = this.actualWidths[c.id];
-    return width === undefined ? c.defaultWidth : width;
-  }
   private setColumnWidth(c: VtableColumn, width: number): void {
-    const newWidths = { ...this.widths, [c.id]: width };
     if (this.widths) {
+      const newWidths = { ...this.widths, [c.id]: width };
       this.$emit("update:widths", newWidths);
     } else {
-      this.widthsPrivate = newWidths;
+      this.widthsPrivate = { ...this.widthsPrivate, [c.id]: width };
     }
   }
   private onSplitterMouseDown(index: number, clientX: number) {
