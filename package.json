@@ -5,7 +5,7 @@
   "main": "dist/vue-vtable.umd.js",
   "module": "dist/vue-vtable.esm.js",
   "typings": "dist/index.d.ts",
-  "version": "0.15.0-dev.1b",
+  "version": "1.0.0-dev.1",
   "license": "MIT",
   "repository": {
     "type": "git",
