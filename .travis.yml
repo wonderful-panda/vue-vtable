@@ -17,7 +17,8 @@ after_deploy:
 - git add dist -f
 - git add example -f
 - 'git commit -m "Travis CI: update gh-pages"'
-- 'git push --quiet "https://${GH_TOKEN}@github.com/wonderful-panda/vue-vtable" HEAD:gh-pages --force'
+- git push --quiet "https://${GH_TOKEN}@github.com/wonderful-panda/vue-vtable" HEAD:gh-pages
+  --force
 env:
   global:
-    secure: QEFctF2iCnY1nszuLxMnzzHlu5P2Ujfv2Zk/YnkSqpXWCxC2U+aHwz7TNdQR/7Hhr2T8+aBz/nkxmrmCPEl1i4rTFztQ8s8Uj7NV2WD5s3PhQI6iMRAGjZL+ybwhbyvVuMN6oZSbH3M/TAw3yUGFalR7Wx/9fCSNzSvIRjbXt2Ky87gSm6BAfdZerfPv7oQWNUER+rDqBa6/GOMtzOm2OCkR7zlmqfAdNei9cS94ZMVRxw5ZDgVNwdBNqywDrSdbLrIAwr3NDBkrl232VIWbmSy2Eni4Fc53daNXhOZ6zZqf2mxNMzV2Xkg6sGMmACoqx92KyN2veRPOI4McBi1Vmp8aD8zYmzKbYLYSKWG/y35fDZVDlX5a3jahXt7kEfZIjgCzkmNEo5WqxMhOMbawYTDh5gJLUlC2pRpKCllycFYSTiuynOGR/yzS4+m61x4hzf9nTUbyMAXmOvzToTkQv+Pq1HcjDuTFiI84VY5XIK6cjEnXzAVElID+35vIfgPar3u3Hbme82x6Pi088AQ/afCnCogM8nNWgtmc8pt4J6few/jU63/WEmwybuWH9fRJu3qc1QVgs/1Dt9+PgnI9b9/BeXBzytc3V3k5MtK0cmXg0oNG5UFVfjn1oivPFTBMjuhx1zi4t0ugZGE3WSGrjl41Lv4z7hrkAybjCDF6cFg=
+    secure: kM4Wn5r78fYygy5D6gVzamVQoGkbj9AUsklipXVsHV0pmkTkFr9fJpYDsYk+ZP3I1XZOv5qGlLCbz1yiZVC0pSs8av0fViFoscwP3xhtF81PCdGw3294d04cqyAk/hp5xHm7cmxdanx3V7RxOlfQwN1uh/5oX3wPfWj/ORB72OCg4mf86YVzdWUZPV4XdLBY31WVbHMMDDJzBRjtbJSJnxWTmh6MYaUtKNrShgHahDA3Rweeb7amcofGrAcCtnHUBM9VqVykm6vpsJsrOX3J+UdmOU3fsYXaLVKYA7Vug5HGh7wxa5v5d/nX2KR+kWnmmPDjMfn23lkXZ70r4QHCydI5+a+OKXwDR1bQHWcrxIEv5nnDCIVxp1CbvRJNh9XIMq/xTacCFuZgbR4XoKJWfyX6g7WC7/bLvfb+opp7AgZG43C/4SF7lOHv0ugliUF8OjleK+Ic1PNoAvkEe5KyrNmD542WX0A0+cdVE00//IDk6t8eiiLQ8vEd4Mk8hX+1k/6jA1zUUnzcTmWoas74Znu+oKILL2w69H6kHTkSTKdLkYKp/gNZf68K5kiS18yte5ETFNRY31uSbopQsOSThnCVuA6cdRAyJuGC9Ms4xaPMm4GJgMeEeKqcUFY5oJd/AwRyN+mrMvy3V0XqeC5QwXKATbZtT8C5SEc3PyPQkbQ=
