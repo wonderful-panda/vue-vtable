@@ -59,6 +59,7 @@ export class VtableBase<T> extends Vue {
       whiteSpace: "none"
     };
   }
+
   private headerCellStyle(width: number): CssProperties {
     return {
       minWidth: px(width),
@@ -69,6 +70,7 @@ export class VtableBase<T> extends Vue {
       overflow: "hidden"
     };
   }
+
   private actualRowClass(item: T, index: number) {
     const { getRowClass, rowClass } = this;
     if (getRowClass) {
@@ -77,13 +79,16 @@ export class VtableBase<T> extends Vue {
       return rowClass || "vtable-row";
     }
   }
+
   private get actualSplitterWidth() {
     return this.splitterWidth || 3;
   }
+
   private get actualHeaderHeight(): number {
     const { headerHeight, rowHeight } = this;
     return headerHeight && headerHeight > 0 ? headerHeight : rowHeight;
   }
+
   private get actualWidths(): Record<string, number> {
     return this.widths || this.widthsPrivate;
   }
@@ -101,6 +106,7 @@ export class VtableBase<T> extends Vue {
   ensureVisible(index: number) {
     this.$refs.vlist.ensureVisible(index);
   }
+
   private setColumnWidth(c: VtableColumn, width: number): void {
     if (this.widths) {
       const newWidths = { ...this.widths, [c.id]: width };
@@ -109,6 +115,7 @@ export class VtableBase<T> extends Vue {
       this.widthsPrivate = { ...this.widthsPrivate, [c.id]: width };
     }
   }
+
   private onSplitterMouseDown(index: number, clientX: number) {
     const headerCell = this.$refs.header.querySelectorAll(
       "div.vtable-header-cell"
@@ -134,22 +141,26 @@ export class VtableBase<T> extends Vue {
     document.addEventListener("mouseup", onMouseUp);
     this.draggingSplitter = index;
   }
+
   /* render */
   private splitter(index: number) {
     return (
       <VtableSplitter
+        key={`splitter-${index}`}
         dragging={index === this.draggingSplitter}
         width={this.actualSplitterWidth}
         mousedownCallback={clientX => this.onSplitterMouseDown(index, clientX)}
       />
     );
   }
+
   private get headerCells() {
     const widths = this.actualWidths;
     return this.columns.map((c, index) => [
       <div
         staticClass="vtable-header-cell"
         class={c.className}
+        key={`cell-${c.id}`}
         style={this.headerCellStyle(widths[c.id] || c.defaultWidth)}
       >
         {c.title === undefined ? c.id : c.title}
@@ -157,6 +168,7 @@ export class VtableBase<T> extends Vue {
       this.splitter(index)
     ]);
   }
+
   render(): VNode {
     const VlistT = Vlist as new () => Vlist<T>;
     const VtableRowT = VtableRow as new () => VtableRow<T>;
@@ -181,7 +193,7 @@ export class VtableBase<T> extends Vue {
         getItemKey={getItemKey}
         overscan={overscan}
         scopedSlots={{
-          row: ({ item, index }) => [
+          row: ({ item, index }) => (
             <VtableRowT
               class={this.actualRowClass(item, index)}
               columns={columns}
@@ -190,11 +202,11 @@ export class VtableBase<T> extends Vue {
               index={index}
               height={rowHeight}
               scopedSlots={{
-                splitter: ({ index: i }) => [this.splitter(i)],
+                splitter: ({ index: i }) => this.splitter(i),
                 cell: this.$scopedSlots.cell
               }}
             />
-          ]
+          )
         }}
         on={this.$listeners}
       >

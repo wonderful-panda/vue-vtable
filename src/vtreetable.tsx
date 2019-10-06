@@ -100,6 +100,7 @@ export class Vtreetable<T> extends Vue {
   $scopedSlots!: tsx.InnerScopedSlots<{
     cell: VtableSlotCellProps<TreeNodeWithState<T>>;
   }>;
+
   @Prop(Number) rowHeight!: number;
   @Prop(Number) headerHeight?: number;
   @Prop(Number) indentWidth!: number;
@@ -107,8 +108,10 @@ export class Vtreetable<T> extends Vue {
   @Prop(Array) rootNodes!: ReadonlyArray<TreeNode<T>>;
   @Prop({ type: Number, default: 1 })
   rowStyleCycle?: number;
+
   @Prop({ type: Number, default: 3 })
   splitterWidth?: number;
+
   @Prop(String) rowClass?: string;
   @Prop(Function) getRowClass?: GetClassFunction<TreeNodeWithState<T>>;
   @Prop(Function) getItemKey!: GetKeyFunction<T>;
@@ -133,9 +136,11 @@ export class Vtreetable<T> extends Vue {
     );
     return ret;
   }
+
   private get itemCount(): number {
     return this.flattenVisibleItems.length;
   }
+
   private addDescendentVisibleItems(
     parent: TreeNode<T>,
     level: number,

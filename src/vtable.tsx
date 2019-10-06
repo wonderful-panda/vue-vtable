@@ -30,8 +30,10 @@ export class Vtable<T> extends Vue {
   @Prop(Array) items!: ReadonlyArray<T>;
   @Prop({ type: Number, default: 1 })
   rowStyleCycle?: number;
+
   @Prop({ type: Number, default: 3 })
   splitterWidth?: number;
+
   @Prop(String) rowClass?: string;
   @Prop(Function) getRowClass?: GetClassFunction<T>;
   @Prop(Function) getItemKey!: GetKeyFunction<T>;
@@ -43,9 +45,11 @@ export class Vtable<T> extends Vue {
   ensureVisible(index: number) {
     this.$refs.base.ensureVisible(index);
   }
+
   private sliceItems(start: number, end: number): ReadonlyArray<T> {
     return this.items.slice(start, end);
   }
+
   render(): VNode {
     const VtableBaseT = VtableBase as new () => VtableBase<T>;
     return (

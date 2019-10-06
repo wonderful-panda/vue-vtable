@@ -9,12 +9,16 @@ import { px } from "./utils";
 export class VtableRow<T> extends Vue {
   @Prop({ required: true })
   item!: T;
+
   @Prop({ type: Array, required: true })
   columns!: ReadonlyArray<t.VtableColumn>;
+
   @Prop({ type: Object, required: true })
   columnWidths!: Record<string, number>;
+
   @Prop({ type: Number, required: true, validator: v => v >= 0 })
   index!: number;
+
   @Prop({ type: Number, required: true, validator: v => v > 0 })
   height!: number;
 
@@ -53,6 +57,7 @@ export class VtableRow<T> extends Vue {
     const { item, columns, columnWidths, index } = this;
     return columns.map((c, columnIndex) => [
       <div
+        key={`cell-${index}`}
         staticClass="vtable-cell"
         class={c.className}
         style={this.cellStyle(columnWidths[c.id] || c.defaultWidth)}

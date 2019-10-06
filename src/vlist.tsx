@@ -44,6 +44,7 @@ export class Vlist<T> extends Vue {
       overflow: "hidden"
     };
   }
+
   private get headerStyle(): CssProperties {
     return {
       display: "flex",
@@ -56,6 +57,7 @@ export class Vlist<T> extends Vue {
       padding: `0 ${px(this.vScrollBarWidth)} 0 0`
     };
   }
+
   private get scrollableStyle(): CssProperties {
     return {
       overflow: "auto",
@@ -67,6 +69,7 @@ export class Vlist<T> extends Vue {
       border: 0
     };
   }
+
   private get contentStyle(): CssProperties {
     return {
       display: "flex",
@@ -79,12 +82,14 @@ export class Vlist<T> extends Vue {
       minWidth: px(this.contentWidth)
     };
   }
+
   private get spacerStyle(): CssProperties {
     return {
       height: px(this.rowHeight * this.firstIndex),
       flex: "0 0 auto"
     };
   }
+
   private get rowStyle(): CssProperties {
     return {
       display: "flex",
@@ -106,6 +111,7 @@ export class Vlist<T> extends Vue {
     }
     return value;
   }
+
   private get lastIndex() {
     const { scrollTop, bodyHeight } = this;
     let value = Math.ceil((scrollTop + bodyHeight) / this.rowHeight);
@@ -114,9 +120,11 @@ export class Vlist<T> extends Vue {
     }
     return value;
   }
+
   private get renderedItems() {
     return this.sliceItems(this.firstIndex, this.lastIndex + 1);
   }
+
   private get contentHeight() {
     return this.rowHeight * this.itemCount;
   }
@@ -149,6 +157,7 @@ export class Vlist<T> extends Vue {
     const sc = this.$refs.scrollable;
     sc.scrollTop = scrollTop;
   }
+
   private updateBodySize() {
     const sc = this.$refs.scrollable;
     const bound = sc.getBoundingClientRect();
@@ -168,6 +177,7 @@ export class Vlist<T> extends Vue {
       this.hScrollBarHeight = hScrollBarHeight;
     }
   }
+
   private nativeOnScroll(event: Event) {
     const { scrollLeft, scrollTop } = this.$refs.scrollable;
     this.scrollDirection = scrollTop < this.scrollTop ? "backward" : "forward";
@@ -175,23 +185,32 @@ export class Vlist<T> extends Vue {
     this.scrollTop = scrollTop;
     emit(this, "scroll", { scrollLeft, scrollTop, event });
   }
+
   private payload<E extends Event>(item: T, physicalIndex: number, event: E) {
     return { item, index: physicalIndex + this.firstIndex, event };
   }
+
   @Watch("contentHeight")
   private contentHeightChanged(newValue: number, _oldValue: number) {
     const hScrollBarHeight = this.hScrollBarHeight;
     const height = this.bodyHeight + hScrollBarHeight;
-    if (0 < hScrollBarHeight === newValue < height) {
+    if (
+      (0 < hScrollBarHeight && newValue < height) ||
+      (hScrollBarHeight <= 0 && height < newValue)
+    ) {
       // must re-check scrollbar visibilities
       this.updateBodySize();
     }
   }
+
   @Watch("contentWidth")
   private contentWidthChanged(newValue: number, _oldValue: number) {
     const vScrollBarWidth = this.vScrollBarWidth;
     const width = this.bodyWidth + vScrollBarWidth;
-    if (0 < vScrollBarWidth === newValue < width) {
+    if (
+      (0 < vScrollBarWidth && newValue < width) ||
+      (vScrollBarWidth <= 0 && width < newValue)
+    ) {
       // must re-check scrollbar visibilities
       this.updateBodySize();
     }
