@@ -28,11 +28,6 @@
     "storybook": "start-storybook -p 9001 -c .storybook",
     "build-all": "npm-run-all lint prettier build build-storybook"
   },
-  "dependencies": {
-    "vue-css-definition": "^0.1.0",
-    "vue-resizesensor": "^0.2.1",
-    "vue-strict-prop": "^0.1.1"
-  },
   "devDependencies": {
     "@babel/core": "^7.6.0",
     "@babel/preset-env": "^7.6.0",
@@ -49,7 +44,6 @@
     "babel-loader": "^8.0.6",
     "babel-polyfill": "^6.26.0",
     "babel-preset-vue": "^2.0.2",
-    "cross-env": "^5.0.0",
     "eslint": "^5.16.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-config-standard-jsx": "^8.1.0",
@@ -69,20 +63,17 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-typescript2": "^0.24.3",
     "ts-loader": "^6.1.0",
-    "tslint": "^5.10.0",
-    "tslint-config-prettier": "^1.13.0",
     "typescript": "^3.5.1",
-    "typescript-eslint-parser": "^22.0.0",
     "vue": "^2.6.1",
     "vue-class-component": "^7.0.0",
-    "vue-component-marker": "^0.1.1",
+    "vue-css-definition": "^0.1.0",
     "vue-loader": "15.7.1",
     "vue-property-decorator": "^8.2.2",
+    "vue-resizesensor": "^0.2.1",
+    "vue-strict-prop": "^0.1.1",
     "vue-template-compiler": "^2.6.1",
     "vue-tsx-support": "^3.0.0-dev.6a",
-    "webpack": "^4.40.2",
-    "webpack-cli": "^3.3.8",
-    "webpack-merge": "^4.2.2"
+    "webpack": "^4.40.2"
   },
   "peerDependencies": {
     "vue": "^2.6.1",
