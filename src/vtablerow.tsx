@@ -57,7 +57,7 @@ export class VtableRow<T> extends Vue {
     const { item, columns, columnWidths, index } = this;
     return columns.map((c, columnIndex) => [
       <div
-        key={`cell-${index}`}
+        key={`cell-${c.id}`}
         staticClass="vtable-cell"
         class={c.className}
         style={this.cellStyle(columnWidths[c.id] || c.defaultWidth)}
