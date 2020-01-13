@@ -16,18 +16,20 @@ import { VtableRow } from "./vtablerow";
 import { VtableSplitter } from "./vtablesplitter";
 import {
   InnerScopedSlots,
-  DeclarePropsFromAllPublicMembers,
+  DeclareProps,
   DeclareOn,
-  DeclarePrefixedEvents
+  DeclareOnEvents,
+  AutoProps
 } from "vue-tsx-support";
+import { DeclareAutoProps } from "./tsx-util";
 
 @Component
 export class VtableBase<T> extends Vue {
   $refs!: { header: Element; vlist: Vlist<T> };
   $scopedSlots!: InnerScopedSlots<{ cell: VtableSlotCellProps<T> }>;
-  _tsx!: DeclarePropsFromAllPublicMembers<VtableBase<T>, Vue, "ensureVisible"> &
+  _tsx!: DeclareAutoProps<VtableBase<T>, Vue, "ensureVisible"> &
     DeclareOn<VlistEvents<T>> &
-    DeclarePrefixedEvents<VlistEventsOn<T>>;
+    DeclareOnEvents<VlistEventsOn<T>>;
 
   @Prop(Number) rowHeight!: number;
   @Prop(Number) headerHeight!: number;

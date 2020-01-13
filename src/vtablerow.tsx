@@ -4,6 +4,7 @@ import * as tsx from "vue-tsx-support";
 import { CssProperties } from "vue-css-definition";
 import * as t from "../types";
 import { px } from "./utils";
+import { DeclareAutoProps } from "./tsx-util";
 
 @Component
 export class VtableRow<T> extends Vue {
@@ -22,7 +23,7 @@ export class VtableRow<T> extends Vue {
   @Prop({ type: Number, required: true, validator: v => v > 0 })
   height!: number;
 
-  _tsx!: tsx.DeclarePropsFromAllPublicMembers<VtableRow<T>, Vue>;
+  _tsx!: DeclareAutoProps<VtableRow<T>>;
 
   $scopedSlots!: tsx.InnerScopedSlots<{
     splitter: { index: number };

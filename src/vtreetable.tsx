@@ -15,6 +15,7 @@ import {
 import { px } from "./utils";
 import { VtableBase } from "./vtablebase";
 import { Component, Prop } from "vue-property-decorator";
+import { DeclareAutoProps } from "./tsx-util";
 
 const m = tsx.modifiers;
 export interface VtreeTableData {
@@ -119,13 +120,13 @@ export class Vtreetable<T> extends Vue {
   @Prop({ type: Number, default: 8 })
   overscan?: number;
 
-  _tsx!: tsx.DeclarePropsFromAllPublicMembers<
+  _tsx!: DeclareAutoProps<
     Vtreetable<T>,
     Vue,
     "toggleExpand" | "expandAll" | "collapseAll" | "expandAllDescendants"
   > &
     tsx.DeclareOn<VtableEvents<TreeNodeWithState<T>>> &
-    tsx.DeclarePrefixedEvents<VtableEventsOn<TreeNodeWithState<T>>>;
+    tsx.DeclareOnEvents<VtableEventsOn<TreeNodeWithState<T>>>;
 
   private expandMap = {} as Record<string, boolean>;
 

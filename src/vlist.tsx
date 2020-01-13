@@ -5,6 +5,7 @@ import * as tsx from "vue-tsx-support";
 import * as t from "../types";
 import { px } from "./utils";
 import { Component, Prop, Watch } from "vue-property-decorator";
+import { DeclareAutoProps } from "./tsx-util";
 
 const emit = tsx.emit;
 
@@ -16,9 +17,9 @@ const ResizeSensor = tsx
 export class Vlist<T> extends Vue {
   $refs!: { scrollable: Element; content: Element };
   $scopedSlots!: tsx.InnerScopedSlots<{ row: t.VlistSlotRowProps<T> }>;
-  _tsx!: tsx.DeclarePropsFromAllPublicMembers<Vlist<T>, Vue, "ensureVisible"> &
+  _tsx!: DeclareAutoProps<Vlist<T>, Vue, "ensureVisible"> &
     tsx.DeclareOn<t.VlistEvents<T>> &
-    tsx.DeclarePrefixedEvents<t.VlistEventsOn<T>>;
+    tsx.DeclareOnEvents<t.VlistEventsOn<T>>;
 
   @Prop(Function) getItemKey!: t.GetKeyFunction<T>;
   @Prop(Number) contentWidth!: number;

@@ -9,20 +9,16 @@ import {
   VtableEventsOn
 } from "../types";
 import { VtableBase } from "./vtablebase";
-import {
-  InnerScopedSlots,
-  DeclarePropsFromAllPublicMembers,
-  DeclareOn,
-  DeclarePrefixedEvents
-} from "vue-tsx-support";
+import { InnerScopedSlots, DeclareOn, DeclareOnEvents } from "vue-tsx-support";
+import { DeclareAutoProps } from "./tsx-util";
 
 @Component
 export class Vtable<T> extends Vue {
   $refs!: { base: VtableBase<T> };
   $scopedSlots!: InnerScopedSlots<{ cell: VtableSlotCellProps<T> }>;
-  _tsx!: DeclarePropsFromAllPublicMembers<Vtable<T>, Vue, "ensureVisible"> &
+  _tsx!: DeclareAutoProps<Vtable<T>, Vue, "ensureVisible"> &
     DeclareOn<VtableEvents<T>> &
-    DeclarePrefixedEvents<VtableEventsOn<T>>;
+    DeclareOnEvents<VtableEventsOn<T>>;
 
   @Prop(Number) rowHeight!: number;
   @Prop(Number) headerHeight?: number;
