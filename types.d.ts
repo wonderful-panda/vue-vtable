@@ -50,7 +50,6 @@ export type RowDragEventArgs<T> = RowEventArgs<T, DragEvent>;
 export interface ScrollEventArgs {
   scrollLeft: number;
   scrollTop: number;
-  event: Event;
 }
 
 export interface ColumnResizeEventArgs {

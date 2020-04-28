@@ -21,6 +21,8 @@ export class Vlist<T> extends Vue {
     tsx.DeclareOn<t.VlistEvents<T>> &
     tsx.DeclareOnEvents<t.VlistEventsOn<T>>;
 
+  $options!: Vue["$options"] & { ticking?: boolean };
+
   @Prop(Function) getItemKey!: t.GetKeyFunction<T>;
   @Prop(Number) contentWidth!: number;
   @Prop(Number) rowStyleCycle?: number;
@@ -179,12 +181,23 @@ export class Vlist<T> extends Vue {
     }
   }
 
-  private nativeOnScroll(event: Event) {
+  private nativeOnScroll() {
+    if (this.$options.ticking) {
+      return;
+    }
+    this.$options.ticking = true;
+    window.requestAnimationFrame(() => {
+      this.emitScrollEvent();
+      this.$options.ticking = false;
+    });
+  }
+
+  private emitScrollEvent() {
     const { scrollLeft, scrollTop } = this.$refs.scrollable;
     this.scrollDirection = scrollTop < this.scrollTop ? "backward" : "forward";
     this.scrollLeft = scrollLeft;
     this.scrollTop = scrollTop;
-    emit(this, "scroll", { scrollLeft, scrollTop, event });
+    emit(this, "scroll", { scrollLeft, scrollTop });
   }
 
   private payload<E extends Event>(item: T, physicalIndex: number, event: E) {
